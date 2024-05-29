@@ -1,8 +1,0 @@
-minishell.c
-text.text
-text.tx
-text.txt
-minishell.c
-text.text
-hallo
-ulla
