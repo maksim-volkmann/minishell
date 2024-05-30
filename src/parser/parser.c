@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 10:31:19 by adrherna          #+#    #+#             */
-/*   Updated: 2024/05/30 16:45:12 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/05/30 16:56:31 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,11 @@ void	ft_fill_array(t_token **tokens, char ***cmds)
 
 void	ft_parser(t_token **tokens, char ***cmds)
 {
+	t_token *current;
+
+	current = *tokens;
+	if (current == NULL)
+		return;
 	cmds = ft_cmds_malloc(tokens);
 	ft_extract_cmd(tokens, cmds);
 	ft_fill_array(tokens, cmds);

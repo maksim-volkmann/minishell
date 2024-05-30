@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:17:35 by adrherna          #+#    #+#             */
-/*   Updated: 2024/05/30 16:41:25 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/05/30 16:55:53 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,8 @@ int main(void)
 	{
 		tokens = NULL;
 		input = readline("minishell> ");
-		if (input == NULL) {
+		if (input == NULL)
 			break;
-		}
 		ft_lexer(input, &tokens);
 		ft_parser(&tokens, cmds);
 		// print_linked_list(tokens);

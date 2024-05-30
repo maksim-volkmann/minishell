@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:31:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/05/30 12:06:43 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/05/30 16:55:25 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,20 @@ void free_token_list(t_token *head)
 	}
 }
 
-char *print_type(enum e_token_type type)
-{
+// char *print_type(enum e_token_type type)
+// {
 
-	char *array_type[] = {"LESS", "GREAT", "PIPE", "LPAR", "RPAR", "WORD", "QUOTE", \
-								"DQUOTE", "DLESS", "DGREAT", \
-								"AND", "DAND", "NUM", "SPACES"};
-	return (array_type[type]);
-}
-void print_linked_list(t_token *head)
-{
-	t_token *current = head;
+// 	char *array_type[] = {"LESS", "GREAT", "PIPE", "LPAR", "RPAR", "WORD", "QUOTE", \
+// 								"DQUOTE", "DLESS", "DGREAT", \
+// 								"AND", "DAND", "NUM", "SPACES"};
+// 	return (array_type[type]);
+// }
+// void print_linked_list(t_token *head)
+// {
+// 	t_token *current = head;
 
-	while (current != NULL) {
-		printf("Token: [%s] Type: [%s]\n", current->token, print_type(current->type));
-		current = current->next;
-	}
-}
+// 	while (current != NULL) {
+// 		printf("Token: [%s] Type: [%s]\n", current->token, print_type(current->type));
+// 		current = current->next;
+// 	}
+// }
