@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:43:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/05/29 12:58:17 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/05/30 12:03:47 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,35 +23,34 @@
 
 typedef enum e_token_type
 {
-	LESS = 1,
-	GREAT = 2,
-	PIPE = 3,
-	LPAR = 4,
-	RPAR = 5,
-	WORD = 6,
-	QUOTE = 7,
-	DQUOTE = 8,
-	DLESS = 9,
-	DGREAT = 10,
-	AND = 11,
-	DAND = 12,
-	NUM = 13,
-	SPACES = 14,
+	LESS = 0,
+	GREAT = 1,
+	PIPE = 2,
+	LPAR = 3,
+	RPAR = 4,
+	WORD = 5,
+	QUOTE = 6,
+	DQUOTE = 7,
+	DLESS = 8,
+	DGREAT = 9,
+	AND = 10,
+	DAND = 11,
+	NUM = 12,
+	SPACES = 13,
 } t_token_type;
 
 typedef struct s_token
 {
-	struct s_token	*prev;
 	char				*token;
 	enum e_token_type	type;
 	struct s_token	*next;
 }	t_token;
 
-// tokens.c
+// lexer.c
 
-void	ft_get_tokens(const char *line, t_token **tokens);
-void free_token_list(t_token *head);
-void print_linked_list(t_token *head);
+void	ft_lexer(const char *line, t_token **tokens);
+void	free_token_list(t_token *head);
+void	print_linked_list(t_token *head);
 
 // cases.c
 

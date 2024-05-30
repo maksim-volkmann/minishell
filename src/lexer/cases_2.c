@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 15:05:33 by adrherna          #+#    #+#             */
-/*   Updated: 2024/05/30 09:54:08 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/05/30 12:08:37 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ t_token *ft_if_word(t_token **tokens, const char *line, int *i)
 	token = ft_extract_str((char *)line, start, end);
 	if (ft_strcmp(token, "") == 0)
 	{
-		printf("Error Word\n");
+		// printf("Error Word\n");
 		free(token);
 		return (NULL);
 	}
