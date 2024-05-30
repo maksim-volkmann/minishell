@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:58:01 by adrherna          #+#    #+#             */
-/*   Updated: 2024/05/28 13:23:04 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/05/30 09:50:04 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,24 @@ char	*ft_extract_str(char *line, int start, int end)
 	}
 	str[i] = '\0';
 	return (str);
+}
+
+int	ft_is_separator(char c)
+{
+	int	i;
+
+	i = 0;
+	while (NOWORD[i] != '\0')
+	{
+		if (NOWORD[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+void	ft_skip_spaces(const char *line, int *i)
+{
+	while (line[*i] == ' ' || line[*i] == '\t' || line[*i] == '\n')
+		(*i)++;
 }

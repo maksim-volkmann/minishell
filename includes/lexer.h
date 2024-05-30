@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:43:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/05/29 10:33:28 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/05/29 12:58:17 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 #include <string.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+
+#define NOWORD "<>|()& \t\n"
 
 typedef enum e_token_type
 {
@@ -31,8 +33,8 @@ typedef enum e_token_type
 	DQUOTE = 8,
 	DLESS = 9,
 	DGREAT = 10,
-	IF_AND = 11,
-	IF_OR = 12,
+	AND = 11,
+	DAND = 12,
 	NUM = 13,
 	SPACES = 14,
 } t_token_type;
@@ -53,7 +55,6 @@ void print_linked_list(t_token *head);
 
 // cases.c
 
-char	*ft_extract_str(char *line, int start, int end);
 t_token	*ft_if_redi_op(t_token **tokens, const char *line, int *i);
 t_token	*ft_if_pipe(t_token **tokens, const char *line, int *i);
 t_token	*ft_if_par(t_token **tokens, const char *line, int *i);
@@ -62,6 +63,14 @@ t_token	*ft_if_quot(t_token **tokens, const char *line, int *i);
 // cases_2.c
 
 t_token *ft_if_do_quot(t_token **tokens, const char *line, int *i);
+t_token *ft_if_and(t_token **tokens, const char *line, int *i);
+t_token *ft_if_word(t_token **tokens, const char *line, int *i);
+
+// helper.c
+int	ft_is_separator(char c);
+char	*ft_extract_str(char *line, int start, int end);
+int ft_strcmp(const char *s1, const char *s2);
+void	ft_skip_spaces(const char *line, int *i);
 
 // list_helper.c
 
