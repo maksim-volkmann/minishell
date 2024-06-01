@@ -1,82 +1,243 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <sys/wait.h>
 #include <string.h>
+#include "libft/include/libft.h" // Assuming your libft contains necessary functions
 
-// Assuming these are the functions available in your libft
-#include "libft/include/libft.h"
+typedef enum e_redir_type {
+    REDIR_NONE,
+    REDIR_INPUT,
+    REDIR_OUTPUT,
+    REDIR_APPEND,
+    REDIR_HEREDOC
+} t_redir_type;
 
-// Define the t_command struct for the linked list
+typedef struct s_redirection {
+    t_redir_type type;
+    char *file;
+    struct s_redirection *next;
+} t_redirection;
+
 typedef struct s_command {
-    char **argv; // Pointer to an array of command and arguments
-    struct s_command *next; // Pointer to the next command
+    char **argv;
+    t_redirection *input;
+    t_redirection *output;
+    struct s_command *next;
 } t_command;
 
-void	ft_free_split(char **arr)
-{
-	int	i;
+typedef struct s_pipeline {
+    t_command *commands;
+    struct s_pipeline *next;
+} t_pipeline;
 
-	if (!arr)
-		return ;
-	i = 0;
-	while (arr[i])
-		free(arr[i++]);
-	free(arr);
+
+// 1
+// t_pipeline
+// └── t_command (Command 1: ls -l)
+//     ├── argv: ["ls", "-l", NULL]
+//     ├── input: NULL
+//     ├── output: NULL
+//     └── next:
+//         └── t_command (Command 2: grep "main")
+//             ├── argv: ["grep", "main", NULL]
+//             ├── input: NULL
+//             ├── output:
+//             │   └── t_redirection
+//             │       ├── type: REDIR_OUTPUT
+//             │       ├── file: "out.txt"
+//             │       └── next: NULL
+//             └── next:
+//                 └── t_command (Command 3: wc -l)
+//                     ├── argv: ["wc", "-l", NULL]
+//                     ├── input: NULL
+//                     ├── output: NULL
+//                     └── next: NULL
+
+
+// 2
+// └── t_command (Command 1: cat)
+//     ├── argv: ["cat", NULL]
+//     ├── input:
+//     │   └── t_redirection
+//     │       ├── type: REDIR_INPUT
+//     │       ├── file: "in.txt"
+//     │       └── next: NULL
+//     ├── output: NULL
+//     └── next:
+//         └── t_command (Command 2: grep line)
+//             ├── argv: ["grep", "line", NULL]
+//             ├── input: NULL
+//             ├── output:
+//             │   └── t_redirection
+//             │       ├── type: REDIR_OUTPUT
+//             │       ├── file: "out.txt"
+//             │       └── next: NULL
+//             └── next: NULL
+
+
+
+// Functions to create and add elements to the structures
+t_redirection *create_redirection(t_redir_type type, char *file) {
+    t_redirection *new_redir = (t_redirection *)malloc(sizeof(t_redirection));
+    if (!new_redir) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+    new_redir->type = type;
+    new_redir->file = strdup(file);
+    new_redir->next = NULL;
+    return new_redir;
 }
 
-// Creates the full path for a command
+void add_redirection(t_redirection **redir_list, t_redir_type type, char *file) {
+    t_redirection *new_redir = create_redirection(type, file);
+    if (*redir_list == NULL) {
+        *redir_list = new_redir;
+    } else {
+        t_redirection *current = *redir_list;
+        while (current->next) {
+            current = current->next;
+        }
+        current->next = new_redir;
+    }
+}
+
+char **duplicate_argv(char **argv) {
+    int argc = 0;
+    while (argv[argc]) {
+        argc++;
+    }
+
+    char **new_argv = (char **)malloc(sizeof(char *) * (argc + 1));
+    if (!new_argv) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+
+    for (int i = 0; i < argc; i++) {
+        new_argv[i] = strdup(argv[i]);
+    }
+    new_argv[argc] = NULL;
+
+    return new_argv;
+}
+
+t_command *create_command(char **argv) {
+    t_command *new_cmd = (t_command *)malloc(sizeof(t_command));
+    if (!new_cmd) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+    new_cmd->argv = duplicate_argv(argv);
+    new_cmd->input = NULL;
+    new_cmd->output = NULL;
+    new_cmd->next = NULL;
+    return new_cmd;
+}
+
+void add_command(t_command **head, char **argv) {
+    t_command *new_cmd = create_command(argv);
+    if (*head == NULL) {
+        *head = new_cmd;
+    } else {
+        t_command *current = *head;
+        while (current->next) {
+            current = current->next;
+        }
+        current->next = new_cmd;
+    }
+}
+
+t_pipeline *create_pipeline() {
+    t_pipeline *new_pipeline = (t_pipeline *)malloc(sizeof(t_pipeline));
+    if (!new_pipeline) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+    new_pipeline->commands = NULL;
+    new_pipeline->next = NULL;
+    return new_pipeline;
+}
+
+void add_pipeline(t_pipeline **head) {
+    t_pipeline *new_pipeline = create_pipeline();
+    if (*head == NULL) {
+        *head = new_pipeline;
+    } else {
+        t_pipeline *current = *head;
+        while (current->next) {
+            current = current->next;
+        }
+        current->next = new_pipeline;
+    }
+}
+
+// Create command path
 char *create_cmd_path(char *dir, char *cmd) {
-    char *path;
-    char *full_path;
-
-    path = ft_strjoin(dir, "/");
-    full_path = ft_strjoin(path, cmd);
+    char *path = ft_strjoin(dir, "/");
+    char *full_path = ft_strjoin(path, cmd);
     free(path);
-    return (full_path);
+    return full_path;
 }
 
-// Checks if a command exists in the given paths
-char *check_command_in_paths(char **paths, char *cmd)
-{
-	char *full_path;
-	int x = 0;
-
-	while (paths[x]) {
-		full_path = create_cmd_path(paths[x], cmd);
-		if (access(full_path, X_OK) == 0) {
-			return (full_path);
-		}
-		free(full_path);
-		x++;
-	}
-	return (NULL);
-}
-
-// Finds the correct path for a command using the environment variables
-char *find_correct_path(char *cmd, char **ep) {
+// Check command in paths
+char *check_command_in_paths(char **paths, char *cmd) {
+    char *full_path;
     int i = 0;
-    char *path;
-    char *executable_path;
-    char **paths;
+    while (paths[i]) {
+        full_path = create_cmd_path(paths[i], cmd);
+        if (access(full_path, X_OK) == 0) {
+            return full_path;
+        }
+        free(full_path);
+        i++;
+    }
+    return NULL;
+}
 
-    while (ep[i]) {
-        if (ft_strncmp(ep[i], "PATH=", 5) == 0) {
-            path = ep[i] + 5;
-            paths = ft_split(path, ':');
-            executable_path = check_command_in_paths(paths, cmd);
-            ft_free_split(paths);
-            if (executable_path != NULL) {
-                return (executable_path);
-            }
+void ft_free_split(char **arr) {
+    int i = 0;
+
+    if (!arr) {
+        return;
+    }
+
+    while (arr[i]) {
+        free(arr[i]);
+        i++;
+    }
+    free(arr);
+}
+
+// Find correct path for the command
+char *find_correct_path(char *cmd, char **env) {
+    char *path_var = NULL;
+    char **paths;
+    char *correct_path;
+    int i = 0;
+
+    while (env[i]) {
+        if (ft_strncmp(env[i], "PATH=", 5) == 0) {
+            path_var = env[i] + 5;
             break;
         }
         i++;
     }
-    return (NULL);
+
+    if (!path_var) {
+        return NULL;
+    }
+
+    paths = ft_split(path_var, ':');
+    correct_path = check_command_in_paths(paths, cmd);
+    ft_free_split(paths);
+
+    return correct_path;
 }
 
-// Executes a command using execve
+// Execute command
 void execute_command(char *cmd[], char **env) {
     char *executable_path;
 
@@ -119,171 +280,187 @@ void setup_child(int input_fd, int output_fd, char *cmd[], char **env) {
     execute_command(cmd, env);
 }
 
-// Creates a new command node
-t_command *create_command(char **argv) {
-    t_command *new_cmd = (t_command *)malloc(sizeof(t_command));
-    if (!new_cmd) {
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
+// Parsing example command: "ls -l | grep pipe > out.txt"
+// void parse_example(t_pipeline **pipelines) {
+//     // Create the first pipeline
+//     add_pipeline(pipelines);
+//     t_pipeline *pl = *pipelines;
 
-    // Count the number of arguments
-    int argc = 0;
-    while (argv[argc]) {
-        argc++;
-    }
+//     // First command: "ls -l"
+//     add_command(&pl->commands, (char *[]) {"ls", "-l", NULL});
 
-    // Allocate memory for the arguments array
-    new_cmd->argv = (char **)malloc(sizeof(char *) * (argc + 1));
-    if (!new_cmd->argv) {
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
+//     // Second command: "grep pipe > out.txt"
+//     t_command *cmd2 = create_command((char *[]) {"grep", "pipe", NULL});
+//     add_redirection(&cmd2->output, REDIR_OUTPUT, "out.txt");
+//     pl->commands->next = cmd2;
 
-    // Copy the arguments
-    for (int i = 0; i < argc; i++) {
-        new_cmd->argv[i] = argv[i];
-    }
-    new_cmd->argv[argc] = NULL; // Terminate the array with NULL
+//     // Third command: "wc -l"
+//     // add_command(&pl->commands, (char *[]) {"wc", "-l", NULL});
+// }
 
-    new_cmd->next = NULL;
-    return new_cmd;
+void parse_example(t_pipeline **pipelines) {
+    // Create the first pipeline
+    add_pipeline(pipelines);
+    t_pipeline *pl = *pipelines;
+
+    // First command: "cat < in.txt"
+    t_command *cmd1 = create_command((char *[]) {"cat", NULL});
+    add_redirection(&cmd1->input, REDIR_INPUT, "in.txt");
+    pl->commands = cmd1;
+
+    // Second command: "grep line > out.txt"
+    t_command *cmd2 = create_command((char *[]) {"grep", "line", NULL});
+    add_redirection(&cmd2->output, REDIR_OUTPUT, "out.txt");
+    cmd1->next = cmd2;
 }
 
-// Adds a command to the end of the linked list
-void add_command(t_command **head, char **argv) {
-    t_command *new_cmd = create_command(argv);
-    if (*head == NULL) {
-        *head = new_cmd;
-    } else {
-        t_command *current = *head;
-        while (current->next) {
-            current = current->next;
+
+// Execute commands in the pipelines
+void execute_pipeline(t_pipeline *pipeline, char **env) {
+    int pipe_fd[2];
+    int input_fd = -1;
+    pid_t pid;
+
+    t_command *cmd = pipeline->commands;
+    while (cmd) {
+        if (cmd->next != NULL) {
+            if (pipe(pipe_fd) == -1) {
+                perror("pipe");
+                exit(EXIT_FAILURE);
+            }
+        } else {
+            pipe_fd[0] = -1;
+            pipe_fd[1] = -1;
         }
-        current->next = new_cmd;
+
+        pid = fork();
+        if (pid == -1) {
+            perror("fork");
+            exit(EXIT_FAILURE);
+        } else if (pid == 0) { // Child process
+            if (input_fd != -1) {
+                if (dup2(input_fd, STDIN_FILENO) == -1) {
+                    perror("dup2 input_fd");
+                    exit(EXIT_FAILURE);
+                }
+                close(input_fd);
+            }
+
+            if (pipe_fd[1] != -1) {
+                if (dup2(pipe_fd[1], STDOUT_FILENO) == -1) {
+                    perror("dup2 pipe_fd[1]");
+                    exit(EXIT_FAILURE);
+                }
+                close(pipe_fd[1]);
+            }
+
+            if (cmd->output != NULL) {
+                int fd = -1;
+                if (cmd->output->type == REDIR_OUTPUT) {
+                    fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                } else if (cmd->output->type == REDIR_APPEND) {
+                    fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+                }
+                if (fd != -1) {
+                    if (dup2(fd, STDOUT_FILENO) == -1) {
+                        perror("dup2 redirection file");
+                        exit(EXIT_FAILURE);
+                    }
+                    close(fd);
+                } else {
+                    perror("open redirection file");
+                    exit(EXIT_FAILURE);
+                }
+            }
+
+            if (cmd->input != NULL) {
+                int fd = open(cmd->input->file, O_RDONLY);
+                if (fd == -1) {
+                    perror("open input redirection file");
+                    exit(EXIT_FAILURE);
+                }
+                if (dup2(fd, STDIN_FILENO) == -1) {
+                    perror("dup2 input redirection file");
+                    exit(EXIT_FAILURE);
+                }
+                close(fd);
+            }
+
+            // Execute the command
+            execute_command(cmd->argv, env);
+        }
+
+        if (input_fd != -1) {
+            close(input_fd);
+        }
+        if (pipe_fd[1] != -1) {
+            close(pipe_fd[1]);
+        }
+        input_fd = pipe_fd[0];
+
+        cmd = cmd->next;
     }
+    while (wait(NULL) > 0);
 }
 
-// Populates the linked list with initial commands
-void populate_commands(t_command **head) {
-    // add_command(head, (char *[]) {"sleep", "1", NULL});
-    add_command(head, (char *[]) {"ls", "-l", NULL});
-    add_command(head, (char *[]) {"/usr/bin/grep", "pipe", NULL});
-    add_command(head, (char *[]) {"/usr/bin/wc", "-m", NULL});
-    // add_command(head, (char *[]) {"/usr/bin/wc", "-l", NULL});
-}
+// Free allocated memory
+void free_pipeline(t_pipeline *pipeline) {
+    t_command *cmd;
+    t_command *tmp_cmd;
+    t_redirection *redir;
+    t_redirection *tmp_redir;
 
-int count_commands(t_command *head) {
-    int count = 0;
-    t_command *current = head;
-    while (current) {
-        count++;
-        current = current->next;
+    while (pipeline) {
+        cmd = pipeline->commands;
+        while (cmd) {
+            tmp_cmd = cmd;
+            cmd = cmd->next;
+
+            redir = tmp_cmd->input;
+            while (redir) {
+                tmp_redir = redir;
+                redir = redir->next;
+                free(tmp_redir->file); // Free the file name
+                free(tmp_redir);
+            }
+
+            redir = tmp_cmd->output;
+            while (redir) {
+                tmp_redir = redir;
+                redir = redir->next;
+                free(tmp_redir->file); // Free the file name
+                free(tmp_redir);
+            }
+
+            for (int i = 0; tmp_cmd->argv[i]; i++) {
+                free(tmp_cmd->argv[i]); // Free each argument
+            }
+            free(tmp_cmd->argv); // Free the argv array
+            free(tmp_cmd); // Free the command node
+        }
+
+        t_pipeline *tmp_pipeline = pipeline;
+        pipeline = pipeline->next;
+        free(tmp_pipeline); // Free the pipeline node
     }
-    return count;
 }
 
 int main(int argc, char **argv, char **env) {
     (void)argc; // Suppress unused parameter warning
     (void)argv; // Suppress unused parameter warning
 
-    // Linked list head for commands
-    t_command *commands = NULL;
+    t_pipeline *pipelines = NULL;
 
-    // Populate the linked list with commands
-    populate_commands(&commands);
+    parse_example(&pipelines);
 
-    // Count the number of commands
-    int num_commands = count_commands(commands);
-
-    // Array to store file descriptors for pipes
-    int pipe_fds[num_commands - 1][2];
-
-    // Array to store process IDs of child processes
-    pid_t pids[num_commands];
-
-    // Counter variable for loops
-    int i = 0;
-
-    // Create pipes for inter-process communication
-    while (i < num_commands - 1) {
-        if (pipe(pipe_fds[i]) == -1) { // Create a pipe and check for errors
-            perror("pipe");
-            exit(EXIT_FAILURE);
-        }
-        i++;
+    t_pipeline *current_pipeline = pipelines;
+    while (current_pipeline) {
+        execute_pipeline(current_pipeline, env);
+        current_pipeline = current_pipeline->next;
     }
 
-    // Fork child processes to execute commands
-    i = 0;
-    t_command *current_cmd = commands;
-    while (i < num_commands) {
-        pids[i] = fork(); // Fork a new process
-        if (pids[i] == -1) { // Check for fork errors
-            perror("fork");
-            exit(EXIT_FAILURE);
-        } else if (pids[i] == 0) { // Child process
-            // Setup redirections for the child process
-            if (i == 0) {
-                // First command: no input redirection
-                if (num_commands > 1) {
-                    close(pipe_fds[i][0]); // Close unused read end of the pipe
-                    setup_child(-1, pipe_fds[i][1], current_cmd->argv, env); // Set up output redirection to the pipe
-                } else {
-                    setup_child(-1, -1, current_cmd->argv, env); // No redirection needed
-                }
-            } else if (i == num_commands - 1) {
-                // Last command: no output redirection
-                close(pipe_fds[i - 1][1]); // Close unused write end of the previous pipe
-                setup_child(pipe_fds[i - 1][0], -1, current_cmd->argv, env); // Set up input redirection from the previous pipe
-            } else {
-                // Middle commands: both input and output redirection
-                close(pipe_fds[i - 1][1]); // Close previous pipe write end
-                close(pipe_fds[i][0]); // Close current pipe read end
-                setup_child(pipe_fds[i - 1][0], pipe_fds[i][1], current_cmd->argv, env); // Set up both input and output redirections
-            }
-
-            // Close all pipe ends in the child process to avoid hanging
-            int j = 0;
-            while (j < num_commands - 1) {
-                close(pipe_fds[j][0]);
-                close(pipe_fds[j][1]);
-                j++;
-            }
-        } else { // Parent process
-            if (i > 0) {
-                // Close read and write ends of the previous pipe in the parent process
-                close(pipe_fds[i - 1][0]);
-                close(pipe_fds[i - 1][1]);
-            }
-        }
-        current_cmd = current_cmd->next; // Move to the next command in the list
-        i++;
-    }
-
-    // Parent process closes all remaining pipe ends
-    i = 0;
-    while (i < num_commands - 1) {
-        close(pipe_fds[i][0]);
-        close(pipe_fds[i][1]);
-        i++;
-    }
-
-    // Wait for all child processes to finish
-    i = 0;
-    while (i < num_commands) {
-        waitpid(pids[i], NULL, 0);
-        i++;
-    }
-
-    // Free the linked list
-    t_command *tmp;
-    while (commands) {
-        tmp = commands;
-        commands = commands->next;
-        free(tmp->argv); // Free the argv array
-        free(tmp); // Free the command node
-    }
+    // Free the allocated memory
+    free_pipeline(pipelines);
 
     return 0;
 }
