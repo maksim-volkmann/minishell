@@ -185,20 +185,7 @@ void setup_child(int input_fd, int output_fd, char *cmd[], char **env, t_redirec
 
     // Handle input redirection
     if (input != NULL) {
-        int fd = -1;
-        if (input->type == REDIR_INPUT) {
-            fd = open(input->file, O_RDONLY);
-        } else if (input->type == REDIR_HEREDOC) {
-            // Use a pipe to simulate heredoc
-            int pipe_fds[2];
-            if (pipe(pipe_fds) == -1) {
-                perror("pipe");
-                exit(EXIT_FAILURE);
-            }
-            write(pipe_fds[1], input->file, strlen(input->file));
-            close(pipe_fds[1]);
-            fd = pipe_fds[0];
-        }
+        int fd = open(input->file, O_RDONLY);
         if (fd == -1) {
             perror("open input redirection file");
             exit(EXIT_FAILURE);
@@ -234,21 +221,32 @@ void setup_child(int input_fd, int output_fd, char *cmd[], char **env, t_redirec
     execute_command(cmd, env);
 }
 
-// Parsing example command: "cat << EOF | grep line > out.txt"
+// Parsing example command: "cat < in.txt | grep line > out.txt"
 void parse_example(t_command **commands) {
-    // First command: "cat << EOF"
+    // First command: "cat < in.txt"
+
+    t_command *cmd0 = create_command((char *[]) {"sleep", "5", NULL});
+    *commands = cmd0;
+
+
     t_command *cmd1 = create_command((char *[]) {"cat", NULL});
-    cmd1->input = create_redirection(REDIR_HEREDOC, "line1\nline2\n");
-    *commands = cmd1;
+    cmd1->input = create_redirection(REDIR_INPUT, "in.txt");
+    cmd0->next = cmd1;
 
     // Second command: "grep line"
-    // t_command *cmd2 = create_command((char *[]) {"grep", "line", NULL});
-    // cmd1->next = cmd2;
+    t_command *cmd2 = create_command((char *[]) {"grep", "line", NULL});
+    cmd1->next = cmd2;
 
-    // // Third command: "grep this > out.txt"
-    // t_command *cmd3 = create_command((char *[]) {"grep", "this", NULL});
-    // cmd3->output = create_redirection(REDIR_OUTPUT, "out.txt");
-    // cmd2->next = cmd3;
+    // Third command: "grep this > out.txt"
+    t_command *cmd3 = create_command((char *[]) {"grep", "this", NULL});
+    cmd3->output = create_redirection(REDIR_OUTPUT, "out.txt");
+    cmd2->next = cmd3;
+
+	t_command *cmd4 = create_command((char *[]) {"echo", "hello", NULL});
+	cmd3->next = cmd4;
+
+	// t_command *cmd5 = create_command((char *[]) {"sleep", "5", NULL});
+	// cmd4->next = cmd5;
 }
 
 // Execute commands in the command chain

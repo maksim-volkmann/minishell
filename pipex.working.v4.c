@@ -26,6 +26,12 @@ typedef struct s_command {
     struct s_command *next;
 } t_command;
 
+typedef struct s_pipeline {
+    t_command *commands;
+    struct s_pipeline *next;
+} t_pipeline;
+
+
 // Functions to create and add elements to the structures
 t_redirection *create_redirection(t_redir_type type, char *file) {
     t_redirection *new_redir = (t_redirection *)malloc(sizeof(t_redirection));
@@ -36,6 +42,14 @@ t_redirection *create_redirection(t_redir_type type, char *file) {
     new_redir->type = type;
     new_redir->file = strdup(file);
     return new_redir;
+}
+
+void add_redirection(t_redirection **redir, t_redir_type type, char *file) {
+    if (*redir != NULL) {
+        free((*redir)->file);
+        free(*redir);
+    }
+    *redir = create_redirection(type, file);
 }
 
 char **duplicate_argv(char **argv) {
@@ -84,6 +98,31 @@ void add_command(t_command **head, char **argv) {
     }
 }
 
+t_pipeline *create_pipeline() {
+    t_pipeline *new_pipeline = (t_pipeline *)malloc(sizeof(t_pipeline));
+    if (!new_pipeline) {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
+    new_pipeline->commands = NULL;
+    new_pipeline->next = NULL;
+    return new_pipeline;
+}
+
+void add_pipeline(t_pipeline **head) {
+    t_pipeline *new_pipeline = create_pipeline();
+    if (*head == NULL) {
+        *head = new_pipeline;
+    } else {
+        t_pipeline *current = *head;
+        while (current->next) {
+            current = current->next;
+        }
+        current->next = new_pipeline;
+    }
+}
+
+// Create command path
 char *create_cmd_path(char *dir, char *cmd) {
     char *path = ft_strjoin(dir, "/");
     char *full_path = ft_strjoin(path, cmd);
@@ -91,6 +130,7 @@ char *create_cmd_path(char *dir, char *cmd) {
     return full_path;
 }
 
+// Check command in paths
 char *check_command_in_paths(char **paths, char *cmd) {
     char *full_path;
     int i = 0;
@@ -119,6 +159,7 @@ void ft_free_split(char **arr) {
     free(arr);
 }
 
+// Find correct path for the command
 char *find_correct_path(char *cmd, char **env) {
     char *path_var = NULL;
     char **paths;
@@ -185,20 +226,7 @@ void setup_child(int input_fd, int output_fd, char *cmd[], char **env, t_redirec
 
     // Handle input redirection
     if (input != NULL) {
-        int fd = -1;
-        if (input->type == REDIR_INPUT) {
-            fd = open(input->file, O_RDONLY);
-        } else if (input->type == REDIR_HEREDOC) {
-            // Use a pipe to simulate heredoc
-            int pipe_fds[2];
-            if (pipe(pipe_fds) == -1) {
-                perror("pipe");
-                exit(EXIT_FAILURE);
-            }
-            write(pipe_fds[1], input->file, strlen(input->file));
-            close(pipe_fds[1]);
-            fd = pipe_fds[0];
-        }
+        int fd = open(input->file, O_RDONLY);
         if (fd == -1) {
             perror("open input redirection file");
             exit(EXIT_FAILURE);
@@ -234,30 +262,34 @@ void setup_child(int input_fd, int output_fd, char *cmd[], char **env, t_redirec
     execute_command(cmd, env);
 }
 
-// Parsing example command: "cat << EOF | grep line > out.txt"
-void parse_example(t_command **commands) {
-    // First command: "cat << EOF"
+// Parsing example command: "cat < in.txt | grep line > out.txt"
+void parse_example(t_pipeline **pipelines) {
+    // Create the first pipeline
+    add_pipeline(pipelines);
+    t_pipeline *pl = *pipelines;
+
+    // First command: "cat < in.txt"
     t_command *cmd1 = create_command((char *[]) {"cat", NULL});
-    cmd1->input = create_redirection(REDIR_HEREDOC, "line1\nline2\n");
-    *commands = cmd1;
+    add_redirection(&cmd1->input, REDIR_INPUT, "in.txt");
+    pl->commands = cmd1;
 
     // Second command: "grep line"
     // t_command *cmd2 = create_command((char *[]) {"grep", "line", NULL});
     // cmd1->next = cmd2;
 
-    // // Third command: "grep this > out.txt"
-    // t_command *cmd3 = create_command((char *[]) {"grep", "this", NULL});
-    // cmd3->output = create_redirection(REDIR_OUTPUT, "out.txt");
-    // cmd2->next = cmd3;
+    // Third command: "grep this > out.txt"
+    t_command *cmd3 = create_command((char *[]) {"grep", "this", NULL});
+    add_redirection(&cmd3->output, REDIR_OUTPUT, "out.txt");
+    cmd1->next = cmd3;
 }
 
-// Execute commands in the command chain
-void execute_commands(t_command *commands, char **env) {
+// Execute commands in the pipelines
+void execute_pipeline(t_pipeline *pipeline, char **env) {
     int pipe_fd[2];
     int input_fd = -1;
     pid_t pid;
 
-    t_command *cmd = commands;
+    t_command *cmd = pipeline->commands;
     while (cmd) {
         if (cmd->next != NULL) {
             if (pipe(pipe_fd) == -1) {
@@ -291,30 +323,38 @@ void execute_commands(t_command *commands, char **env) {
 }
 
 // Free allocated memory
-void free_commands(t_command *commands) {
+void free_pipeline(t_pipeline *pipeline) {
     t_command *cmd;
+    t_command *tmp_cmd;
 
-    while (commands) {
-        cmd = commands;
-        commands = commands->next;
+    while (pipeline) {
+        cmd = pipeline->commands;
+        while (cmd) {
+            tmp_cmd = cmd;
+            cmd = cmd->next;
 
-        // Free input redirection
-        if (cmd->input) {
-            free(cmd->input->file); // Free the file name
-            free(cmd->input); // Free the redirection struct
+            // Free input redirection
+            if (tmp_cmd->input) {
+                free(tmp_cmd->input->file); // Free the file name
+                free(tmp_cmd->input); // Free the redirection struct
+            }
+
+            // Free output redirection
+            if (tmp_cmd->output) {
+                free(tmp_cmd->output->file); // Free the file name
+                free(tmp_cmd->output); // Free the redirection struct
+            }
+
+            for (int i = 0; tmp_cmd->argv[i]; i++) {
+                free(tmp_cmd->argv[i]); // Free each argument
+            }
+            free(tmp_cmd->argv); // Free the argv array
+            free(tmp_cmd); // Free the command node
         }
 
-        // Free output redirection
-        if (cmd->output) {
-            free(cmd->output->file); // Free the file name
-            free(cmd->output); // Free the redirection struct
-        }
-
-        for (int i = 0; cmd->argv[i]; i++) {
-            free(cmd->argv[i]); // Free each argument
-        }
-        free(cmd->argv); // Free the argv array
-        free(cmd); // Free the command node
+        t_pipeline *tmp_pipeline = pipeline;
+        pipeline = pipeline->next;
+        free(tmp_pipeline); // Free the pipeline node
     }
 }
 
@@ -322,14 +362,18 @@ int main(int argc, char **argv, char **env) {
     (void)argc; // Suppress unused parameter warning
     (void)argv; // Suppress unused parameter warning
 
-    t_command *commands = NULL;
+    t_pipeline *pipelines = NULL;
 
-    parse_example(&commands);
+    parse_example(&pipelines);
 
-    execute_commands(commands, env);
+    t_pipeline *current_pipeline = pipelines;
+    while (current_pipeline) {
+        execute_pipeline(current_pipeline, env);
+        current_pipeline = current_pipeline->next;
+    }
 
     // Free the allocated memory
-    free_commands(commands);
+    free_pipeline(pipelines);
 
     return 0;
 }

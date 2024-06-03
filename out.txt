@@ -1,5 +1,0 @@
-hello1 line
-second line
-this is third line
-fouth line
-5 this is linein.txt
