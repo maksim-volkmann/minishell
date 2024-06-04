@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:17:35 by adrherna          #+#    #+#             */
-/*   Updated: 2024/05/30 16:55:53 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/05/31 10:53:38 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,34 @@ int main(void)
 			break;
 		ft_lexer(input, &tokens);
 		ft_parser(&tokens, cmds);
-		// print_linked_list(tokens);
-		// print_cmd_list(cmds);
 		free_token_list(tokens);
 		free(input);
 	}
 	return 0;
 }
 
-// seg fault with empty readline
+		// print_cmd_list(cmds);
+		// print_linked_list(tokens);
+
+
+// ver si puedo implementar una history
+// ver que es expand
+
+
+
+
+// 3.1.2.3 Double Quotes
+// Enclosing characters in double quotes
+// (‘"’) preserves the literal value of all characters
+//  within the quotes, with the exception of ‘$’, ‘`’, ‘\’
+
+
+
+
+// Tilde Expansion:
+
+// Expands the tilde character (~) to the value of the home directory. For example, ~ expands to /home/username.
+// Parameter and Variable Expansion:
+
+// Replaces variables with their values. For example, $HOME expands to /home/username.
+// Can also include modifiers, such as ${VAR:-default}, which provides a default value if the variable is unset.
