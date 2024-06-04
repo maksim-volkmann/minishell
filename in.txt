@@ -4,3 +4,4 @@ this is third line
 fouth line
 5 this is linein.txt
 this is not
+0

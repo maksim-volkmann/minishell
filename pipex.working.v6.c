@@ -26,6 +26,7 @@ typedef struct s_command {
     struct s_command *next;
 } t_command;
 
+// Functions to create and add elements to the structures
 t_redirection *create_redirection(t_redir_type type, char *file) {
     t_redirection *new_redir = (t_redirection *)malloc(sizeof(t_redirection));
     if (!new_redir) {
@@ -106,9 +107,11 @@ char *check_command_in_paths(char **paths, char *cmd) {
 
 void ft_free_split(char **arr) {
     int i = 0;
+
     if (!arr) {
         return;
     }
+
     while (arr[i]) {
         free(arr[i]);
         i++;
@@ -141,6 +144,7 @@ char *find_correct_path(char *cmd, char **env) {
     return correct_path;
 }
 
+// Execute command
 void execute_command(char *cmd[], char **env) {
     char *executable_path;
 
@@ -159,25 +163,42 @@ void execute_command(char *cmd[], char **env) {
     exit(EXIT_FAILURE);
 }
 
+// Sets up redirections for a child process and executes the command
 void setup_child(int input_fd, int output_fd, char *cmd[], char **env, t_redirection *input, t_redirection *output) {
+    // If input_fd is valid, redirect stdin to input_fd
     if (input_fd != -1) {
         if (dup2(input_fd, STDIN_FILENO) == -1) {
             perror("dup2 input_fd");
             exit(EXIT_FAILURE);
         }
-        close(input_fd);
+        close(input_fd); // Close the duplicated file descriptor
     }
 
+    // If output_fd is valid, redirect stdout to output_fd
     if (output_fd != -1) {
         if (dup2(output_fd, STDOUT_FILENO) == -1) {
             perror("dup2 output_fd");
             exit(EXIT_FAILURE);
         }
-        close(output_fd);
+        close(output_fd); // Close the duplicated file descriptor
     }
 
+    // Handle input redirection
     if (input != NULL) {
-        int fd = open(input->file, O_RDONLY);
+        int fd = -1;
+        if (input->type == REDIR_INPUT) {
+            fd = open(input->file, O_RDONLY);
+        } else if (input->type == REDIR_HEREDOC) {
+            // Use a pipe to simulate heredoc
+            int pipe_fds[2];
+            if (pipe(pipe_fds) == -1) {
+                perror("pipe");
+                exit(EXIT_FAILURE);
+            }
+            write(pipe_fds[1], input->file, strlen(input->file));
+            close(pipe_fds[1]);
+            fd = pipe_fds[0];
+        }
         if (fd == -1) {
             perror("open input redirection file");
             exit(EXIT_FAILURE);
@@ -189,33 +210,52 @@ void setup_child(int input_fd, int output_fd, char *cmd[], char **env, t_redirec
         close(fd);
     }
 
+    // Handle output redirection
     if (output != NULL) {
-        int fd = open(output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        if (fd == -1) {
-            perror("open output redirection file");
+        int fd = -1;
+        if (output->type == REDIR_OUTPUT) {
+            fd = open(output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        } else if (output->type == REDIR_APPEND) {
+            fd = open(output->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        }
+        if (fd != -1) {
+            if (dup2(fd, STDOUT_FILENO) == -1) {
+                perror("dup2 redirection file");
+                exit(EXIT_FAILURE);
+            }
+            close(fd);
+        } else {
+            perror("open redirection file");
             exit(EXIT_FAILURE);
         }
-        if (dup2(fd, STDOUT_FILENO) == -1) {
-            perror("dup2 output redirection file");
-            exit(EXIT_FAILURE);
-        }
-        close(fd);
     }
 
+    // Execute the command
     execute_command(cmd, env);
 }
 
-// Parsing example command: "grep line | wc -l > out.txt < in.txt"
+// Parsing example command: "cat << EOF | grep line > out.txt"
 void parse_example(t_command **commands) {
-    t_command *cmd1 = create_command((char *[]) {"wc", "-l", NULL});
-    // cmd1->input = create_redirection(REDIR_INPUT, "in.txt");
-    *commands = cmd1;
+    // First command: "cat << EOF"
+    // t_command *cmd1 = create_command((char *[]) {"cat", NULL});
+    // cmd1->input = create_redirection(REDIR_HEREDOC, "line1\nline2\n");
+    // *commands = cmd1;
 
-    // t_command *cmd2 = create_command((char *[]) {"wc", "-l", NULL});
-    // cmd2->output = create_redirection(REDIR_OUTPUT, "out.txt");
+	t_command *cmd1 = create_command((char *[]) {"echo", "$USER", NULL});
+	// cmd1->input = create_redirection(REDIR_HEREDOC, "line1\nline2\n");
+	*commands = cmd1;
+
+    // Second command: "grep line"
+    // t_command *cmd2 = create_command((char *[]) {"grep", "line", NULL});
     // cmd1->next = cmd2;
+
+    // // Third command: "grep this > out.txt"
+    // t_command *cmd3 = create_command((char *[]) {"grep", "this", NULL});
+    // cmd3->output = create_redirection(REDIR_OUTPUT, "out.txt");
+    // cmd2->next = cmd3;
 }
 
+// Execute commands in the command chain
 void execute_commands(t_command *commands, char **env) {
     int pipe_fd[2];
     int input_fd = -1;
@@ -237,7 +277,7 @@ void execute_commands(t_command *commands, char **env) {
         if (pid == -1) {
             perror("fork");
             exit(EXIT_FAILURE);
-        } else if (pid == 0) {
+        } else if (pid == 0) { // Child process
             setup_child(input_fd, pipe_fd[1], cmd->argv, env, cmd->input, cmd->output);
         }
 
@@ -251,10 +291,10 @@ void execute_commands(t_command *commands, char **env) {
 
         cmd = cmd->next;
     }
-
-    while ((pid = wait(NULL)) > 0);
+    while (wait(NULL) > 0);
 }
 
+// Free allocated memory
 void free_commands(t_command *commands) {
     t_command *cmd;
 
@@ -262,27 +302,29 @@ void free_commands(t_command *commands) {
         cmd = commands;
         commands = commands->next;
 
+        // Free input redirection
         if (cmd->input) {
-            free(cmd->input->file);
-            free(cmd->input);
+            free(cmd->input->file); // Free the file name
+            free(cmd->input); // Free the redirection struct
         }
 
+        // Free output redirection
         if (cmd->output) {
-            free(cmd->output->file);
-            free(cmd->output);
+            free(cmd->output->file); // Free the file name
+            free(cmd->output); // Free the redirection struct
         }
 
         for (int i = 0; cmd->argv[i]; i++) {
-            free(cmd->argv[i]);
+            free(cmd->argv[i]); // Free each argument
         }
-        free(cmd->argv);
-        free(cmd);
+        free(cmd->argv); // Free the argv array
+        free(cmd); // Free the command node
     }
 }
 
 int main(int argc, char **argv, char **env) {
-    (void)argc;
-    (void)argv;
+    (void)argc; // Suppress unused parameter warning
+    (void)argv; // Suppress unused parameter warning
 
     t_command *commands = NULL;
 
@@ -290,6 +332,7 @@ int main(int argc, char **argv, char **env) {
 
     execute_commands(commands, env);
 
+    // Free the allocated memory
     free_commands(commands);
 
     return 0;
