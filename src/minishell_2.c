@@ -6,31 +6,31 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:17:35 by adrherna          #+#    #+#             */
-/*   Updated: 2024/05/31 10:53:38 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/04 09:48:34 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/lexer.h"
 #include "../includes/parser.h"
 
-int main(void)
+int	main(void)
 {
-	char	***cmds;
-	char	*input;
-	t_token	*tokens;
+	char		*input;
+	t_token		*tokens;
+	t_command	*cmds;
 
 	while (1)
 	{
 		tokens = NULL;
 		input = readline("minishell> ");
 		if (input == NULL)
-			break;
+			break ;
 		ft_lexer(input, &tokens);
 		ft_parser(&tokens, cmds);
 		free_token_list(tokens);
 		free(input);
 	}
-	return 0;
+	return (0);
 }
 
 		// print_cmd_list(cmds);

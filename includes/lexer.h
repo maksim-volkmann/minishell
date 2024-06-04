@@ -6,20 +6,20 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:43:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/05/30 12:03:47 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/04 10:08:57 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
-#define NOWORD "<>|()& \t\n"
+# define NOWORD "<>|()& \t\n"
 
 typedef enum e_token_type
 {
@@ -74,7 +74,7 @@ void	ft_skip_spaces(const char *line, int *i);
 // list_helper.c
 
 t_token	*ft_new_token(char *str, enum e_token_type type);
-t_token	*ft_lst_add_token(t_token **tokens, t_token *new_token);
+void	ft_lst_add_token(t_token **tokens, t_token *new_token);
 int		ft_strcmp(const char *s1, const char *s2);
 
 #endif

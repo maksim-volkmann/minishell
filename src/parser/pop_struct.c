@@ -1,40 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   pop_struct.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/30 10:31:19 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/04 09:47:09 by adrherna         ###   ########.fr       */
+/*   Created: 2024/06/04 09:51:31 by adrherna          #+#    #+#             */
+/*   Updated: 2024/06/04 10:15:36 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
-#include <stdio.h>
 
-void	ft_print_cmds(char ***cmds)
+void	ft_pop_struct(t_command	*cmds, char ***tarray)
 {
-	int i, j;
+	t_command	*new;
+	int			i;
 
 	i = 0;
-	while (cmds[i] != NULL)
+	while (tarray[i] != NULL)
 	{
-		printf("Command %d: ", i + 1);
-		j = 0;
-		while (cmds[i][j] != NULL)
-		{
-			printf("[%d]\"%s\" ", j, cmds[i][j]);
-			j++;
-		}
-		printf("\n");
-		i++;
+		new = ft_new_node(tarray[i]);
+		add_or_init_node(&cmds, new);
 	}
-}
-
-void	ft_parser(t_token **tokens, t_command *cmds)
-{
-	char	***tarray;
-
-	ft_tarray(tokens, tarray);
 }
