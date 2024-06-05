@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 09:37:15 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/04 09:49:12 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/04 15:28:43 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,17 @@ void	ft_fill_array(t_token **tokens, char ***tarray)
 	}
 }
 
-void	ft_tarray(t_token **tokens, char ***tarray)
+char	***ft_tarray(t_token **tokens)
 {
+	char	***tarray;
 	t_token	*current;
 
 	current = *tokens;
 	if (current == NULL)
-		return ;
+		return (NULL);
 	tarray = ft_tarray_malloc(tokens);
 	ft_extract_cmd(tokens, tarray);
 	ft_fill_array(tokens, tarray);
 	ft_print_cmds(tarray);
+	return (tarray);
 }

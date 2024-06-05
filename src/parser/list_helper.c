@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 09:56:09 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/04 10:11:26 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/05 15:23:57 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,32 @@
 
 t_command	*ft_new_node(char **cmd)
 {
-	t_command	*new_n;
+	t_command	*new;
 
-	new_n = malloc(sizeof(t_command));
-	if (!new_n)
+	new = malloc(sizeof(t_command));
+	if (!new)
 		return (NULL);
-	new_n->argv = cmd;
-	new_n->next = NULL;
-	return (new_n);
+	new->argv = cmd;
+	new->input = NULL;
+	new->output = NULL;
+	new->next = NULL;
+	return (new);
 }
 
-void	add_or_init_node(t_command **cmds, t_command *new_n)
+void add_or_init_node(t_command **cmds, t_command *new_n)
 {
-	t_command	*current;
+	t_command *current;
 
 	if (*cmds == NULL)
 	{
 		*cmds = new_n;
-		return ;
+		new_n->next = NULL;
+		return;
 	}
-	current = (*cmds);
-	while (current != NULL)
+
+	current = *cmds;
+	while (current->next != NULL)
 		current = current->next;
 	current->next = new_n;
+	new_n->next = NULL;
 }

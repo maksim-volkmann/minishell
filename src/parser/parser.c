@@ -6,12 +6,34 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 10:31:19 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/04 09:47:09 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/05 16:43:22 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 #include <stdio.h>
+
+void	free_tarray(char ***tarray)
+{
+	char	***ptr;
+	char	**inner_ptr;
+
+	if (tarray == NULL)
+		return ;
+	ptr = tarray;
+	while (*ptr != NULL)
+	{
+		inner_ptr = *ptr;
+		while (*inner_ptr != NULL)
+		{
+			free(*inner_ptr);
+			inner_ptr++;
+		}
+		free(*ptr);
+		ptr++;
+	}
+	free(tarray);
+}
 
 void	ft_print_cmds(char ***cmds)
 {
@@ -36,5 +58,7 @@ void	ft_parser(t_token **tokens, t_command *cmds)
 {
 	char	***tarray;
 
-	ft_tarray(tokens, tarray);
+	tarray = ft_tarray(tokens);
+	ft_pop_struct(&cmds, tarray);
+	free_tarray(tarray);
 }
