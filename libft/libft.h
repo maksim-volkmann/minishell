@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/14 12:53:47 by adrherna          #+#    #+#             */
-/*   Updated: 2023/10/26 11:51:07 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/06 09:27:05 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,9 @@ void	ft_bzero(void *s, size_t n);
 
 int		ft_atoi(const char *str);
 
-void	ft_lstadd_back(t_list **lst, t_list *new);
+void	ft_lstadd_back(t_list **lst, t_list *new_n);
 
-void	ft_lstadd_front(t_list **lst, t_list *new);
+void	ft_lstadd_front(t_list **lst, t_list *new_n);
 
 t_list	*ft_lstlast(t_list *lst);
 

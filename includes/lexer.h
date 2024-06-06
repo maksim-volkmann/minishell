@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:43:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/04 10:08:57 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/06 09:26:03 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <string.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "../libft/libft.h"
 
 # define NOWORD "<>|()& \t\n"
 
