@@ -6,6 +6,18 @@
 #include <string.h>
 #include "libft/include/libft.h" // Assuming your libft contains necessary functions
 
+
+// 0: Success - The command or script executed successfully without errors.
+// 1: General error - A catchall for general errors.
+// 2: Misuse of shell builtins - The shell encountered a misuse of a shell builtin.
+// 126: Command invoked cannot execute - The command was found but could not be executed (e.g., permission problems, or the command is not an executable).
+// 127: Command not found - The command was not found.
+// 128: Invalid exit argument - The exit command was used with an invalid argument.
+// 128+n: Fatal error signal "n" - A command was terminated by signal "n". For example, 130 indicates termination by SIGINT (signal 2), 137 indicates termination by SIGKILL (signal 9), etc.
+// 130: Script terminated by Control-C - The script was terminated by Control-C.
+// 255: Exit status out of range - Exit statuses should be in the range 0-255.
+
+
 typedef enum e_redir_type {
     REDIR_NONE,
     REDIR_INPUT,
@@ -26,6 +38,7 @@ typedef struct s_command {
     struct s_command *next;
 } t_command;
 
+//REMOVE THIS
 t_redirection *create_redirection(t_redir_type type, char *file) {
     t_redirection *new_redir = (t_redirection *)malloc(sizeof(t_redirection));
     if (!new_redir) {
@@ -37,6 +50,7 @@ t_redirection *create_redirection(t_redir_type type, char *file) {
     return new_redir;
 }
 
+//REMOVE THIS
 char **duplicate_argv(char **argv) {
     int argc = 0;
     while (argv[argc]) {
@@ -57,6 +71,7 @@ char **duplicate_argv(char **argv) {
     return new_argv;
 }
 
+//REMOVE THIS
 t_command *create_command(char **argv) {
     t_command *new_cmd = (t_command *)malloc(sizeof(t_command));
     if (!new_cmd) {
@@ -69,7 +84,7 @@ t_command *create_command(char **argv) {
     new_cmd->next = NULL;
     return new_cmd;
 }
-
+//?? REMOVE THIS?
 void add_command(t_command **head, char **argv) {
     t_command *new_cmd = create_command(argv);
     if (*head == NULL) {
@@ -205,11 +220,20 @@ void setup_child(int input_fd, int output_fd, char *cmd[], char **env, t_redirec
     execute_command(cmd, env);
 }
 
-// Parsing example command: "grep line | wc -l > out.txt < in.txt"
+// REMOVE THIS
 void parse_example(t_command **commands) {
-    t_command *cmd1 = create_command((char *[]) {"wc", "-l", NULL});
-    // cmd1->input = create_redirection(REDIR_INPUT, "in.txt");
-    *commands = cmd1;
+    // t_command *cmd1 = create_command((char *[]) {"cat", NULL});
+    // // cmd1->input = create_redirection(REDIR_INPUT, "in.txt");
+    // *commands = cmd1;
+
+    // t_command *cmd1 = create_command((char *[]) {"cat", NULL});
+    // // cmd1->input = create_redirection(REDIR_INPUT, "in.txt");
+    // *commands = cmd1;
+
+	t_command *cmd1 = create_command((char *[]) {"gre", "line", NULL});
+	cmd1->output = create_redirection(REDIR_OUTPUT, "out.txt");
+	cmd1->input = create_redirection(REDIR_INPUT, "in.txt");
+	*commands = cmd1;
 
     // t_command *cmd2 = create_command((char *[]) {"wc", "-l", NULL});
     // cmd2->output = create_redirection(REDIR_OUTPUT, "out.txt");
