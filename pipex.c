@@ -143,7 +143,8 @@ void ft_free_split(char **arr) {
     free(arr);
 }
 
-char *find_correct_path(char *cmd, char **env) {
+char *find_correct_path(char *cmd, char **env)
+{
     char *path_var = NULL;
     char **paths;
     char *correct_path;
@@ -242,7 +243,7 @@ void parse_example(t_command **commands) {
     // // cmd1->input = create_redirection(REDIR_INPUT, "in.txt");
     // *commands = cmd1;
 
-	t_command *cmd1 = create_command((char *[]) {"gre", "line", NULL});
+	t_command *cmd1 = create_command((char *[]) {"grep", "line", NULL});
 	cmd1->output = create_redirection(REDIR_OUTPUT, "out.txt");
 	cmd1->input = create_redirection(REDIR_INPUT, "in.txt");
 	*commands = cmd1;
@@ -252,44 +253,71 @@ void parse_example(t_command **commands) {
     // cmd1->next = cmd2;
 }
 
-void execute_commands(t_command *commands, char **env) {
-    int pipe_fd[2];
-    int input_fd = -1;
-    pid_t pid;
+// execute_commands - START HERE.
 
-    t_command *cmd = commands;
-    while (cmd) {
-        if (cmd->next != NULL) {
-            if (pipe(pipe_fd) == -1) {
-                perror("pipe");
-                exit(EXIT_FAILURE);
-            }
-        } else {
-            pipe_fd[0] = -1;
-            pipe_fd[1] = -1;
-        }
-
-        pid = fork();
-        if (pid == -1) {
-            perror("fork");
-            exit(EXIT_FAILURE);
-        } else if (pid == 0) {
-            setup_child(input_fd, pipe_fd[1], cmd->argv, env, cmd->input, cmd->output);
-        }
-
-        if (input_fd != -1) {
-            close(input_fd);
-        }
-        if (pipe_fd[1] != -1) {
-            close(pipe_fd[1]);
-        }
-        input_fd = pipe_fd[0];
-
-        cmd = cmd->next;
-    }
-
-    while ((pid = wait(NULL)) > 0);
+void close_fds(int *input_fd, int *pipe_fd)
+{
+	if (*input_fd != -1)
+		close(*input_fd);
+	if (pipe_fd[1] != -1)
+		close(pipe_fd[1]);
 }
+
+void handle_pipe(int *pipe_fd, t_command *cmd)
+{
+	if (cmd->next != NULL)
+	{
+		if (pipe(pipe_fd) == -1)
+		{
+			perror("pipe");
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+	{
+		pipe_fd[0] = -1;
+		pipe_fd[1] = -1;
+	}
+}
+
+void fork_and_setup(int input_fd, int *pipe_fd, t_command *cmd, char **env)
+{
+	pid_t pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	else if (pid == 0)
+	{
+		setup_child(input_fd, pipe_fd[1], cmd->argv, env,
+					cmd->input, cmd->output);
+	}
+}
+
+void execute_commands(t_command *commands, char **env)
+{
+	int pipe_fd[2];
+	int input_fd;
+	pid_t pid;
+	t_command *cmd;
+
+	input_fd = -1;
+	cmd = commands;
+	while (cmd)
+	{
+		handle_pipe(pipe_fd, cmd);
+		fork_and_setup(input_fd, pipe_fd, cmd, env);
+		close_fds(&input_fd, pipe_fd);
+		input_fd = pipe_fd[0];
+		cmd = cmd->next;
+	}
+	while ((pid = wait(NULL)) > 0);
+}
+
+// execute_commands - END HERE.
 
 void free_commands(t_command *commands) {
     t_command *cmd;
