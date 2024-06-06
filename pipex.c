@@ -17,6 +17,18 @@
 // 130: Script terminated by Control-C - The script was terminated by Control-C.
 // 255: Exit status out of range - Exit statuses should be in the range 0-255.
 
+// int	new_waitpid(int id)
+// {
+// 	int	status;
+
+// 	waitpid(id, &status, 0);
+// 	if (WIFEXITED(status))
+// 		return (WEXITSTATUS(status));
+// 	else if (WIFSIGNALED(status))
+// 		return (128 + WTERMSIG(status));
+// 	return (status);
+// }
+
 
 typedef enum e_redir_type {
     REDIR_NONE,
