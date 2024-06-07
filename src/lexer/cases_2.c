@@ -6,15 +6,14 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 15:05:33 by adrherna          #+#    #+#             */
-/*   Updated: 2024/05/30 12:08:37 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/07 11:12:08 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
-#include "../../libft/libft.h"
 #include <stdio.h>
 
-t_token *ft_if_do_quot(t_token **tokens, const char *line, int *i)
+t_token	*ft_if_do_quot(t_token **tokens, const char *line, int *i)
 {
 	t_token	*new_token;
 	char	*token;
@@ -40,7 +39,7 @@ t_token *ft_if_do_quot(t_token **tokens, const char *line, int *i)
 	return (new_token);
 }
 
-t_token *ft_if_and(t_token **tokens, const char *line, int *i)
+t_token	*ft_if_and(t_token **tokens, const char *line, int *i)
 {
 	t_token	*new_token;
 	char	*token;

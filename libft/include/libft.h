@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 21:38:25 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/03/14 16:22:27 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/06/07 10:47:47 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,10 @@ char	**ft_split(char const *s, char c);
 
 // Bonus
 t_list	*ft_lstnew(void *content);
-void	ft_lstadd_front(t_list **lst, t_list *new);
+void	ft_lstadd_front(t_list **lst, t_list *new_n);
 int		ft_lstsize(t_list *lst);
 t_list	*ft_lstlast(t_list *lst);
-void	ft_lstadd_back(t_list **lst, t_list *new);
+void	ft_lstadd_back(t_list **lst, t_list *new_n);
 void	ft_lstdelone(t_list *lst, void (*del)(void*));
 void	ft_lstclear(t_list **lst, void (*del)(void*));
 void	ft_lstiter(t_list *lst, void (*f)(void *));
@@ -85,12 +85,12 @@ char	*read_to_storage(int fd, char *storage);
 char	*get_next_line(int fd);
 
 // Printf
-int	ft_putint(long n);
-int	ft_putptn(void *n);
-int	ft_puthex(unsigned long long n, int c);
-int	ft_putchar(char c);
-int	ft_putstr(char *str);
-int	ft_conversions(const char *format, va_list args);
-int	ft_printf(const char *str, ...);
+int		ft_putint(long n);
+int		ft_putptn(void *n);
+int		ft_puthex(unsigned long long n, int c);
+int		ft_putchar(char c);
+int		ft_putstr(char *str);
+int		ft_conversions(const char *format, va_list args);
+int		ft_printf(const char *str, ...);
 
 #endif

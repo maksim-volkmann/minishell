@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+# CFLAGS = -Wall -Wextra -Werror
 LIBS = -lreadline
 
 RED = \033[1;31m
@@ -10,13 +10,13 @@ MAGENTA = \033[1;35m
 CYAN = \033[1;36m
 RESET = \033[0m
 
-NAME = minishell_2
+NAME = minishell
 LIBFT_NAME = libft.a
 
 SRC_DIR = src
 OBJ_DIR = obj
 INC_DIR = includes
-LIBFT_DIR = libft
+LIBFT_DIR = libft/src
 
 SRC = $(shell find $(SRC_DIR) -type f -name "*.c")
 OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)

@@ -6,14 +6,13 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 17:11:52 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/06 14:18:33 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/07 11:17:41 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
-#include <stdio.h>
 
-void print_redirection(t_redirection *redir)
+void	print_redirection(t_redirection *redir)
 {
 	while (redir != NULL)
 	{
@@ -21,7 +20,7 @@ void print_redirection(t_redirection *redir)
 	}
 }
 
-void print_command(t_command *cmd)
+void	print_command(t_command *cmd)
 {
 	int i;
 
@@ -60,7 +59,7 @@ void	ft_parser(t_command **cmds, t_token **tokens)
 		new->output = ft_fill_output(new->argv);
 		new->input = ft_fill_input(new->argv);
 		add_or_init_node(cmds, new);
-		// print_command(new);
+		print_command(new);
 	}
 }
 

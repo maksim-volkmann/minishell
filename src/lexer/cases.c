@@ -6,13 +6,11 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:29:48 by adrherna          #+#    #+#             */
-/*   Updated: 2024/05/28 13:39:26 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/07 11:11:56 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
-#include "../../libft/libft.h"
-#include <stdio.h>
 
 // This function is called when a redirection op is found
 // It extracts the token and returns it

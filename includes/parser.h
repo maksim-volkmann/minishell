@@ -6,19 +6,19 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 10:33:59 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/06 14:42:03 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/07 11:16:28 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-# include "../includes/lexer.h"
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <stdio.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include <unistd.h>
+# include <string.h>
+# include <stdio.h>
+# include "./lexer.h"
 
 typedef enum e_redir_type
 {
@@ -42,6 +42,26 @@ typedef struct s_command
 	t_redirection		*output;
 	struct s_command	*next;
 }	t_command;
+
+// typedef enum e_redir_type {
+//     REDIR_NONE,
+//     REDIR_INPUT,
+//     REDIR_OUTPUT,
+//     REDIR_APPEND,
+//     REDIR_HEREDOC
+// } t_redir_type;
+
+// typedef struct s_redirection {
+//     t_redir_type type;
+//     char *file;
+// } t_redirection;
+
+// typedef struct s_command {
+//     char **argv;
+//     t_redirection *input;
+//     t_redirection *output;
+//     struct s_command *next;
+// } t_command;
 
 // parser.c
 void			ft_parser(t_command **cmds, t_token **tokens);
