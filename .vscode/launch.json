@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/adrherna/Desktop/Minishell",
-      "program": "/Users/adrherna/Desktop/Minishell/build/Debug/outDebug"
+      "cwd": "/Users/adrherna/Desktop/Minishell/src/parser",
+      "program": "/Users/adrherna/Desktop/Minishell/src/parser/build/Debug/outDebug"
     }
   ]
 }

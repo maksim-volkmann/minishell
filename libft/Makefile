@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+         #
+#    By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/19 21:34:32 by mvolkman          #+#    #+#              #
-#    Updated: 2024/03/14 14:28:56 by mvolkman         ###   ########.fr        #
+#    Updated: 2024/06/07 10:37:27 by adrherna         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
