@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/fcntl.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/wait.h>
@@ -109,6 +110,16 @@
 //     }
 // }
 
+void print_string_array(char *array[]) {
+    int i = 0;
+    while (array[i] != NULL) {
+        int length = strlen(array[i]);
+        printf("String %d: %s (Length: %d)\n", i, array[i], length);
+        i++;
+    }
+    printf("String %d: NULL (End of array)\n", i);
+}
+
 char *create_cmd_path(char *dir, char *cmd) {
     char *path = ft_strjoin(dir, "/");
     char *full_path = ft_strjoin(path, cmd);
@@ -180,6 +191,7 @@ void execute_command(char *cmd[], char **env) {
             exit(EXIT_FAILURE);
         }
     }
+    print_string_array(cmd);
     execve(executable_path, cmd, env);
     perror("execve failed");
     free(executable_path);
@@ -289,7 +301,7 @@ void setup_child(int input_fd, int output_fd, char *cmd[], char **env, t_redirec
         close(output_fd);
     }
 
-    if (input != NULL) {
+    if (input->file != NULL) {
         int fd = open(input->file, O_RDONLY);
         if (fd == -1) {
             perror("open input redirection file");
@@ -302,7 +314,7 @@ void setup_child(int input_fd, int output_fd, char *cmd[], char **env, t_redirec
         close(fd);
     }
 
-    if (output != NULL) {
+    if (output->file != NULL) {
         int fd = open(output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         if (fd == -1) {
             perror("open output redirection file");

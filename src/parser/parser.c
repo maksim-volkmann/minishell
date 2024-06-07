@@ -6,43 +6,44 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 17:11:52 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/07 11:17:41 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/07 12:47:14 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
+#include <stdio.h>
 
-void	print_redirection(t_redirection *redir)
-{
-	while (redir != NULL)
-	{
-		printf("Type: %d, File: %s\n", redir->type, redir->file);
-	}
-}
+// void	print_redirection(t_redirection *redir)
+// {
+// 	// while (redir != NULL)
+// 	// {
+// 		printf("Type: %d, File: %s\n", redir->type, redir->file);
+// 	// }
+// }
 
-void	print_command(t_command *cmd)
-{
-	int i;
+// void	print_command(t_command *cmd)
+// {
+// 	int	i;
 
-	if (cmd == NULL)
-	{
-		printf("Command is NULL\n");
-		return;
-	}
+// 	if (cmd == NULL)
+// 	{
+// 		printf("Command is NULL\n");
+// 		return;
+// 	}
 
-	printf("Arguments: ");
-	for (i = 0; cmd->argv && cmd->argv[i]; i++)
-	{
-		printf("%s ", cmd->argv[i]);
-	}
-	printf("\n");
+// 	printf("Arguments: ");
+// 	for (i = 0; cmd->argv && cmd->argv[i]; i++)
+// 	{
+// 		printf("%s ", cmd->argv[i]);
+// 	}
+// 	printf("\n");
 
-	printf("Output redirections:\n");
-	print_redirection(cmd->output);
+// 	printf("Output redirections:\n");
+// 	print_redirection(cmd->output);
 
-	printf("Input redirections:\n");
-	print_redirection(cmd->input);
-}
+// 	printf("Input redirections:\n");
+// 	print_redirection(cmd->input);
+// }
 
 void	ft_parser(t_command **cmds, t_token **tokens)
 {
@@ -57,9 +58,11 @@ void	ft_parser(t_command **cmds, t_token **tokens)
 		new = ft_new_node();
 		new->argv = ft_get_darray(&current);
 		new->output = ft_fill_output(new->argv);
+		
 		new->input = ft_fill_input(new->argv);
+
 		add_or_init_node(cmds, new);
-		print_command(new);
+		// print_command(new);
 	}
 }
 
