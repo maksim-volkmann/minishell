@@ -6,18 +6,19 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:17:35 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/06 10:34:41 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/07 10:30:23 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/lexer.h"
 #include "../includes/parser.h"
+#include <stdio.h>
 #include <stdlib.h>
 
-void	leaks(void)
-{
-	system("leaks minishell_2");
-}
+// void	leaks(void)
+// {
+// 	system("leaks minishell_2");
+// }
 
 int	main(void)
 {
@@ -39,6 +40,7 @@ int	main(void)
 		ft_lexer(input, &tokens);
 		ft_parser(&cmds, &tokens);
 		//TODO: pipex part called here.
+		free_command(cmds);
 		free_token_list(tokens);
 		free(input);
 	}

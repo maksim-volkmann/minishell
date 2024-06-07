@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 10:33:59 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/06 10:18:28 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/06 14:42:03 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ typedef struct s_redirection
 {
 	t_redir_type			type;
 	char					*file;
-	struct s_redirection	*next;
 }	t_redirection;
 
 typedef struct s_command
@@ -45,22 +44,32 @@ typedef struct s_command
 }	t_command;
 
 // parser.c
-
 void			ft_parser(t_command **cmds, t_token **tokens);
 void			print_command(t_command *cmd);
 void			print_redirection(t_redirection *redir);
 
 // list_helper.c
-
 t_command		*ft_new_node(void);
 void			add_or_init_node(t_command **cmds, t_command *new_n);
 
-// fill_node.c
-
-int				check_for_output(char **cmd, int current);
+// darray.c
 int				ft_darray_size(t_token	*tokens);
 char			**ft_get_darray(t_token **tokens);
-void			ft_handle_files(t_redirection *new_n, char **cmd, int actual);
+
+// fill_in_node
+t_redirection	*ft_fill_input(char **cmd);
+int				check_for_input(char **cmd, int current);
+void			ft_handle_in_files(t_redirection *new_n,
+					char **cmd, int actual);
+
+// fill_out_node.c
 t_redirection	*ft_fill_output(char **cmd);
+int				check_for_output(char **cmd, int current);
+void			ft_handle_out_files(t_redirection *new_n,
+					char **cmd, int actual);
+
+// free.c
+void			free_redirection(t_redirection *redir);
+void			free_command(t_command *cmd);
 
 #endif

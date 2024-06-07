@@ -1,5 +1,5 @@
 CC = gcc
-# CFLAGS = -Wall -Wextra -Werror
+# CFLAGS = -Wall -Wextra -Werror -fsanitize=address
 LIBS = -lreadline
 
 RED = \033[1;31m
