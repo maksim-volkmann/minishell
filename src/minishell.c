@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:17:35 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/07 13:31:41 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/08 10:47:44 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ int	main(int argc, char **argv, char **env)
 		}
 		ft_lexer(input, &tokens);
 		ft_parser(&cmds, &tokens);
-		// print_command(cmds);
-		execute_commands(cmds, env);
+		print_command(cmds);
+		// execute_commands(cmds, env);
 		free_command(cmds);
 		free_token_list(tokens);
 		free(input);
