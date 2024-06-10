@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:29:48 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/07 11:11:56 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/10 10:46:13 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,10 @@ t_token	*ft_if_par(t_token **tokens, const char *line, int *i)
 	return (new_token);
 }
 
-t_token *ft_if_quot(t_token **tokens, const char *line, int *i)
+t_token	*ft_if_quot(t_token **tokens, const char *line, int *i)
 {
 	t_token	*new_token;
+	char	*temp;
 	char	*token;
 	int		start;
 	int		end;
@@ -104,8 +105,10 @@ t_token *ft_if_quot(t_token **tokens, const char *line, int *i)
 	if (line[end] == '\'')
 	{
 		(*i)++;
-		token = ft_extract_str((char *)line, start, end + 1);
+		temp = ft_extract_str((char *)line, start, end + 1);
+		token = ft_strtrim(temp, "\'");
 		new_token = ft_new_token(token, QUOTE);
+		free(temp);
 	}
 	else
 	{
