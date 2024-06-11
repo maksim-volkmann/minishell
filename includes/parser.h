@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 10:33:59 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/07 12:10:15 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/11 13:15:37 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,19 @@ typedef struct s_command
 	t_redirection		*output;
 	struct s_command	*next;
 }	t_command;
+
+typedef struct s_env_var
+{
+	char *key;
+	char *value;
+	struct s_env_var *next;
+}	t_env_var;
+
+typedef struct s_shell
+{
+	t_command *commands;
+	t_env_var *env_list;
+}	t_shell;
 
 // parser.c
 void			ft_parser(t_command **cmds, t_token **tokens);
