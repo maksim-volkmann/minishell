@@ -110,15 +110,15 @@
 //     }
 // }
 
-// void print_string_array(char *array[]) {
-//     int i = 0;
-//     while (array[i] != NULL) {
-//         int length = strlen(array[i]);
-//         printf("String %d: %s (Length: %d)\n", i, array[i], length);
-//         i++;
-//     }
-//     printf("String %d: NULL (End of array)\n", i);
-// }
+void print_string_array(char *array[]) {
+    int i = 0;
+    while (array[i] != NULL) {
+        int length = strlen(array[i]);
+        printf("String %d: %s (Length: %d)\n", i, array[i], length);
+        i++;
+    }
+    printf("String %d: NULL (End of array)\n", i);
+}
 
 char *create_cmd_path(char *dir, char *cmd) {
     char *path = ft_strjoin(dir, "/");
@@ -191,7 +191,7 @@ void execute_command(char *cmd[], char **env) {
             exit(EXIT_FAILURE);
         }
     }
-    // print_string_array(cmd);
+    print_string_array(cmd);
     execve(executable_path, cmd, env);
     perror("execve failed");
     free(executable_path);
