@@ -23,3 +23,4 @@ To install the script, copy and run following command:
 ## TODO:
 
 1. Need to modify my own env to be able to use in execve.
+// TEST: echo -- -n "Hello, world!"

@@ -200,24 +200,25 @@ void copy_env_vars(t_shell *shell, char **env)
 	}
 }
 
+
+
 int	main(int argc, char **argv, char **env)
 {
 	char		*input;
 	t_token		*tokens;
 	t_shell		shell;
 
-	// signal(SIGINT, handle_sigint);
-	// signal(SIGQUIT, handle_sigquit);
+	// Initialize the shell struct
 	shell.env_list = NULL;
-	copy_env_vars(&shell, env);
-	// PRINTS SAVES ENVS!
+	copy_env_vars(&shell, env); // Copy environment variables
+	// Uncomment to print environment variables for debugging
 	// print_env_vars(shell.env_list);
 
 	while (1)
 	{
+		// Reset the command list and tokens for each loop iteration
 		shell.commands = NULL;
 		tokens = NULL;
-		// shell.env_list = NULL;
 
 		input = readline("minishell> ");
 		if (input == NULL)
@@ -230,14 +231,18 @@ int	main(int argc, char **argv, char **env)
 			free(input);
 			continue ;
 		}
-		ft_lexer(input, &tokens);
+
+		ft_lexer(input, &tokens); // Lexical analysis of input
+		// Uncomment to print tokens for debugging
 		// print_token_list(tokens);
-		ft_parser(&shell.commands, &tokens);
-		execute_commands(shell.commands, shell.env_list);
-		free_command(shell.commands);
-		free_token_list(tokens);
-		free(input);
+		ft_parser(&shell.commands, &tokens); // Parse tokens into commands
+		execute_commands(shell.commands, shell.env_list); // Execute commands with built-in checks
+		free_command(shell.commands); // Free commands
+		free_token_list(tokens); // Free tokens
+		free(input); // Free input string
 	}
+
+	// Free the copied environment variables
 	free_env_vars(shell.env_list);
 	return (0);
 }
