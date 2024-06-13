@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/27 16:17:35 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/11 14:05:09 by mvolkman         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../includes/executor.h"
 
 // extern int rl_replace_line(const char *text, int clear_undo);
@@ -157,9 +145,7 @@ void add_env_var(t_env_var **env_list, const char *key, const char *value)
 	new_var->next = NULL;
 
 	if (*env_list == NULL)
-	{
 		*env_list = new_var;
-	}
 	else
 	{
 		current = *env_list;
@@ -218,18 +204,18 @@ int	main(int argc, char **argv, char **env)
 {
 	char		*input;
 	t_token		*tokens;
-	t_command	*cmds;
 	t_shell		shell;
 
 	// signal(SIGINT, handle_sigint);
 	// signal(SIGQUIT, handle_sigquit);
 	shell.env_list = NULL;
 	copy_env_vars(&shell, env);
-	print_env_vars(shell.env_list);
+	// PRINTS SAVES ENVS!
+	// print_env_vars(shell.env_list);
 
 	while (1)
 	{
-		cmds = NULL;
+		shell.commands = NULL;
 		tokens = NULL;
 		// shell.env_list = NULL;
 
@@ -245,10 +231,10 @@ int	main(int argc, char **argv, char **env)
 			continue ;
 		}
 		ft_lexer(input, &tokens);
-		print_token_list(tokens);
-		ft_parser(&cmds, &tokens);
-		// execute_commands(cmds, env);
-		free_command(cmds);
+		// print_token_list(tokens);
+		ft_parser(&shell.commands, &tokens);
+		execute_commands(shell.commands, shell.env_list);
+		free_command(shell.commands);
 		free_token_list(tokens);
 		free(input);
 	}

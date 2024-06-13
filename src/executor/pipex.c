@@ -7,221 +7,222 @@
 #include <string.h>
 #include "../../includes/executor.h"
 
-// 0: Success - The command or script executed successfully without errors.
-// 1: General error - A catchall for general errors.
-// 2: Misuse of shell builtins - The shell encountered a misuse of a shell builtin.
-// 126: Command invoked cannot execute - The command was found but could not be executed (e.g., permission problems, or the command is not an executable).
-// 127: Command not found - The command was not found.
-// 128: Invalid exit argument - The exit command was used with an invalid argument.
-// 128+n: Fatal error signal "n" - A command was terminated by signal "n". For example, 130 indicates termination by SIGINT (signal 2), 137 indicates termination by SIGKILL (signal 9), etc.
-// 130: Script terminated by Control-C - The script was terminated by Control-C.
-// 255: Exit status out of range - Exit statuses should be in the range 0-255.
-
-// int	new_waitpid(int id)
+// void	free_env_vars(t_env_var *env_list)
 // {
-// 	int	status;
+// 	t_env_var *current;
+// 	t_env_var *next;
 
-// 	waitpid(id, &status, 0);
-// 	if (WIFEXITED(status))
-// 		return (WEXITSTATUS(status));
-// 	else if (WIFSIGNALED(status))
-// 		return (128 + WTERMSIG(status));
-// 	return (status);
+// 	current = env_list;
+// 	while (current != NULL)
+// 	{
+// 		next = current->next;
+// 		free(current->key);
+// 		free(current->value);
+// 		free(current);
+// 		current = next;
+// 	}
 // }
 
-
-// typedef enum e_redir_type {
-//     REDIR_NONE,
-//     REDIR_INPUT,
-//     REDIR_OUTPUT,
-//     REDIR_APPEND,
-//     REDIR_HEREDOC
-// } t_redir_type;
-
-// typedef struct s_redirection {
-//     t_redir_type type;
-//     char *file;
-// } t_redirection;
-
-// typedef struct s_command {
-//     char **argv;
-//     t_redirection *input;
-//     t_redirection *output;
-//     struct s_command *next;
-// } t_command;
-
-// //REMOVE THIS
-// t_redirection *create_redirection(t_redir_type type, char *file) {
-//     t_redirection *new_redir = (t_redirection *)malloc(sizeof(t_redirection));
-//     if (!new_redir) {
-//         perror("malloc");
-//         exit(EXIT_FAILURE);
-//     }
-//     new_redir->type = type;
-//     new_redir->file = strdup(file);
-//     return new_redir;
-// }
-
-// //REMOVE THIS
-// char **duplicate_argv(char **argv) {
-//     int argc = 0;
-//     while (argv[argc]) {
-//         argc++;
-//     }
-
-//     char **new_argv = (char **)malloc(sizeof(char *) * (argc + 1));
-//     if (!new_argv) {
-//         perror("malloc");
-//         exit(EXIT_FAILURE);
-//     }
-
-//     for (int i = 0; i < argc; i++) {
-//         new_argv[i] = strdup(argv[i]);
-//     }
-//     new_argv[argc] = NULL;
-
-//     return new_argv;
-// }
-
-// //REMOVE THIS
-// t_command *create_command(char **argv) {
-//     t_command *new_cmd = (t_command *)malloc(sizeof(t_command));
-//     if (!new_cmd) {
-//         perror("malloc");
-//         exit(EXIT_FAILURE);
-//     }
-//     new_cmd->argv = duplicate_argv(argv);
-//     new_cmd->input = NULL;
-//     new_cmd->output = NULL;
-//     new_cmd->next = NULL;
-//     return new_cmd;
-// }
-// //?? REMOVE THIS?
-// void add_command(t_command **head, char **argv) {
-//     t_command *new_cmd = create_command(argv);
-//     if (*head == NULL) {
-//         *head = new_cmd;
-//     } else {
-//         t_command *current = *head;
-//         while (current->next) {
-//             current = current->next;
-//         }
-//         current->next = new_cmd;
-//     }
-// }
-
-void print_string_array(char *array[]) {
-    int i = 0;
-    while (array[i] != NULL) {
-        int length = strlen(array[i]);
-        printf("String %d: %s (Length: %d)\n", i, array[i], length);
-        i++;
-    }
-    printf("String %d: NULL (End of array)\n", i);
-}
-
-char *create_cmd_path(char *dir, char *cmd) {
-    char *path = ft_strjoin(dir, "/");
-    char *full_path = ft_strjoin(path, cmd);
-    free(path);
-    return full_path;
-}
-
-char *check_command_in_paths(char **paths, char *cmd) {
-    char *full_path;
-    int i = 0;
-    while (paths[i]) {
-        full_path = create_cmd_path(paths[i], cmd);
-        if (access(full_path, X_OK) == 0) {
-            return full_path;
-        }
-        free(full_path);
-        i++;
-    }
-    return NULL;
-}
-
-void ft_free_split(char **arr) {
-    int i = 0;
-    if (!arr) {
-        return;
-    }
-    while (arr[i]) {
-        free(arr[i]);
-        i++;
-    }
-    free(arr);
-}
-
-char *find_correct_path(char *cmd, char **env)
+char	*find_path_var(t_env_var *env_list)
 {
-    char *path_var = NULL;
-    char **paths;
-    char *correct_path;
-    int i = 0;
+	t_env_var	*current;
 
-    while (env[i]) {
-        if (ft_strncmp(env[i], "PATH=", 5) == 0) {
-            path_var = env[i] + 5;
-            break;
-        }
-        i++;
-    }
-
-    if (!path_var) {
-        return NULL;
-    }
-
-    paths = ft_split(path_var, ':');
-    correct_path = check_command_in_paths(paths, cmd);
-    ft_free_split(paths);
-
-    return correct_path;
+	current = env_list;
+	while (current)
+	{
+		if (ft_strcmp(current->key, "PATH") == 0)
+			return (current->value);
+		current = current->next;
+	}
+	return (NULL);
 }
 
-void execute_command(char *cmd[], char **env) {
-    char *executable_path;
+char	*create_cmd_path(char *dir, char *cmd)
+{
+	char	*path;
+	char	*full_path;
 
-    if (ft_strchr(cmd[0], '/') != NULL) {
-        executable_path = ft_strdup(cmd[0]);
-    } else {
-        executable_path = find_correct_path(cmd[0], env);
-        if (executable_path == NULL) {
-            fprintf(stderr, "command not found: %s\n", cmd[0]);
-            exit(EXIT_FAILURE);
-        }
-    }
-    print_string_array(cmd);
-    execve(executable_path, cmd, env);
-    perror("execve failed");
-    free(executable_path);
-    exit(EXIT_FAILURE);
+	path = ft_strjoin(dir, "/");
+	full_path = ft_strjoin(path, cmd);
+	free(path);
+	return (full_path);
 }
 
+char	*check_command_in_paths(char **paths, char *cmd)
+{
+	char	*full_path;
+	int		i;
 
-// // REMOVE THIS
-// void parse_example(t_command **commands) {
-//     // t_command *cmd1 = create_command((char *[]) {"cat", NULL});
-//     // // cmd1->input = create_redirection(REDIR_INPUT, "in.txt");
-//     // *commands = cmd1;
+	i = 0;
+	while (paths[i])
+	{
+		full_path = create_cmd_path(paths[i], cmd);
+		if (access(full_path, X_OK) == 0)
+			return (full_path);
+		free(full_path);
+		i++;
+	}
+	return (NULL);
+}
 
-//     // t_command *cmd1 = create_command((char *[]) {"cat", NULL});
-//     // // cmd1->input = create_redirection(REDIR_INPUT, "in.txt");
-//     // *commands = cmd1;
+void	ft_free_split(char **arr)
+{
+	int	i;
 
-// 	t_command *cmd1 = create_command((char *[]) {"grep", "line", NULL});
-// 	cmd1->output = create_redirection(REDIR_OUTPUT, "out.txt");
-// 	cmd1->input = create_redirection(REDIR_INPUT, "in.txt");
-// 	*commands = cmd1;
+	i = 0;
+	if (!arr)
+		return ;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	free(arr);
+}
 
-//     // t_command *cmd2 = create_command((char *[]) {"wc", "-l", NULL});
-//     // cmd2->output = create_redirection(REDIR_OUTPUT, "out.txt");
-//     // cmd1->next = cmd2;
-// }
+char	*find_correct_path(char *cmd, t_env_var *env_list)
+{
+	char		*path_var;
+	t_env_var	*current;
+	char		**paths;
+	char		*correct_path;
+	int			i;
 
-// execute_commands - START HERE.
+	path_var = NULL;
+	current = env_list;
+	while (current)
+	{
+		if (ft_strcmp(current->key, "PATH") == 0)
+		{
+			path_var = current->value;
+			break ;
+		}
+		current = current->next;
+	}
+	if (!path_var)
+		return (NULL);
+	paths = ft_split(path_var, ':');
+	correct_path = NULL;
+	i = 0;
+	while (paths[i])
+	{
+		correct_path = create_cmd_path(paths[i], cmd);
+		if (access(correct_path, X_OK) == 0)
+		{
+			ft_free_split(paths);
+			return (correct_path);
+		}
+		free(correct_path);
+		i++;
+	}
+	ft_free_split(paths);
+	return (NULL);
+}
 
-void close_fds(int *input_fd, int *pipe_fd)
+void	execute_command(char *cmd[], t_env_var *env_list)
+{
+	char	*executable_path;
+
+	if (ft_strchr(cmd[0], '/') != NULL)
+		executable_path = ft_strdup(cmd[0]);
+	else
+	{
+		executable_path = find_correct_path(cmd[0], env_list);
+		if (executable_path == NULL)
+		{
+			fprintf(stderr, "command not found: %s\n", cmd[0]);
+			exit(EXIT_FAILURE);
+		}
+	}
+	execve(executable_path, cmd, NULL);
+	perror("execve failed");
+	free(executable_path);
+	exit(EXIT_FAILURE);
+}
+
+void	handle_input_fd(int input_fd)
+{
+	if (input_fd != -1)
+	{
+		if (dup2(input_fd, STDIN_FILENO) == -1)
+		{
+			perror("dup2 input_fd");
+			exit(EXIT_FAILURE);
+		}
+		close(input_fd);
+	}
+}
+
+void	handle_output_fd(int output_fd)
+{
+	if (output_fd != -1)
+	{
+		if (dup2(output_fd, STDOUT_FILENO) == -1)
+		{
+			perror("dup2 output_fd");
+			exit(EXIT_FAILURE);
+		}
+		close(output_fd);
+	}
+}
+
+void	setup_input_redirection(int input_fd, t_redirection *input)
+{
+	int	fd;
+
+	fd = -1;
+	handle_input_fd(input_fd);
+	if (input != NULL && input->file != NULL)
+	{
+		fd = open(input->file, O_RDONLY);
+		if (fd == -1)
+		{
+			perror("open input redirection file");
+			exit(EXIT_FAILURE);
+		}
+		if (dup2(fd, STDIN_FILENO) == -1)
+		{
+			perror("dup2 input redirection file");
+			exit(EXIT_FAILURE);
+		}
+		close(fd);
+	}
+}
+
+void	setup_output_redirection(int output_fd, t_redirection *output)
+{
+	int	fd;
+
+	fd = -1;
+	handle_output_fd(output_fd);
+	if (output != NULL && output->file != NULL)
+	{
+		if (output->type == REDIR_OUTPUT)
+			fd = open(output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		else if (output->type == REDIR_APPEND)
+			fd = open(output->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (fd == -1)
+		{
+			perror("open output redirection file");
+			exit(EXIT_FAILURE);
+		}
+		if (dup2(fd, STDOUT_FILENO) == -1)
+		{
+			perror("dup2 output redirection file");
+			exit(EXIT_FAILURE);
+		}
+		close(fd);
+	}
+}
+
+void	setup_child(int input_fd, int output_fd, t_command *cmd, t_env_var *env_list)
+{
+	setup_input_redirection(input_fd, cmd->input);
+	setup_output_redirection(output_fd, cmd->output);
+	execute_command(cmd->argv, env_list);
+}
+
+void	close_fds(int *input_fd, int *pipe_fd)
 {
 	if (*input_fd != -1)
 		close(*input_fd);
@@ -229,7 +230,7 @@ void close_fds(int *input_fd, int *pipe_fd)
 		close(pipe_fd[1]);
 }
 
-void handle_pipe(int *pipe_fd, t_command *cmd)
+void	handle_pipe(int *pipe_fd, t_command *cmd)
 {
 	if (cmd->next != NULL)
 	{
@@ -246,9 +247,9 @@ void handle_pipe(int *pipe_fd, t_command *cmd)
 	}
 }
 
-void fork_and_setup(int input_fd, int *pipe_fd, t_command *cmd, char **env)
+void	fork_and_setup(int input_fd, int *pipe_fd, t_command *cmd, t_env_var *env_list)
 {
-	pid_t pid;
+	pid_t	pid;
 
 	pid = fork();
 	if (pid == -1)
@@ -257,117 +258,27 @@ void fork_and_setup(int input_fd, int *pipe_fd, t_command *cmd, char **env)
 		exit(EXIT_FAILURE);
 	}
 	else if (pid == 0)
-	{
-		setup_child(input_fd, pipe_fd[1], cmd->argv, env,
-					cmd->input, cmd->output);
-	}
+		setup_child(input_fd, pipe_fd[1], cmd, env_list);
 }
 
-void execute_commands(t_command *commands, char **env)
+void	execute_commands(t_command *commands, t_env_var *env_list)
 {
-	int pipe_fd[2];
-	int input_fd;
-	pid_t pid;
-	t_command *cmd;
+	int			pipe_fd[2];
+	int			input_fd;
+	pid_t		pid;
+	t_command	*cmd;
 
 	input_fd = -1;
 	cmd = commands;
 	while (cmd)
 	{
 		handle_pipe(pipe_fd, cmd);
-		fork_and_setup(input_fd, pipe_fd, cmd, env);
+		fork_and_setup(input_fd, pipe_fd, cmd, env_list);
 		close_fds(&input_fd, pipe_fd);
 		input_fd = pipe_fd[0];
 		cmd = cmd->next;
 	}
-	while ((pid = wait(NULL)) > 0);
+	pid = wait(NULL);
+	while (pid > 0)
+		pid = wait(NULL);
 }
-
-void setup_child(int input_fd, int output_fd, char *cmd[], char **env, t_redirection *input, t_redirection *output)
-{
-    if (input_fd != -1) {
-        if (dup2(input_fd, STDIN_FILENO) == -1) {
-            perror("dup2 input_fd");
-            exit(EXIT_FAILURE);
-        }
-        close(input_fd);
-    }
-
-    if (output_fd != -1) {
-        if (dup2(output_fd, STDOUT_FILENO) == -1) {
-            perror("dup2 output_fd");
-            exit(EXIT_FAILURE);
-        }
-        close(output_fd);
-    }
-
-    if (input->file != NULL) {
-        int fd = open(input->file, O_RDONLY);
-        if (fd == -1) {
-            perror("open input redirection file");
-            exit(EXIT_FAILURE);
-        }
-        if (dup2(fd, STDIN_FILENO) == -1) {
-            perror("dup2 input redirection file");
-            exit(EXIT_FAILURE);
-        }
-        close(fd);
-    }
-
-    if (output->file != NULL) {
-        int fd = open(output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        if (fd == -1) {
-            perror("open output redirection file");
-            exit(EXIT_FAILURE);
-        }
-        if (dup2(fd, STDOUT_FILENO) == -1) {
-            perror("dup2 output redirection file");
-            exit(EXIT_FAILURE);
-        }
-        close(fd);
-    }
-
-    execute_command(cmd, env);
-}
-
-// execute_commands - END HERE.
-
-// void free_commands(t_command *commands) {
-//     t_command *cmd;
-
-//     while (commands) {
-//         cmd = commands;
-//         commands = commands->next;
-
-//         if (cmd->input) {
-//             free(cmd->input->file);
-//             free(cmd->input);
-//         }
-
-//         if (cmd->output) {
-//             free(cmd->output->file);
-//             free(cmd->output);
-//         }
-
-//         for (int i = 0; cmd->argv[i]; i++) {
-//             free(cmd->argv[i]);
-//         }
-//         free(cmd->argv);
-//         free(cmd);
-//     }
-// }
-
-// int main(int argc, char **argv, char **env) {
-//     (void)argc;
-//     (void)argv;
-
-//     t_command *commands = NULL;
-
-//     parse_example(&commands);
-
-//     execute_commands(commands, env);
-
-//     free_commands(commands);
-
-//     return 0;
-// }

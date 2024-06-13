@@ -18,3 +18,8 @@ bash-3.2$
 ## TESTER:
 To install the script, copy and run following command:
 ```bash -c "$(curl -fsSL https://raw.githubusercontent.com/zstenger93/42_minishell_tester/master/install.sh)"```
+
+
+## TODO:
+
+1. Need to modify my own env to be able to use in execve.
