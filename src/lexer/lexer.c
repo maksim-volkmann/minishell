@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:31:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/11 11:49:55 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/13 12:46:35 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,18 @@ void	ft_lexer(const char *line, t_token **tokens)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		ft_skip_spaces(line, &i);
-		if (line[i] == '<' || line[i] == '>')
+		if (line[i] == ' ')
+			ft_lst_add_token(tokens, ft_if_space(line, &i));
+		else if (line[i] == '<' || line[i] == '>')
 			ft_lst_add_token(tokens, ft_if_redi_op(line, &i));
 		else if (line[i] == '|')
 			ft_lst_add_token(tokens, ft_if_pipe(line, &i));
 		else if (line[i] == '(' || line[i] == ')')
 			ft_lst_add_token(tokens, ft_if_par(line, &i));
-		// else if (line[i] == '\'')
-		// 	ft_lst_add_token(tokens, ft_if_quot(tokens, line, &i));
-		// else if (line[i] == '\"')
-			// ft_lst_add_token(tokens, ft_if_do_quot(tokens, line, &i));
+		else if (line[i] == '\'')
+			ft_lst_add_token(tokens, ft_if_quot(line, &i));
+		else if (line[i] == '\"')
+			ft_lst_add_token(tokens, ft_if_do_quot(line, &i));
 		else if (line[i] == '&')
 			ft_lst_add_token(tokens, ft_if_and(line, &i));
 		else

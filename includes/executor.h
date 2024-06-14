@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 10:51:23 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/11 11:44:22 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/12 12:11:31 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define EXECUTOR_H
 
 # include "./parser.h"
+# include "./expander.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>

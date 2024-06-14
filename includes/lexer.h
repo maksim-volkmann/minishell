@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:43:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/11 11:49:17 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/14 12:40:41 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 # include <readline/history.h>
 # include "../libft/include/libft.h"
 
-# define NOWORD "<>|()& \t\n"
-# define QUOTATIONS "\'\""
+# define NOWORD "<>|()& \t\n\'\""
+# define NOVAR " \"\'\t\n$"
 
 typedef enum e_token_type
 {
@@ -31,14 +31,14 @@ typedef enum e_token_type
 	LPAR = 3,
 	RPAR = 4,
 	WORD = 5,
-	// QUOTE = 6,
-	// DQUOTE = 7,
+	QUOTE = 6,
+	DQUOTE = 7,
 	DLESS = 8,
 	DGREAT = 9,
 	AND = 10,
 	DAND = 11,
 	NUM = 12,
-	SPACES = 13,
+	SPACES = 13
 }	t_token_type;
 
 typedef struct s_token
@@ -59,13 +59,14 @@ void	print_linked_list(t_token *head);
 t_token	*ft_if_redi_op(const char *line, int *i);
 t_token	*ft_if_pipe(const char *line, int *i);
 t_token	*ft_if_par(const char *line, int *i);
-t_token	*ft_if_quot(t_token **tokens, const char *line, int *i);
+t_token	*ft_if_quot(const char *line, int *i);
 
 // cases_2.c
 
 t_token	*ft_if_do_quot(const char *line, int *i);
 t_token	*ft_if_and(const char *line, int *i);
 t_token	*ft_if_word(const char *line, int *i);
+t_token	*ft_if_space(const char *line, int *i);
 
 // helper.c
 int		ft_is_separator(char c);
