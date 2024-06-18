@@ -1,5 +1,6 @@
 #include "../../includes/executor.h"
 
+// Free a null-terminated array of strings
 void ft_free_split(char **arr)
 {
     int i;
@@ -15,6 +16,26 @@ void ft_free_split(char **arr)
     free(arr);
 }
 
+// Check if a string is a number
+int ft_strisnum(const char *str)
+{
+    int i;
+
+    if (!str || !*str)
+        return 0;
+    i = 0;
+    if (str[i] == '-' || str[i] == '+')
+        i++;
+    while (str[i])
+    {
+        if (!ft_isdigit(str[i]))
+            return 0;
+        i++;
+    }
+    return 1;
+}
+
+// Print the environment variables
 void print_env_vars(t_env_var *env_list)
 {
     t_env_var *current;
@@ -27,6 +48,7 @@ void print_env_vars(t_env_var *env_list)
     }
 }
 
+// Find the correct path for a command using the PATH environment variable
 char *find_correct_path(char *cmd, t_env_var *env_list)
 {
     char *path_var;
@@ -65,6 +87,7 @@ char *find_correct_path(char *cmd, t_env_var *env_list)
     return (NULL);
 }
 
+// Create the full command path by concatenating the directory and the command
 char *create_cmd_path(char *dir, char *cmd)
 {
     char *path;
@@ -76,6 +99,7 @@ char *create_cmd_path(char *dir, char *cmd)
     return (full_path);
 }
 
+// Set up input redirection
 void setup_input_redirection(int input_fd, t_redirection *input)
 {
     int fd;
@@ -107,6 +131,7 @@ void setup_input_redirection(int input_fd, t_redirection *input)
     }
 }
 
+// Set up output redirection
 void setup_output_redirection(int output_fd, t_redirection *output)
 {
     int fd;
@@ -143,6 +168,7 @@ void setup_output_redirection(int output_fd, t_redirection *output)
 
 /* MODIFY ENV VARIABLES IN OUR STRUCT - START*/
 
+// Get the value of an environment variable
 char *get_env_value(t_env_var *env_list, const char *key)
 {
     t_env_var *current = env_list;
@@ -157,6 +183,7 @@ char *get_env_value(t_env_var *env_list, const char *key)
     return NULL;
 }
 
+// Add a new environment variable to the linked list in alphabetical order
 void add_env_var(t_env_var **env_list, const char *key, const char *value)
 {
     t_env_var *new_var;
@@ -191,6 +218,7 @@ void add_env_var(t_env_var **env_list, const char *key, const char *value)
     }
 }
 
+// Update the value of an existing environment variable or add it if it doesn't exist
 void update_env_var(t_env_var **env_list, const char *key, const char *value)
 {
     t_env_var *current = *env_list;
@@ -209,6 +237,7 @@ void update_env_var(t_env_var **env_list, const char *key, const char *value)
 
 /* MODIFY ENV VARIABLES IN OUR STRUCT - END*/
 
+// Execute the echo command
 void ft_echo(char **args)
 {
     int i;
@@ -232,6 +261,7 @@ void ft_echo(char **args)
         ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
+// Execute the cd command
 void ft_cd(char **args, t_env_var **env_list)
 {
     char *old_pwd;
@@ -274,6 +304,7 @@ void ft_cd(char **args, t_env_var **env_list)
     update_env_var(env_list, "PWD", new_pwd);
 }
 
+// Execute the export command
 void ft_export(char **args, t_env_var **env_list)
 {
     int i;
@@ -311,15 +342,102 @@ void ft_export(char **args, t_env_var **env_list)
     }
 }
 
+// Execute the pwd command
+void ft_pwd()
+{
+    char buffer[1024];
+    char *cwd;
+
+    cwd = getcwd(buffer, sizeof(buffer));
+    if (cwd)
+    {
+        ft_putstr_fd(cwd, STDOUT_FILENO);
+        ft_putchar_fd('\n', STDOUT_FILENO);
+    }
+    else
+    {
+        perror("getcwd");
+    }
+}
+
+// Execute the unset command
+void ft_unset(char **args, t_env_var **env_list)
+{
+    t_env_var *current;
+    t_env_var *prev;
+    int i;
+
+    i = 1;
+    while (args[i])
+    {
+        current = *env_list;
+        prev = NULL;
+        while (current)
+        {
+            if (ft_strcmp(current->key, args[i]) == 0)
+            {
+                if (prev == NULL)
+                {
+                    *env_list = current->next;
+                }
+                else
+                {
+                    prev->next = current->next;
+                }
+                free(current->key);
+                free(current->value);
+                free(current);
+                break;
+            }
+            prev = current;
+            current = current->next;
+        }
+        i++;
+    }
+}
+
+// Execute the exit command
+void ft_exit(char **args)
+{
+    int exit_status;
+
+    exit_status = 0;
+    if (args[1] && args[2])
+    {
+        ft_putendl_fd("exit: too many arguments", STDERR_FILENO);
+        exit_status = 1;
+    }
+    else if (args[1] && !ft_strisnum(args[1]))
+    {
+        ft_putstr_fd("exit: ", STDERR_FILENO);
+        ft_putstr_fd(args[1], STDERR_FILENO);
+        ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+        exit_status = 255;
+    }
+    else if (args[1])
+    {
+        exit_status = ft_atoi(args[1]);
+    }
+    exit(exit_status);
+}
+
+// Execute the env command to print the environment variables
+void ft_env(t_env_var *env_list)
+{
+    print_env_vars(env_list);
+}
+
+// Check if a command is a built-in command
 int is_builtin(char *cmd)
 {
-    if (ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "cd") == 0 || ft_strcmp(cmd, "export") == 0)
+    if (ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "cd") == 0 || ft_strcmp(cmd, "export") == 0 || ft_strcmp(cmd, "pwd") == 0 || ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "env") == 0 || ft_strcmp(cmd, "exit") == 0)
     {
         return 1;
     }
     return 0;
 }
 
+// Execute built-in commands
 void execute_builtin(t_command *cmd, t_env_var **env_list)
 {
     if (ft_strcmp(cmd->argv[0], "echo") == 0)
@@ -334,8 +452,25 @@ void execute_builtin(t_command *cmd, t_env_var **env_list)
     {
         ft_export(cmd->argv, env_list);
     }
+    else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
+    {
+        ft_pwd();
+    }
+    else if (ft_strcmp(cmd->argv[0], "unset") == 0)
+    {
+        ft_unset(cmd->argv, env_list);
+    }
+    else if (ft_strcmp(cmd->argv[0], "env") == 0)
+    {
+        ft_env(*env_list);
+    }
+    else if (ft_strcmp(cmd->argv[0], "exit") == 0)
+    {
+        ft_exit(cmd->argv);
+    }
 }
 
+// Execute a command, handling both built-in and external commands
 void execute_command(t_command *cmd, t_env_var *env_list)
 {
     char *executable_path;
@@ -389,6 +524,7 @@ void execute_command(t_command *cmd, t_env_var *env_list)
     exit(EXIT_FAILURE);
 }
 
+// Set up the child process for execution
 void setup_child(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd)
 {
     setup_input_redirection(input_fd, cmd->input);
@@ -396,6 +532,7 @@ void setup_child(t_command *cmd, t_env_var *env_list, int input_fd, int output_f
     execute_command(cmd, env_list);
 }
 
+// Close file descriptors
 void close_fds(int *input_fd, int *pipe_fd)
 {
     if (*input_fd != -1)
@@ -404,6 +541,7 @@ void close_fds(int *input_fd, int *pipe_fd)
         close(pipe_fd[1]);
 }
 
+// Handle piping between commands
 void handle_pipe(int *pipe_fd, t_command *cmd)
 {
     if (cmd->next != NULL)
@@ -421,6 +559,7 @@ void handle_pipe(int *pipe_fd, t_command *cmd)
     }
 }
 
+// Fork and set up child processes
 void fork_and_setup(int input_fd, int *pipe_fd, t_command *cmd, t_env_var *env_list)
 {
     pid_t pid;
@@ -437,6 +576,7 @@ void fork_and_setup(int input_fd, int *pipe_fd, t_command *cmd, t_env_var *env_l
     }
 }
 
+// Execute commands with piping
 void execute_commands(t_command *commands, t_env_var *env_list)
 {
     int pipe_fd[2];
@@ -454,6 +594,5 @@ void execute_commands(t_command *commands, t_env_var *env_list)
         input_fd = pipe_fd[0];
         cmd = cmd->next;
     }
-    while ((pid = wait(NULL)) > 0)
-        ;
+    while ((pid = wait(NULL)) > 0);
 }
