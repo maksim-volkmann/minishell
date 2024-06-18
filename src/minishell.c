@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:17:35 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/14 13:42:01 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/18 13:32:39 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,9 +225,9 @@ int	main(int argc, char **argv, char **env)
 		}
 		ft_lexer(input, &tokens);
 		print_token_list(tokens);
-		ft_parser(&shell.cmds, &tokens);
-		execute_commands(shell.cmds, env);
-		free_command(shell.cmds);
+		// ft_parser(&shell.cmds, &tokens);
+		// execute_commands(shell.cmds, env);
+		// free_command(shell.cmds);
 		free_token_list(tokens);
 		free(input);
 	}
@@ -236,8 +236,9 @@ int	main(int argc, char **argv, char **env)
 }
 
 // TO DO
-// unir tokens que con WORD DQ y Q que esten consecutivos
 // no expandir variables que se encuentren adentro de Q, quizas con un flag o algo
+
+// unir tokens que con WORD DQ y Q que esten consecutivos
 
 
 
