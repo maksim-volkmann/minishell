@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:17:35 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/19 12:26:01 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/19 15:07:43 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ int	main(int argc, char **argv, char **env)
 	t_token		*tokens;
 	t_shell		shell;
 
-	atexit(leaks);
+	// atexit(leaks);
 	shell.env_list = NULL;
 	copy_env_vars(&shell, env);
 	shell.exit_code = 0;
@@ -156,6 +156,8 @@ int	main(int argc, char **argv, char **env)
 		shell.cmds = NULL;
 		tokens = NULL;
 		input = readline("minishell> ");
+		if (!input)
+			exit(0);
 		input = ft_expander(input, shell.env_list);
 		// printf("%s\n", input);
 		if (ft_strcmp(input, "") == 0)
@@ -164,16 +166,16 @@ int	main(int argc, char **argv, char **env)
 			break ;
 		}
 		ft_lexer(input, &tokens);
-		print_token_list(tokens);
+		// print_token_list(tokens);
 		ft_parser(&shell.cmds, &tokens);
-    if (is_builtin(shell.commands->argv[0]))
-    {
-        execute_builtin(shell.commands, &shell.env_list);
-    }
-    else
-    {
-        execute_commands(shell.commands, shell.env_list);
-    }
+		if (is_builtin(shell.cmds->argv[0]))
+		{
+			execute_builtin(shell.cmds, &shell.env_list);
+		}
+		else
+		{
+			execute_commands(shell.cmds, shell.env_list);
+		}
 		free_command(shell.cmds);
 		free_token_list(tokens);
 		free(input);
@@ -181,6 +183,11 @@ int	main(int argc, char **argv, char **env)
 	free_env_vars(shell.env_list);
 	return (0);
 }
+
+// #define TESTER 1
+
+
+
 
 // TO DO
 // no expandir variables que se encuentren adentro de Q, quizas con un flag o algo

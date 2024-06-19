@@ -141,35 +141,36 @@ int is_builtin(char *cmd)
 
 void execute_builtin(t_command *cmd, t_env_var **env_list)
 {
-    if (ft_strcmp(cmd->argv[0], "echo") == 0)
-    {
-        ft_echo(cmd->argv);
-    }
-    else if (ft_strcmp(cmd->argv[0], "cd") == 0)
-    {
-        ft_cd(cmd->argv, env_list);
-    }
-    else if (ft_strcmp(cmd->argv[0], "export") == 0)
-    {
-        ft_export(cmd->argv, env_list);
-    }
-    else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
-    {
-        ft_pwd();
-    }
-    else if (ft_strcmp(cmd->argv[0], "unset") == 0)
-    {
-        ft_unset(cmd->argv, env_list);
-    }
-    else if (ft_strcmp(cmd->argv[0], "exit") == 0)
-    {
-        ft_exit(cmd->argv);
-    }
-    else if (ft_strcmp(cmd->argv[0], "env") == 0)
-    {
-        ft_env(*env_list);
-    }
+	if (ft_strcmp(cmd->argv[0], "echo") == 0)
+	{
+		ft_echo(cmd->argv, *env_list);
+	}
+	else if (ft_strcmp(cmd->argv[0], "cd") == 0)
+	{
+		ft_cd(cmd->argv, env_list);
+	}
+	else if (ft_strcmp(cmd->argv[0], "export") == 0)
+	{
+		ft_export(cmd->argv, env_list);
+	}
+	else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
+	{
+		ft_pwd();
+	}
+	else if (ft_strcmp(cmd->argv[0], "unset") == 0)
+	{
+		ft_unset(cmd->argv, env_list);
+	}
+	else if (ft_strcmp(cmd->argv[0], "env") == 0)
+	{
+		print_env_vars(*env_list);
+	}
+	else if (ft_strcmp(cmd->argv[0], "exit") == 0)
+	{
+		ft_exit(cmd->argv);
+	}
 }
+
 
 void execute_command(t_command *cmd, t_env_var *env_list)
 {

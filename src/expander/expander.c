@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:51:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/18 14:34:05 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/19 14:38:09 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,10 @@ char	*ft_expander(char *input, t_env_var *env)
 		{
 			exp_var = ft_extract_var(input, &i);
 			exp_var = ft_expand_var(env, exp_var);
-			exp_input = ft_join_input(exp_input, exp_var);
+			if (exp_var != NULL)
+				exp_input = ft_join_input(exp_input, exp_var);
+			else
+				exp_input = ft_join_input(exp_input, "");
 		}
 		else
 		{
