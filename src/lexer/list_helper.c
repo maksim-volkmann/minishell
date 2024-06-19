@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:21:13 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/04 10:08:31 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/19 11:56:11 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,4 +40,67 @@ void	ft_lst_add_token(t_token **tokens, t_token *new_token)
 		tmp = tmp->next;
 	tmp->next = new_token;
 	return ;
+}
+
+void	remove_current_token(t_token **head, t_token **current,
+				t_token **previous)
+{
+	t_token	*temp;
+
+	temp = *current;
+
+	if (*previous == NULL)
+		*head = (*current)->next;
+	else
+		(*previous)->next = (*current)->next;
+	*current = (*current)->next;
+	free(temp->token);
+	free(temp);
+}
+
+void	remove_spaces(t_token **head)
+{
+	t_token	*current;
+	t_token	*previous;
+
+	current = *head;
+	previous = NULL;
+	while (current != NULL)
+	{
+		if (current->type == SPACES)
+			remove_current_token(head, &current, &previous);
+		else
+		{
+			previous = current;
+			current = current->next;
+		}
+	}
+}
+
+void	merge_tokens(t_token **head)
+{
+	t_token	*current;
+	t_token	*next_node;
+	char	*new_token;
+
+	current = *head;
+	while (current != NULL && current->next != NULL)
+	{
+		next_node = current->next;
+		if ((current->type == WORD || current->type == DQUOTE)
+			&& (next_node->type == DQUOTE || next_node->type == WORD))
+		{
+			new_token = ft_strjoin(current->token, next_node->token);
+			if (!new_token)
+				return ;
+			free(current->token);
+			current->token = new_token;
+			current->type = WORD;
+			current->next = next_node->next;
+			free(next_node->token);
+			free(next_node);
+		}
+		else
+			current = current->next;
+	}
 }

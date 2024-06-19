@@ -1,12 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/27 16:17:35 by adrherna          #+#    #+#             */
+/*   Updated: 2024/06/19 12:26:01 by adrherna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/executor.h"
+#include <stdio.h>
 
 // extern int rl_replace_line(const char *text, int clear_undo);
 
-// void	leaks(void)
-// {
-// 	system("leaks minishell_2");
-// }
-// atexit(leaks);
+void	leaks(void)
+{
+	system("leaks minishell");
+}
 
 void free_env_vars(t_env_var *env_list)
 {
@@ -31,8 +43,8 @@ const char* get_token_type_string(t_token_type type) {
         case LPAR:    return "LPAR";
         case RPAR:    return "RPAR";
         case WORD:    return "WORD";
-        // case QUOTE:   return "QUOTE";
-        // case DQUOTE:  return "DQUOTE";
+        case QUOTE:   return "QUOTE";
+        case DQUOTE:  return "DQUOTE";
         case DLESS:   return "DLESS";
         case DGREAT:  return "DGREAT";
         case AND:     return "AND";
@@ -104,19 +116,6 @@ void print_command(t_command *cmd) {
     }
 }
 
-// void handle_sigint(int sig)
-// {
-// 	printf("\n");
-// 	rl_on_new_line();
-// 	rl_replace_line("", 0);
-// 	rl_redisplay();
-// }
-
-// void	handle_sigquit(int sig)
-// {
-
-// }
-
 void copy_env_vars(t_shell *shell, char **env)
 {
     int        i;
@@ -142,65 +141,76 @@ void copy_env_vars(t_shell *shell, char **env)
     }
 }
 
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
-    char *input;
-    t_token *tokens;
-    t_shell shell;
+	char		*input;
+	t_token		*tokens;
+	t_shell		shell;
 
-    shell.env_list = NULL;
-    copy_env_vars(&shell, env);
-
-    while (1)
+	atexit(leaks);
+	shell.env_list = NULL;
+	copy_env_vars(&shell, env);
+	shell.exit_code = 0;
+	while (1)
+	{
+		shell.cmds = NULL;
+		tokens = NULL;
+		input = readline("minishell> ");
+		input = ft_expander(input, shell.env_list);
+		// printf("%s\n", input);
+		if (ft_strcmp(input, "") == 0)
+		{
+			free(input);
+			break ;
+		}
+		ft_lexer(input, &tokens);
+		print_token_list(tokens);
+		ft_parser(&shell.cmds, &tokens);
+    if (is_builtin(shell.commands->argv[0]))
     {
-        shell.commands = NULL;
-        tokens = NULL;
-
-        input = readline("minishell> ");
-        if (input == NULL)
-        {
-            printf("exit\n");
-            break;
-        }
-        if (ft_strcmp(input, "") == 0)
-        {
-            free(input);
-            continue;
-        }
-
-        ft_lexer(input, &tokens);
-        ft_parser(&shell.commands, &tokens);
-
-        // Execute built-in commands directly in the parent process
-        if (is_builtin(shell.commands->argv[0]))
-        {
-            execute_builtin(shell.commands, &shell.env_list);
-        }
-        else
-        {
-            execute_commands(shell.commands, shell.env_list);
-        }
-
-        free_command(shell.commands);
-        free_token_list(tokens);
-        free(input);
+        execute_builtin(shell.commands, &shell.env_list);
     }
-
-    free_env_vars(shell.env_list);
-    return (0);
+    else
+    {
+        execute_commands(shell.commands, shell.env_list);
+    }
+		free_command(shell.cmds);
+		free_token_list(tokens);
+		free(input);
+	}
+	free_env_vars(shell.env_list);
+	return (0);
 }
 
-		// print_command(cmds);
+// TO DO
+// no expandir variables que se encuentren adentro de Q, quizas con un flag o algo
+
+// unir tokens que con WORD DQ y Q que esten consecutivos
+
+// checkear >">"
+
+
+	// print_env_vars(shell.env_list);
+// void handle_sigint(int sig)
+// {
+// 	printf("\n");
+// 	rl_on_new_line();
+// 	rl_replace_line("", 0);
+// 	rl_redisplay();
+// }
+
+// void	handle_sigquit(int sig)
+// {
+
+// }
+
+
+
+
+		// print_command(shell.cmds);
 // To do
 
 // limpiar argv despues de conseguir input y output files
-
-
-
-
-
-
-
 
 		// print_cmd_list(cmds);
 		// print_linked_list(tokens);

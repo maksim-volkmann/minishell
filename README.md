@@ -14,6 +14,21 @@ aaa
 bash-3.2$
 ```
 
+To Do:
+
+-History
+
+-Signals
+
+-Heredoc
+
+-Finish lexer and parsing
+
+-Exit codes
+
+-Segfault when setting input without command
+
+-How to organize
 
 ## TESTER:
 To install the script, copy and run following command:

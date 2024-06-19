@@ -14,6 +14,7 @@
 # define EXECUTOR_H
 
 # include "./parser.h"
+# include "./expander.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
