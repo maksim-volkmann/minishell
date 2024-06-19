@@ -59,6 +59,8 @@
   "files.associations": {
 	"libft.h": "c",
 	"stdio.h": "c",
-	"executor.h": "c"
+	"executor.h": "c",
+	"iterator": "c",
+	"builtins.h": "c"
 }
 }
