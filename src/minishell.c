@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:17:35 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/18 13:32:39 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/19 12:26:01 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,7 @@ void copy_env_vars(t_shell *shell, char **env)
 	}
 }
 
+
 int	main(int argc, char **argv, char **env)
 {
 	char		*input;
@@ -217,7 +218,7 @@ int	main(int argc, char **argv, char **env)
 		tokens = NULL;
 		input = readline("minishell> ");
 		input = ft_expander(input, shell.env_list);
-		printf("%s\n", input);
+		// printf("%s\n", input);
 		if (ft_strcmp(input, "") == 0)
 		{
 			free(input);
@@ -225,9 +226,9 @@ int	main(int argc, char **argv, char **env)
 		}
 		ft_lexer(input, &tokens);
 		print_token_list(tokens);
-		// ft_parser(&shell.cmds, &tokens);
-		// execute_commands(shell.cmds, env);
-		// free_command(shell.cmds);
+		ft_parser(&shell.cmds, &tokens);
+		execute_commands(shell.cmds, env);
+		free_command(shell.cmds);
 		free_token_list(tokens);
 		free(input);
 	}
@@ -240,7 +241,7 @@ int	main(int argc, char **argv, char **env)
 
 // unir tokens que con WORD DQ y Q que esten consecutivos
 
-
+// checkear >">"
 
 
 	// print_env_vars(shell.env_list);

@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:43:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/14 12:40:41 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/19 11:59:29 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,9 @@ void	ft_skip_spaces(const char *line, int *i);
 
 t_token	*ft_new_token(char *str, enum e_token_type type);
 void	ft_lst_add_token(t_token **tokens, t_token *new_token);
-int		ft_strcmp(const char *s1, const char *s2);
+void	merge_tokens(t_token **head);
+void	remove_current_token(t_token **head, t_token **current,
+			t_token **previous);
+void	remove_spaces(t_token **head);
 
 #endif

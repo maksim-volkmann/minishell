@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:31:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/13 12:46:35 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/19 12:00:02 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void	ft_lexer(const char *line, t_token **tokens)
 		else
 			ft_lst_add_token(tokens, ft_if_word(line, &i));
 	}
+	merge_tokens(tokens);
+	remove_spaces(tokens);
 }
 
 void	free_token_list(t_token *head)
