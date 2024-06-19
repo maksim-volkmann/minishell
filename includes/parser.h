@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 10:33:59 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/11 13:15:37 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/06/12 11:58:39 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,16 @@ typedef struct s_command
 
 typedef struct s_env_var
 {
-	char *key;
-	char *value;
-	struct s_env_var *next;
+	char	*key;
+	char	*value;
+	struct	s_env_var *next;
 }	t_env_var;
 
 typedef struct s_shell
 {
-	t_command *commands;
-	t_env_var *env_list;
+	t_command	*cmds;
+	t_env_var	*env_list;
+	int			exit_code;
 }	t_shell;
 
 // parser.c

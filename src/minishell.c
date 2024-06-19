@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:17:35 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/11 14:05:09 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/06/19 12:26:01 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/executor.h"
+#include <stdio.h>
 
 // extern int rl_replace_line(const char *text, int clear_undo);
 
-// void	leaks(void)
-// {
-// 	system("leaks minishell_2");
-// }
-// atexit(leaks);
+void	leaks(void)
+{
+	system("leaks minishell");
+}
 
 void free_env_vars(t_env_var *env_list)
 {
@@ -43,8 +43,8 @@ const char* get_token_type_string(t_token_type type) {
         case LPAR:    return "LPAR";
         case RPAR:    return "RPAR";
         case WORD:    return "WORD";
-        // case QUOTE:   return "QUOTE";
-        // case DQUOTE:  return "DQUOTE";
+        case QUOTE:   return "QUOTE";
+        case DQUOTE:  return "DQUOTE";
         case DLESS:   return "DLESS";
         case DGREAT:  return "DGREAT";
         case AND:     return "AND";
@@ -115,19 +115,6 @@ void print_command(t_command *cmd) {
         printf("\n");
     }
 }
-
-// void handle_sigint(int sig)
-// {
-// 	printf("\n");
-// 	rl_on_new_line();
-// 	rl_replace_line("", 0);
-// 	rl_redisplay();
-// }
-
-// void	handle_sigquit(int sig)
-// {
-
-// }
 
 void print_env_vars(t_env_var *env_list)
 {
@@ -203,7 +190,7 @@ void copy_env_vars(t_shell *shell, char **env)
 		if (!sep)
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		key = ft_substr(env[i], 0, sep - env[i]);
 		value = ft_strdup(sep + 1);
@@ -214,41 +201,34 @@ void copy_env_vars(t_shell *shell, char **env)
 	}
 }
 
+
 int	main(int argc, char **argv, char **env)
 {
 	char		*input;
 	t_token		*tokens;
-	t_command	*cmds;
 	t_shell		shell;
 
-	// signal(SIGINT, handle_sigint);
-	// signal(SIGQUIT, handle_sigquit);
+	atexit(leaks);
 	shell.env_list = NULL;
 	copy_env_vars(&shell, env);
-	print_env_vars(shell.env_list);
-
+	shell.exit_code = 0;
 	while (1)
 	{
-		cmds = NULL;
+		shell.cmds = NULL;
 		tokens = NULL;
-		// shell.env_list = NULL;
-
 		input = readline("minishell> ");
-		if (input == NULL)
-		{
-			printf("exit\n");
-			break ;
-		}
+		input = ft_expander(input, shell.env_list);
+		// printf("%s\n", input);
 		if (ft_strcmp(input, "") == 0)
 		{
 			free(input);
-			continue ;
+			break ;
 		}
 		ft_lexer(input, &tokens);
 		print_token_list(tokens);
-		ft_parser(&cmds, &tokens);
-		// execute_commands(cmds, env);
-		free_command(cmds);
+		ft_parser(&shell.cmds, &tokens);
+		execute_commands(shell.cmds, env);
+		free_command(shell.cmds);
 		free_token_list(tokens);
 		free(input);
 	}
@@ -256,17 +236,35 @@ int	main(int argc, char **argv, char **env)
 	return (0);
 }
 
-		// print_command(cmds);
+// TO DO
+// no expandir variables que se encuentren adentro de Q, quizas con un flag o algo
+
+// unir tokens que con WORD DQ y Q que esten consecutivos
+
+// checkear >">"
+
+
+	// print_env_vars(shell.env_list);
+// void handle_sigint(int sig)
+// {
+// 	printf("\n");
+// 	rl_on_new_line();
+// 	rl_replace_line("", 0);
+// 	rl_redisplay();
+// }
+
+// void	handle_sigquit(int sig)
+// {
+
+// }
+
+
+
+
+		// print_command(shell.cmds);
 // To do
 
 // limpiar argv despues de conseguir input y output files
-
-
-
-
-
-
-
 
 		// print_cmd_list(cmds);
 		// print_linked_list(tokens);
