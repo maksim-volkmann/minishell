@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 10:37:14 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/14 12:40:53 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/19 16:29:29 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,36 @@ int	ft_is_separator_var(char c)
 	return (0);
 }
 
-char	*ft_expand_var(t_env_var *env, char *var)
+char	*ft_extract_var(char *input, int *i)
 {
-	t_env_var	*current;
-	char		*exp_var;
+	char		*var;
+	int			j;
+	const int	var_len = ft_var_len(input, (*i));
 
-	current = env;
-	while (current != NULL)
+	if (!var)
+		return (NULL);
+	(*i)++;
+	if (input[(*i)] == '?')
 	{
-		if (ft_strcmp(current->key, var) == 0)
-		{
-			exp_var = current->value;
-			free(var);
-			return (exp_var);
-		}
-		current = current->next;
+		var = ft_strdup("?");
+		(*i)++;
+		return (var);
 	}
-	free(var);
-	return (NULL);
+	var = malloc(var_len + 1);
+	j = 0;
+	while (input[(*i)] != 0)
+	{
+		if (ft_is_separator_var(input[(*i)]) != 0)
+			break ;
+		else
+		{
+			var[j] = input[(*i)];
+			j++;
+			(*i)++;
+		}
+	}
+	var[j] = '\0';
+	return (var);
 }
 
 int	ft_var_len(char *input, int i)
@@ -66,30 +78,26 @@ int	ft_var_len(char *input, int i)
 	return (len);
 }
 
-char	*ft_extract_var(char *input, int *i)
+char	*ft_expand_var(t_env_var *env, char *var)
 {
-	char		*var;
-	int			j;
-	const int	var_len = ft_var_len(input, (*i));
+	t_env_var	*current;
+	char		*exp_var;
 
-	var = malloc(var_len + 1);
-	if (!var)
-		return (NULL);
-	(*i)++;
-	j = 0;
-	while (input[(*i)] != 0)
+	if (ft_strcmp(var, "?") == 0)
+		return (ft_strdup("23"));
+	current = env;
+	while (current != NULL)
 	{
-		if (ft_is_separator_var(input[(*i)]) != 0)
-			break ;
-		else
+		if (ft_strcmp(current->key, var) == 0)
 		{
-			var[j] = input[(*i)];
-			j++;
-			(*i)++;
+			exp_var = current->value;
+			free(var);
+			return (exp_var);
 		}
+		current = current->next;
 	}
-	var[j] = '\0';
-	return (var);
+	free(var);
+	return (NULL);
 }
 
 char	*ft_join_input(char *s1, char *s2)
