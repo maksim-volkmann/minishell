@@ -15,16 +15,8 @@ void ft_echo(char **args, t_env_var *env_list)
 	}
 	while (args[i])
 	{
-		if (args[i][0] == '$')
-		{
-			env_value = get_env_value(env_list, args[i] + 1);
-			if (env_value)
-				ft_putstr_fd(env_value, STDOUT_FILENO);
-		}
-		else
-		{
-			ft_putstr_fd(args[i], STDOUT_FILENO);
-		}
+
+		ft_putstr_fd(args[i], STDOUT_FILENO);
 		if (args[i + 1])
 			ft_putchar_fd(' ', STDOUT_FILENO);
 		i++;

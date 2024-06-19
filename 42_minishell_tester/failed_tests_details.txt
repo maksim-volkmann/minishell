@@ -1,0 +1,228 @@
+Failed test: /bin/echo ""$?""
+
+Failure Category: STD_OUT
+Expected: 0
+Actual: 
+------
+Failed test: /bin/echo $?"42"
+
+Failure Category: STD_OUT
+Expected: 042
+Actual: 42
+------
+Failed test: /bin/echo ''$?''"42"
+
+Failure Category: STD_OUT
+Expected: 042
+Actual: 42
+------
+Failed test: /bin/echo '"$USER"'
+
+Failure Category: STD_OUT
+Expected: "$USER"
+Actual: $USER
+------
+Failed test: /bin/echo "'$USER'"
+
+Failure Category: STD_OUT
+Expected: 'mvolkman'
+Actual: $USER
+------
+Failed test: /bin/echo '"'$USER'"'
+
+Failure Category: STD_OUT
+Expected: "mvolkman"
+Actual: mvolkman
+------
+Failed test: /bin/echo "''$USER''"
+
+Failure Category: STD_OUT
+Expected: ''mvolkman''
+Actual: mvolkman
+------
+Failed test: /bin/echo "'"'$USER'"'"
+
+Failure Category: STD_OUT
+Expected: '$USER'
+Actual: mvolkman
+------
+Failed test: /bin/echo '"'"$USER"'"'
+
+Failure Category: STD_OUT
+Expected: "mvolkman"
+Actual: mvolkman
+------
+Failed test: /bin/echo "exit_code ->$? user ->$USER home -> $HOME"
+
+Failure Category: STD_OUT
+Expected: exit_code ->0 user ->mvolkman home -> /Users/mvolkman
+Actual: exit_code -> user ->mvolkman home -> /Users/mvolkman
+------
+Failed test: /bin/echo $"42$"
+
+Failure Category: STD_OUT
+Expected: 42$
+Actual: 42
+------
+Failed test: /bin/echo "$ "
+
+Failure Category: STD_OUT
+Expected: $ 
+Actual:  
+------
+Failed test: /bin/echo hi >./outfiles/outfile01 | /bin/echo bye
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 134
+------
+Failed test: /bin/echo '$ '
+
+Failure Category: STD_OUT
+Expected: $ 
+Actual: $
+------
+Failed test: /bin/echo "$?"
+
+Failure Category: STD_OUT
+Expected: 0
+Actual: 
+------
+Failed test: /bin/echo "'$?'"
+
+Failure Category: STD_OUT
+Expected: '0'
+Actual: $?
+------
+Failed test: /bin/echo \$USER
+
+Failure Category: STD_OUT
+Expected: $USER
+Actual: \mvolkman
+------
+Failed test: /bin/echo \\$USER
+
+Failure Category: STD_OUT
+Expected: \mvolkman
+Actual: \\mvolkman
+------
+Failed test: /bin/echo \\\$USER
+
+Failure Category: STD_OUT
+Expected: \$USER
+Actual: \\\mvolkman
+------
+Failed test: /bin/echo \\\\$USER
+
+Failure Category: STD_OUT
+Expected: \\mvolkman
+Actual: \\\\mvolkman
+------
+Failed test: /bin/echo \\\\\$USER
+
+Failure Category: STD_OUT
+Expected: \\$USER
+Actual: \\\\\mvolkman
+------
+Failed test: /bin/echo \\\\\\\\\$USER
+
+Failure Category: STD_OUT
+Expected: \\\\$USER
+Actual: \\\\\\\\\mvolkman
+------
+Failed test: /bin/echo \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\$USER \$PATH \\$PWD
+
+Failure Category: STD_OUT
+Expected: \\\\\\\\\\\\\\\\$USER $PATH \/Users/mvolkman/minishell_v5/42_minishell_tester
+Actual: \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\mvolkman \/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin \\/Users/mvolkman/minishell_v5/42_minishell_tester
+------
+Failed test: /bin/echo "cat lol.c '|' cat > lol.c"
+
+Failure Category: STD_OUT
+Expected: cat lol.c '|' cat > lol.c
+Actual: cat lol.c | cat > lol.c
+------
+Failed test: /bin/echo '$USER' "$USER" "text  ' text"
+
+Failure Category: STD_OUT
+Expected: $USER mvolkman text  ' text
+Actual: $USER mvolkman text   text
+------
+Failed test: /bin/echo "'$USER'"
+
+Failure Category: STD_OUT
+Expected: 'mvolkman'
+Actual: $USER
+------
+Failed test: /bin/echo " '$USER' "
+
+Failure Category: STD_OUT
+Expected:  'mvolkman' 
+Actual:  $USER 
+------
+Failed test: /bin/echo text"'$USER'" ' $USER '
+
+Failure Category: STD_OUT
+Expected: text'mvolkman'  $USER 
+Actual: text$USER $USER
+------
+Failed test: /bin/echo '              $USER          '
+
+Failure Category: STD_OUT
+Expected:               $USER          
+Actual: $USER
+------
+Failed test: /bin/echo '""""""""$USER""""""""'
+
+Failure Category: STD_OUT
+Expected: """"""""$USER""""""""
+Actual: $USER
+------
+Failed test: /bin/echo ""'""""""$USER""""""'""
+
+Failure Category: STD_OUT
+Expected: """"""$USER""""""
+Actual: $USER
+------
+Failed test: /bin/echo """""""'"$USER"'"""""""
+
+Failure Category: STD_OUT
+Expected: 'mvolkman'
+Actual: $USER
+------
+Failed test: /bin/echo """"""'""$USER""'""""""
+
+Failure Category: STD_OUT
+Expected: ""$USER""
+Actual: $USER
+------
+Failed test: /bin/echo ""'""'""""$USER""""'""'""
+
+Failure Category: STD_OUT
+Expected: ""mvolkman""
+Actual: mvolkman
+------
+Failed test: /bin/echo '""'""'""""$USER""""'""'""'
+
+Failure Category: STD_OUT
+Expected: """"""$USER""""""
+Actual: $USER
+------
+Failed test: /bin/echo $USER'$USER'text oui oui     oui  oui $USER oui      $USER ''
+
+Failure Category: STD_OUT
+Expected: mvolkman$USERtext oui oui oui oui mvolkman oui mvolkman 
+Actual: mvolkman$USERtext oui oui oui oui mvolkman oui mvolkman
+------
+Failed test: /bin/echo '' ""
+
+Failure Category: STD_OUT
+Expected:  
+Actual: 
+------
+Failed test: /bin/echo " test1 test2 " 'test3 '
+
+Failure Category: STD_OUT
+Expected:  test1 test2  test3 
+Actual:  test1 test2  test3
+------

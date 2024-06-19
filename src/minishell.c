@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:17:35 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/19 15:07:43 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/06/19 16:10:25 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,48 +141,7 @@ void copy_env_vars(t_shell *shell, char **env)
     }
 }
 
-int	main(int argc, char **argv, char **env)
-{
-	char		*input;
-	t_token		*tokens;
-	t_shell		shell;
 
-	// atexit(leaks);
-	shell.env_list = NULL;
-	copy_env_vars(&shell, env);
-	shell.exit_code = 0;
-	while (1)
-	{
-		shell.cmds = NULL;
-		tokens = NULL;
-		input = readline("minishell> ");
-		if (!input)
-			exit(0);
-		input = ft_expander(input, shell.env_list);
-		// printf("%s\n", input);
-		if (ft_strcmp(input, "") == 0)
-		{
-			free(input);
-			break ;
-		}
-		ft_lexer(input, &tokens);
-		// print_token_list(tokens);
-		ft_parser(&shell.cmds, &tokens);
-		if (is_builtin(shell.cmds->argv[0]))
-		{
-			execute_builtin(shell.cmds, &shell.env_list);
-		}
-		else
-		{
-			execute_commands(shell.cmds, shell.env_list);
-		}
-		free_command(shell.cmds);
-		free_token_list(tokens);
-		free(input);
-	}
-	free_env_vars(shell.env_list);
-	return (0);
-}
 
 // #define TESTER 1
 

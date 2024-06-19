@@ -5,8 +5,6 @@ export MINISHELL_PATH=./
 export EXECUTABLE=minishell
 RUNDIR=$HOME/42_minishell_tester
 
->"failed_tests_details.txt"
-
 NL=$'\n'
 TAB=$'\t'
 
@@ -160,18 +158,6 @@ print_stats() {
 	echo ""
 }
 
-log_failure() {
-    category=$1
-    input_command="$2"
-    expected_value="$3"
-    actual_value="$4"
-    echo "Failed test: $input_command" >> failed_tests_details.txt
-    echo "Failure Category: $category" >> failed_tests_details.txt
-    echo "Expected: $expected_value" >> failed_tests_details.txt
-    echo "Actual: $actual_value" >> failed_tests_details.txt
-    echo "------" >> failed_tests_details.txt
-}
-
 test_from_file() {
 	IFS=''
 	i=1
@@ -207,9 +193,6 @@ test_from_file() {
 			echo -ne "\033[1;34mSTD_OUT:\033[m "
 			if ! diff -q tmp_out_minishell tmp_out_bash >/dev/null ;
 			then
-    expected_out=$(<tmp_out_bash)
-    actual_out=$(<tmp_out_minishell)
-    log_failure "STD_OUT" "$INPUT" "$expected_out" "$actual_out"
 				echo -ne "❌  " | tr '\n' ' '
 				((TEST_KO_OUT++))
 				((FAILED++))
@@ -221,9 +204,6 @@ test_from_file() {
 			echo -ne "\033[1;33mSTD_ERR:\033[m "
 			if [[ -s tmp_err_minishell && ! -s tmp_err_bash ]] || [[ ! -s tmp_err_minishell && -s tmp_err_bash ]] ;
 			then
-    expected_err=$(<tmp_err_bash)
-    actual_err=$(<tmp_err_minishell)
-    log_failure "STD_ERR" "$INPUT" "$expected_err" "$actual_err"
 				echo -ne "❌  " |  tr '\n' ' '
 				((TEST_KO_ERR++))
 				((FAILED++))
@@ -235,7 +215,6 @@ test_from_file() {
 			echo -ne "\033[1;36mEXIT_CODE:\033[m "
 			if [[ $exit_minishell != $exit_bash ]] ;
 			then
-log_failure "EXIT_CODE" "$INPUT" "$exit_bash" "$exit_minishell"
 				echo -ne "❌\033[1;31m [ minishell($exit_minishell)  bash($exit_bash) ]\033[m  " | tr '\n' ' '
 				((TEST_KO_EXIT++))
 				((FAILED++))
@@ -298,9 +277,6 @@ test_leaks() {
 			echo -ne "\033[1;34mSTD_OUT:\033[m "
 			if ! diff -q tmp_out_minishell tmp_out_bash >/dev/null ;
 			then
-    expected_out=$(<tmp_out_bash)
-    actual_out=$(<tmp_out_minishell)
-    log_failure "STD_OUT" "$INPUT" "$expected_out" "$actual_out"
 				echo -ne "❌  " | tr '\n' ' '
 				((TEST_KO_OUT++))
 				((FAILED++))
@@ -312,9 +288,6 @@ test_leaks() {
 			echo -ne "\033[1;36mSTD_ERR:\033[m "
 			if [[ -s tmp_err_minishell && ! -s tmp_err_bash ]] || [[ ! -s tmp_err_minishell && -s tmp_err_bash ]] ;
 			then
-    expected_err=$(<tmp_err_bash)
-    actual_err=$(<tmp_err_minishell)
-    log_failure "STD_ERR" "$INPUT" "$expected_err" "$actual_err"
 				echo -ne "❌  " |  tr '\n' ' '
 				((TEST_KO_ERR++))
 				((FAILED++))
@@ -326,7 +299,6 @@ test_leaks() {
 			echo -ne "\033[1;36mEXIT_CODE:\033[m "
 			if [[ $exit_minishell != $exit_bash ]] ;
 			then
-log_failure "EXIT_CODE" "$INPUT" "$exit_bash" "$exit_minishell"
 				echo -ne "❌\033[1;31m [ minishell($exit_minishell)  bash($exit_bash) ]\033[m  " | tr '\n' ' '
 				((TEST_KO_EXIT++))
 				((FAILED++))
@@ -341,11 +313,12 @@ log_failure "EXIT_CODE" "$INPUT" "$exit_bash" "$exit_minishell"
 			definitely_lost=$(cat tmp_valgrind-out.txt | grep "definitely lost:" | awk 'END{print $4}')
 			possibly_lost=$(cat tmp_valgrind-out.txt | grep "possibly lost:" | awk 'END{print $4}')
 			indirectly_lost=$(cat tmp_valgrind-out.txt | grep "indirectly lost:" | awk 'END{print $4}')
+			all_blocks_freed=$(cat tmp_valgrind-out.txt | grep "All heap blocks were freed -- no leaks are possible")
 			# echo "$definitely_lost"
 			# echo "$possibly_lost"
 			# echo "$indirectly_lost"
 			# Check if any bytes were lost
-			if [ "$definitely_lost" != "0" ] || [ "$possibly_lost" != "0" ] || [ "$indirectly_lost" != "0" ];
+			if [ "$definitely_lost" != "0" ] || [ "$possibly_lost" != "0" ] || [ "$indirectly_lost" != "0" ] && [[ -z "$all_blocks_freed" ]];
 			then
 				echo -ne "❌ "
 				((LEAKS++))
@@ -406,9 +379,6 @@ test_without_env() {
 			echo -ne "\033[1;34mSTD_OUT:\033[m "
 			if ! diff -q tmp_out_minishell tmp_out_bash >/dev/null ;
 			then
-    expected_out=$(<tmp_out_bash)
-    actual_out=$(<tmp_out_minishell)
-    log_failure "STD_OUT" "$INPUT" "$expected_out" "$actual_out"
 				echo -ne "❌  " | tr '\n' ' '
 				((TEST_KO_OUT++))
 				((FAILED++))
@@ -420,9 +390,6 @@ test_without_env() {
 			echo -ne "\033[1;36mSTD_ERR:\033[m "
 			if [[ -s tmp_err_minishell && ! -s tmp_err_bash ]] || [[ ! -s tmp_err_minishell && -s tmp_err_bash ]] ;
 			then
-    expected_err=$(<tmp_err_bash)
-    actual_err=$(<tmp_err_minishell)
-    log_failure "STD_ERR" "$INPUT" "$expected_err" "$actual_err"
 				echo -ne "❌  " |  tr '\n' ' '
 				((TEST_KO_ERR++))
 				((FAILED++))
@@ -434,7 +401,6 @@ test_without_env() {
 			echo -ne "\033[1;36mEXIT_CODE:\033[m "
 			if [[ $exit_minishell != $exit_bash ]] ;
 			then
-log_failure "EXIT_CODE" "$INPUT" "$exit_bash" "$exit_minishell"
 				echo -ne "❌\033[1;31m [ minishell($exit_minishell)  bash($exit_bash) ]\033[m  " | tr '\n' ' '
 				((TEST_KO_EXIT++))
 				((FAILED++))
