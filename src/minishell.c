@@ -22,17 +22,17 @@ void	leaks(void)
 
 void free_env_vars(t_env_var *env_list)
 {
-	t_env_var *current;
-	t_env_var *next;
+    t_env_var *current;
+    t_env_var *next;
 
-	current = env_list;
-	while (current != NULL) {
-		next = current->next;
-		free(current->key);
-		free(current->value);
-		free(current);
-		current = next;
-	}
+    current = env_list;
+    while (current != NULL) {
+        next = current->next;
+        free(current->key);
+        free(current->value);
+        free(current);
+        current = next;
+    }
 }
 
 const char* get_token_type_string(t_token_type type) {
@@ -116,91 +116,30 @@ void print_command(t_command *cmd) {
     }
 }
 
-void print_env_vars(t_env_var *env_list)
-{
-	t_env_var	*current;
-
-	current = env_list;
-	while (current)
-	{
-		printf("%s=%s\n", current->key, current->value);
-		current = current->next;
-	}
-}
-
-void add_env_var(t_env_var **env_list, const char *key, const char *value)
-{
-	t_env_var *new_var;
-	t_env_var *current;
-
-	new_var = malloc(sizeof(t_env_var));
-	if (!new_var)
-	{
-		perror("malloc");
-		exit(EXIT_FAILURE);
-	}
-	new_var->key = ft_strdup(key);
-	new_var->value = ft_strdup(value);
-	new_var->next = NULL;
-
-	if (*env_list == NULL)
-	{
-		*env_list = new_var;
-	}
-	else
-	{
-		current = *env_list;
-		while (current->next != NULL)
-			current = current->next;
-		current->next = new_var;
-	}
-}
-
-
-// void copy_env_vars(t_shell *shell, char **env)
-// {
-// 	int		i;
-// 	char	*key;
-// 	char	*value;
-// 	char	*sep;
-
-// 	i = 0;
-// 	while (env[i]) {
-// 		sep = ft_strchr(env[i], '=');
-// 		key = ft_substr(env[i], 0, sep - env[i]);
-// 		value = ft_strdup(sep + 1);
-// 		add_env_var(shell, key, value);
-// 		free(key);
-// 		free(value);
-// 		i++;
-// 	}
-// }
-
 void copy_env_vars(t_shell *shell, char **env)
 {
-	int		i;
-	char	*key;
-	char	*value;
-	char	*sep;
+    int        i;
+    char    *key;
+    char    *value;
+    char    *sep;
 
-	i = 0;
-	while (env[i])
-	{
-		sep = ft_strchr(env[i], '=');
-		if (!sep)
-		{
-			i++;
-			continue ;
-		}
-		key = ft_substr(env[i], 0, sep - env[i]);
-		value = ft_strdup(sep + 1);
-		add_env_var(&shell->env_list, key, value);
-		free(key);
-		free(value);
-		i++;
-	}
+    i = 0;
+    while (env[i])
+    {
+        sep = ft_strchr(env[i], '=');
+        if (!sep)
+        {
+            i++;
+            continue;
+        }
+        key = ft_substr(env[i], 0, sep - env[i]);
+        value = ft_strdup(sep + 1);
+        add_env_var(&shell->env_list, key, value);
+        free(key);
+        free(value);
+        i++;
+    }
 }
-
 
 int	main(int argc, char **argv, char **env)
 {
@@ -227,7 +166,14 @@ int	main(int argc, char **argv, char **env)
 		ft_lexer(input, &tokens);
 		print_token_list(tokens);
 		ft_parser(&shell.cmds, &tokens);
-		execute_commands(shell.cmds, env);
+    if (is_builtin(shell.commands->argv[0]))
+    {
+        execute_builtin(shell.commands, &shell.env_list);
+    }
+    else
+    {
+        execute_commands(shell.commands, shell.env_list);
+    }
 		free_command(shell.cmds);
 		free_token_list(tokens);
 		free(input);

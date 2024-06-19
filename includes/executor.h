@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 10:51:23 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/12 12:11:31 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/14 15:13:38 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,26 @@
 # include <fcntl.h>
 
 // pipex.c
-void	execute_commands(t_command *commands, char **env);
-char	*create_cmd_path(char *dir, char *cmd);
-void	execute_command(char *cmd[], char **env);
-char	*find_correct_path(char *cmd, char **env);
-void	setup_child(int input_fd, int output_fd, char *cmd[], char **env, t_redirection *input, t_redirection *output);
-void	fork_and_setup(int input_fd, int *pipe_fd, t_command *cmd, char **env);
-void	handle_pipe(int *pipe_fd, t_command *cmd);
-void	close_fds(int *input_fd, int *pipe_fd);
-char	*check_command_in_paths(char **paths, char *cmd);
-void	ft_free_split(char **arr);
+void    ft_free_split(char **arr);
+void    print_env_vars(t_env_var *env_list);
+char    *find_correct_path(char *cmd, t_env_var *env_list);
+char    *create_cmd_path(char *dir, char *cmd);
+void    setup_input_redirection(int input_fd, t_redirection *input);
+void    setup_output_redirection(int output_fd, t_redirection *output);
+char    *get_env_value(t_env_var *env_list, const char *key);
+void    add_env_var(t_env_var **env_list, const char *key, const char *value);
+void    update_env_var(t_env_var **env_list, const char *key, const char *value);
+void    ft_echo(char **args);
+void    ft_cd(char **args, t_env_var **env_list);
+void    ft_export(char **args, t_env_var **env_list);
+int     is_builtin(char *cmd);
+void    execute_builtin(t_command *cmd, t_env_var **env_list);
+void    execute_command(t_command *cmd, t_env_var *env_list);
+void    setup_child(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd);
+void    close_fds(int *input_fd, int *pipe_fd);
+void    handle_pipe(int *pipe_fd, t_command *cmd);
+void    fork_and_setup(int input_fd, int *pipe_fd, t_command *cmd, t_env_var *env_list);
+void    execute_commands(t_command *commands, t_env_var *env_list);
 
 
 #endif
