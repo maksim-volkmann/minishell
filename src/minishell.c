@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:17:35 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/20 12:28:12 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:43:51 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,6 +197,7 @@ int main(int argc, char **argv, char **env)
 	{
 		shell.cmds = NULL;
 		tokens = NULL;
+
 		if (isatty(fileno(stdin)))
 			input = readline("minishell> ");
 		else
@@ -209,8 +210,10 @@ int main(int argc, char **argv, char **env)
 		// input = readline("minishell> ");
 		if (!input)
 			exit(0);
+        add_history(input);
+        printf("%s\n", input);
 		input = ft_expander(input, shell.env_list);
-		// printf("%s\n", input);
+		printf("%s\n", input);
 		if (ft_strcmp(input, "") == 0)
 		{
 			free(input);
@@ -219,7 +222,6 @@ int main(int argc, char **argv, char **env)
 		ft_lexer(input, &tokens);
 		// print_token_list(tokens);
 		ft_parser(&shell.cmds, &tokens);
-
 		// PRINTING SHELL STRUCT!!!
 		// print_command_details(shell.cmds);
 		// EXECUTION
