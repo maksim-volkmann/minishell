@@ -195,7 +195,11 @@ void execute_command(t_command *cmd, t_env_var *env_list)
         if (executable_path == NULL)
         {
 			//TODO: NEED TO COMPARE TO REAL BASH (command should go first).
-            fprintf(stderr, "command not found: %s\n", cmd->argv[0]);
+            // fprintf(stderr, "command not found: %s\n", cmd->argv[0]);
+			// printf("%s: No such file or directory\n", cmd->argv[0]);
+			char *error_message = ft_strjoin(cmd->argv[0], ": No such file or directory\n");
+			write(STDERR_FILENO, error_message, ft_strlen(error_message));
+			free(error_message);
             exit(127);
         }
     }

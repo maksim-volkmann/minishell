@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:17:35 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/20 15:37:07 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:43:51 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,11 +141,54 @@ void copy_env_vars(t_shell *shell, char **env)
     }
 }
 
+void print_command_details(t_command *cmds)
+{
+    t_command *current_cmd = cmds;
+    int i;
+
+    while (current_cmd)
+    {
+        printf("Command:\n");
+        // Print all arguments
+        for (i = 0; current_cmd->argv[i]; i++)
+        {
+            printf("  Arg[%d]: %s\n", i, current_cmd->argv[i]);
+        }
+
+        // Print input redirection details if present
+        if (current_cmd->input)
+        {
+            printf("  Input Redirection:\n");
+            printf("    Type: %d\n", current_cmd->input->type);
+            printf("    File: %s\n", current_cmd->input->file);
+        }
+        else
+        {
+            printf("  Input Redirection: None\n");
+        }
+
+        // Print output redirection details if present
+        if (current_cmd->output)
+        {
+            printf("  Output Redirection:\n");
+            printf("    Type: %d\n", current_cmd->output->type);
+            printf("    File: %s\n", current_cmd->output->file);
+        }
+        else
+        {
+            printf("  Output Redirection: None\n");
+        }
+
+        current_cmd = current_cmd->next;
+    }
+}
+
 int main(int argc, char **argv, char **env)
 {
-	char		*input;
-	t_token	 *tokens;
-	t_shell	 shell;
+	char        *input;
+	t_token     *tokens;
+	t_shell     shell;
+
 	// atexit(leaks);
 	shell.env_list = NULL;
 	copy_env_vars(&shell, env);
@@ -154,15 +197,16 @@ int main(int argc, char **argv, char **env)
 	{
 		shell.cmds = NULL;
 		tokens = NULL;
-	//if (isatty(fileno(stdin)))
-		input = readline("minishell> ");
-	// else
-	// {
-	// 	char *line;
-	// 	line = get_next_line(fileno(stdin));
-		// input = ft_strtrim(line, "\n");
-	// 	free(line);
-	// }
+
+		if (isatty(fileno(stdin)))
+			input = readline("minishell> ");
+		else
+		{
+			char *line;
+			line = get_next_line(fileno(stdin));
+			input = ft_strtrim(line, "\n");
+			free(line);
+		}
 		// input = readline("minishell> ");
 		if (!input)
 			exit(0);
@@ -178,7 +222,9 @@ int main(int argc, char **argv, char **env)
 		ft_lexer(input, &tokens);
 		// print_token_list(tokens);
 		ft_parser(&shell.cmds, &tokens);
-		// printf("I reached here\n");
+		// PRINTING SHELL STRUCT!!!
+		// print_command_details(shell.cmds);
+		// EXECUTION
 		if (is_builtin(shell.cmds->argv[0]))
 		{
 			execute_builtin(shell.cmds, &shell.env_list);
