@@ -39,7 +39,6 @@ char	*ft_extract_var(char *input, int *i)
 			j++;
 			(*i)++;
 		}
-		assert(*i < 40 && j < 40);
 	}
 	var[j] = '\0';
 	return (var);
@@ -84,7 +83,6 @@ char	*ft_expand_var(t_env_var *env, char *var)
 
 		current = current->next;
 	}
-	assert(0);
 	return (NULL);
 }
 
