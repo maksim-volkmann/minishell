@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:21:13 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/20 16:14:40 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/20 16:20:12 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,8 @@ void	merge_tokens(t_token **head)
 	while (current != NULL && current->next != NULL)
 	{
 		next_node = current->next;
-		if ((current->type == WORD || current->type == DQUOTE
-				|| current->type == QUOTE) && (next_node->type == DQUOTE
-				|| next_node->type == WORD || current->type == QUOTE))
+		if ((current->type == WORD || current->type == DQUOTE || current->type == QUOTE)
+				&& (next_node->type == DQUOTE || next_node->type == WORD || next_node->type == QUOTE))
 		{
 			new_token = ft_strjoin(current->token, next_node->token);
 			if (!new_token)
