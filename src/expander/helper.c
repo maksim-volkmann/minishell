@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 10:37:14 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/19 16:29:29 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/20 14:51:57 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ char	*ft_extract_var(char *input, int *i)
 	int			j;
 	const int	var_len = ft_var_len(input, (*i));
 
-	if (!var)
-		return (NULL);
 	(*i)++;
 	if (input[(*i)] == '?')
 	{
@@ -53,6 +51,7 @@ char	*ft_extract_var(char *input, int *i)
 			j++;
 			(*i)++;
 		}
+		assert(*i < 40 && j < 40);
 	}
 	var[j] = '\0';
 	return (var);
@@ -92,11 +91,12 @@ char	*ft_expand_var(t_env_var *env, char *var)
 		{
 			exp_var = current->value;
 			free(var);
-			return (exp_var);
+			return (ft_strdup(current->value));
 		}
+
 		current = current->next;
 	}
-	free(var);
+	assert(0);
 	return (NULL);
 }
 

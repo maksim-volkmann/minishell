@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 16:17:35 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/19 16:30:58 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:37:07 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,20 +154,22 @@ int main(int argc, char **argv, char **env)
 	{
 		shell.cmds = NULL;
 		tokens = NULL;
-	if (isatty(fileno(stdin)))
+	//if (isatty(fileno(stdin)))
 		input = readline("minishell> ");
-	else
-	{
-		char *line;
-		line = get_next_line(fileno(stdin));
-		input = ft_strtrim(line, "\n");
-		free(line);
-	}
-		//input = readline("minishell> ");
+	// else
+	// {
+	// 	char *line;
+	// 	line = get_next_line(fileno(stdin));
+		// input = ft_strtrim(line, "\n");
+	// 	free(line);
+	// }
+		// input = readline("minishell> ");
 		if (!input)
 			exit(0);
+        add_history(input);
+        printf("%s\n", input);
 		input = ft_expander(input, shell.env_list);
-		// printf("%s\n", input);
+		printf("%s\n", input);
 		if (ft_strcmp(input, "") == 0)
 		{
 			free(input);
@@ -176,6 +178,7 @@ int main(int argc, char **argv, char **env)
 		ft_lexer(input, &tokens);
 		// print_token_list(tokens);
 		ft_parser(&shell.cmds, &tokens);
+		// printf("I reached here\n");
 		if (is_builtin(shell.cmds->argv[0]))
 		{
 			execute_builtin(shell.cmds, &shell.env_list);
