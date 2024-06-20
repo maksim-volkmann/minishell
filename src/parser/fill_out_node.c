@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_out_node.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 17:48:08 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/07 12:03:11 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/20 13:14:06 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,8 @@ void	ft_handle_out_files(t_redirection *new_n, char **cmd, int actual)
 		return ;
 	if (fd < 0)
 	{
-		ft_putstr_fd("Error opening file\n", 2);
-		free(new_n);
-		new_n = NULL;
+		ft_putstr_fd(new_n->file, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 		return ;
 	}
 	close(fd);
@@ -70,6 +69,7 @@ t_redirection	*ft_fill_output(char **cmd)
 	{
 		if (check_for_output(cmd, i) == 1)
 		{
+			printf("hello\n");
 			ft_handle_out_files(new, cmd, i);
 		}
 		i++;

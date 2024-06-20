@@ -1,6 +1,6 @@
 CC = cc
 # CFLAGS = -Wall -Wextra -Werror
-# CFLAGS=-fsanitize=address
+CFLAGS=-fsanitize=address
 LIBS = -lreadline
 
 RED = \033[1;31m

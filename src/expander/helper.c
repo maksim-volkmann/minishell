@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 10:37:14 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/19 16:29:29 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/20 13:19:30 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*ft_expand_var(t_env_var *env, char *var)
 	char		*exp_var;
 
 	if (ft_strcmp(var, "?") == 0)
-		return (ft_strdup("23"));
+		return (ft_strdup("0"));
 	current = env;
 	while (current != NULL)
 	{
