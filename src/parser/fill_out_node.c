@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 17:48:08 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/20 13:14:06 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:52:57 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ t_redirection	*ft_fill_output(char **cmd)
 	{
 		if (check_for_output(cmd, i) == 1)
 		{
-			printf("hello\n");
+			// printf("hello\n");
 			ft_handle_out_files(new, cmd, i);
 		}
 		i++;

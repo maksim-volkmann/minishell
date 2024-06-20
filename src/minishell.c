@@ -200,9 +200,9 @@ int main(int argc, char **argv, char **env)
 		if (!input)
 			exit(0);
         add_history(input);
-        printf("%s\n", input);
+        // printf("%s\n", input);
 		input = ft_expander(input, shell.env_list);
-		printf("%s\n", input);
+		// printf("%s\n", input);
 		if (ft_strcmp(input, "") == 0)
 		{
 			free(input);
