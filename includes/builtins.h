@@ -7,8 +7,8 @@
 void	ft_echo(char **args, t_env_var *env_list);
 
 void	update_pwd(t_env_var **env_list, char *old_pwd);
-void	change_to_home(t_env_var **env_list);
-void	ft_cd(char **args, t_env_var **env_list);
+void	change_to_home(t_env_var **env_list, t_shell *shell);
+void	ft_cd(char **args, t_env_var **env_list, t_shell *shell);
 
 void ft_pwd(void);
 void ft_export(char **args, t_env_var **env_list);

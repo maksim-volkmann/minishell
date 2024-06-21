@@ -217,7 +217,7 @@ int main(int argc, char **argv, char **env)
 		// EXECUTION
 		if (is_builtin(shell.cmds->argv[0]))
 		{
-			execute_builtin(shell.cmds, &shell.env_list);
+			execute_builtin(shell.cmds, &shell);
 		}
 		else
 		{

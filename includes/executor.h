@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 10:51:23 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/19 13:36:36 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/06/21 12:14:02 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ void    setup_output_redirection(int output_fd, t_redirection *output);
 char    *get_env_value(t_env_var *env_list, const char *key);
 void    add_env_var(t_env_var **env_list, const char *key, const char *value);
 void    update_env_var(t_env_var **env_list, const char *key, const char *value);
-void    ft_cd(char **args, t_env_var **env_list);
+// void    ft_cd(char **args, t_env_var **env_list);
 void    ft_export(char **args, t_env_var **env_list);
 int     is_builtin(char *cmd);
-void    execute_builtin(t_command *cmd, t_env_var **env_list);
+void execute_builtin(t_command *cmd, t_shell *shell);
 void    execute_command(t_command *cmd, t_env_var *env_list);
 void    setup_child(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd);
 void    close_fds(int *input_fd, int *pipe_fd);
