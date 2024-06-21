@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:51:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/21 12:39:08 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/21 12:59:19 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*ft_extract_sq(char *input, int *i)
 }
 
 
-char	*ft_extract_dq(char *input, int *i, t_env_var *env)
+char	*ft_extract_dq(char *input, int *i, t_shell *shell)
 {
 	char	*segment;
 	char	*exp_var;
@@ -54,7 +54,7 @@ char	*ft_extract_dq(char *input, int *i, t_env_var *env)
 			exp_var = ft_extract_var(input, i);
 			if (exp_var)
 			{
-				exp_var = ft_expand_var(env, exp_var);
+				exp_var = ft_expand_var(shell, exp_var);
 				if (exp_var)
 					segment = ft_join_input(segment, exp_var);
 				free(exp_var);
@@ -67,7 +67,7 @@ char	*ft_extract_dq(char *input, int *i, t_env_var *env)
 	return (segment);
 }
 
-char	*ft_extract_segment(char *input, int *i, t_env_var *env)
+char	*ft_extract_segment(char *input, int *i, t_shell *shell)
 {
 	char	*segment;
 	char	*exp_var;
@@ -89,7 +89,7 @@ char	*ft_extract_segment(char *input, int *i, t_env_var *env)
 			exp_var = ft_extract_var(input, i);
 			if (exp_var)
 			{
-				exp_var = ft_expand_var(env, exp_var);
+				exp_var = ft_expand_var(shell, exp_var);
 				if (exp_var)
 					segment = ft_join_input(segment, exp_var);
 				free(exp_var);
@@ -117,13 +117,13 @@ char	*ft_expander(char *input, t_shell *shell)
 		}
 		else if (input[i] == '\"')
 		{
-			temp = ft_extract_dq(input, &i, shell->env_list);
+			temp = ft_extract_dq(input, &i, shell);
 			exp_input = ft_join_input(exp_input, temp);
 			free(temp);
 		}
 		else
 		{
-			temp = ft_extract_segment(input, &i, shell->env_list);
+			temp = ft_extract_segment(input, &i, shell);
 			exp_input = ft_join_input(exp_input, temp);
 			free(temp);
 		}

@@ -64,14 +64,14 @@ int	ft_var_len(char *input, int i)
 	return (len);
 }
 
-char	*ft_expand_var(t_env_var *env, char *var)
+char	*ft_expand_var(t_shell *shell, char *var)
 {
 	t_env_var	*current;
 	char		*exp_var;
 
 	if (ft_strcmp(var, "?") == 0)
-		return (ft_strdup("0"));
-	current = env;
+		return (ft_itoa(shell->exit_code));
+	current = shell->env_list;
 	while (current != NULL)
 	{
 		if (ft_strcmp(current->key, var) == 0)

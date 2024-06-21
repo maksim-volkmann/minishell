@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 11:36:57 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/06/21 12:09:33 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/06/21 12:53:21 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,10 @@ void	change_to_home(t_env_var **env_list, t_shell *shell)
 	// Change directory to the home directory
 	if (chdir(home_dir) != 0)
 	{
-		perror("chdir"); // Print error message if chdir fails
+		printf("this is chdir\n");
 		shell->exit_code = 1; // Set exit code to 1
+		perror("chdir"); // Print error message if chdir fails
+
 	}
 	else
 	{
@@ -81,8 +83,10 @@ void	ft_cd(char **args, t_env_var **env_list, t_shell *shell)
 	}
 	else if (chdir(args[1]) != 0) // Attempt to change directory to the given path
 	{
+				printf("this is chdir\n");
 		perror("chdir"); // Print error message if chdir fails
 		shell->exit_code = 1; // Set exit code to 1
+		printf("exit code: %d\n", shell->exit_code);
 		return ; // Exit the function if there's an error
 	}
 	else

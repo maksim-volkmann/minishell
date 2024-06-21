@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:49:44 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/21 12:38:44 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/21 13:00:02 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@
 #include <assert.h>
 // expander.c
 char	*ft_expander(char *input, t_shell *shell);
-char	*ft_extract_segment(char *input, int *i, t_env_var *env);
+char	*ft_extract_segment(char *input, int *i, t_shell *shell);
 
 // helper.c
-char	*ft_expand_var(t_env_var *env, char *var);
+char	*ft_expand_var(t_shell *shell, char *var);
 int		ft_is_separator_var(char c);
 int		ft_var_len(char *token, int i);
 char	*ft_extract_var(char *input, int *i);
