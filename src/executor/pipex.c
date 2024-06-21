@@ -139,19 +139,19 @@ int is_builtin(char *cmd)
     return 0;
 }
 
-void execute_builtin(t_command *cmd, t_env_var **env_list)
+void execute_builtin(t_command *cmd, t_shell *shell)
 {
 	if (ft_strcmp(cmd->argv[0], "echo") == 0)
 	{
-		ft_echo(cmd->argv, *env_list);
+		ft_echo(cmd->argv, shell->env_list);
 	}
 	else if (ft_strcmp(cmd->argv[0], "cd") == 0)
 	{
-		ft_cd(cmd->argv, env_list);
+		ft_cd(cmd->argv, &shell->env_list, shell);
 	}
 	else if (ft_strcmp(cmd->argv[0], "export") == 0)
 	{
-		ft_export(cmd->argv, env_list);
+		ft_export(cmd->argv, &shell->env_list);
 	}
 	else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
 	{
@@ -159,17 +159,18 @@ void execute_builtin(t_command *cmd, t_env_var **env_list)
 	}
 	else if (ft_strcmp(cmd->argv[0], "unset") == 0)
 	{
-		ft_unset(cmd->argv, env_list);
+		ft_unset(cmd->argv, &shell->env_list);
 	}
 	else if (ft_strcmp(cmd->argv[0], "env") == 0)
 	{
-		print_env_vars(*env_list);
+		print_env_vars(shell->env_list);
 	}
 	else if (ft_strcmp(cmd->argv[0], "exit") == 0)
 	{
 		ft_exit(cmd->argv);
 	}
 }
+
 
 
 void execute_command(t_command *cmd, t_env_var *env_list)

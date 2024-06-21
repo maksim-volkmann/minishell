@@ -6,13 +6,13 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 11:36:57 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/06/19 11:40:10 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/06/21 12:09:33 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/builtins.h"
+#include "../../includes/builtins.h"
 
-
+// cd "doesntexist" 2>/dev/null
 
 // Updates the PWD and OLDPWD environment variables
 void	update_pwd(t_env_var **env_list, char *old_pwd)
@@ -34,7 +34,7 @@ void	update_pwd(t_env_var **env_list, char *old_pwd)
 }
 
 // Changes the directory to the home directory
-void	change_to_home(t_env_var **env_list)
+void	change_to_home(t_env_var **env_list, t_shell *shell)
 {
 	char	*home_dir;
 
@@ -42,18 +42,24 @@ void	change_to_home(t_env_var **env_list)
 	home_dir = get_env_value(*env_list, "HOME");
 	if (!home_dir) // Check if HOME is not set
 	{
-		fprintf(stderr, "cd: HOME not set\n"); // Print error message
+		printf("cd: HOME not set\n"); // Print error message
+		shell->exit_code = 1; // Set exit code to 1
 		return ; // Exit the function if HOME is not set
 	}
 	// Change directory to the home directory
 	if (chdir(home_dir) != 0)
 	{
 		perror("chdir"); // Print error message if chdir fails
+		shell->exit_code = 1; // Set exit code to 1
+	}
+	else
+	{
+		shell->exit_code = 0; // Reset exit code to 0 on success
 	}
 }
 
 // Changes the current working directory
-void	ft_cd(char **args, t_env_var **env_list)
+void	ft_cd(char **args, t_env_var **env_list, t_shell *shell)
 {
 	char	buffer[1024];
 	char	*old_pwd;
@@ -63,6 +69,7 @@ void	ft_cd(char **args, t_env_var **env_list)
 	if (!old_pwd) // Check if getcwd failed
 	{
 		perror("getcwd"); // Print error message
+		shell->exit_code = 1; // Set exit code to 1
 		return ; // Exit the function if there's an error
 	}
 
@@ -70,12 +77,17 @@ void	ft_cd(char **args, t_env_var **env_list)
 	if (!args[1] || ft_strcmp(args[1], "~") == 0)
 	{
 		// Change directory to the home directory
-		change_to_home(env_list);
+		change_to_home(env_list, shell);
 	}
 	else if (chdir(args[1]) != 0) // Attempt to change directory to the given path
 	{
 		perror("chdir"); // Print error message if chdir fails
+		shell->exit_code = 1; // Set exit code to 1
 		return ; // Exit the function if there's an error
+	}
+	else
+	{
+		shell->exit_code = 0; // Reset exit code to 0 on success
 	}
 
 	// Update the PWD and OLDPWD environment variables

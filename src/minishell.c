@@ -210,13 +210,14 @@ int main(int argc, char **argv, char **env)
 		}
 		ft_lexer(input, &tokens);
 		// print_token_list(tokens);
+		// /printf
 		ft_parser(&shell.cmds, &tokens);
 		// PRINTING SHELL STRUCT!!!
 		// print_command_details(shell.cmds);
 		// EXECUTION
 		if (is_builtin(shell.cmds->argv[0]))
 		{
-			execute_builtin(shell.cmds, &shell.env_list);
+			execute_builtin(shell.cmds, &shell);
 		}
 		else
 		{

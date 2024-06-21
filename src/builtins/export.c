@@ -1,4 +1,4 @@
-#include "../../../includes/builtins.h"
+#include "../../includes/builtins.h"
 
 //TODO: '?' can't be the first char setting up new envs. Need to check for more cases.
 
