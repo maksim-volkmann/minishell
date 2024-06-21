@@ -172,68 +172,115 @@ void print_command_details(t_command *cmds)
     }
 }
 
+// int main(int argc, char **argv, char **env)
+// {
+// 	char        *input;
+// 	t_token     *tokens;
+// 	t_shell     shell;
+
+// 	// atexit(leaks);
+// 	shell.env_list = NULL;
+// 	copy_env_vars(&shell, env);
+// 	shell.exit_code = 0;
+// 	while (1)
+// 	{
+// 		shell.cmds = NULL;
+// 		tokens = NULL;
+
+// 		if (isatty(fileno(stdin)))
+// 			input = readline("minishell> ");
+// 		else
+// 		{
+// 			char *line;
+// 			line = get_next_line(fileno(stdin));
+// 			input = ft_strtrim(line, "\n");
+// 			free(line);
+// 		}
+// 		// input = readline("minishell> ");
+// 		if (!input)
+// 			exit(0);
+//         add_history(input);
+//         // printf("%s\n", input);
+// 		input = ft_expander(input, &shell);
+// 		// printf("%s\n", input);
+// 		if (ft_strcmp(input, "") == 0)
+// 		{
+// 			free(input);
+// 			break ;
+// 		}
+// 		ft_lexer(input, &tokens);
+// 		// print_token_list(tokens);
+// 		// /printf
+// 		ft_parser(&shell.cmds, &tokens);
+// 		// PRINTING SHELL STRUCT!!!
+// 		// print_command_details(shell.cmds);
+// 		// EXECUTION
+//         if (is_builtin(shell.cmds->argv[0]))
+//         {
+//             shell.exit_code = execute_builtin(shell.cmds, &shell); // Capture and set exit code
+//         }
+//         else
+//         {
+//             execute_commands(shell.cmds, shell.env_list);
+//         }
+// 		free_command(shell.cmds);
+// 		free_token_list(tokens);
+// 		free(input);
+// 	}
+// 	free_env_vars(shell.env_list);
+// 	return 0;
+// }
+
+
 int main(int argc, char **argv, char **env)
 {
-	char        *input;
-	t_token     *tokens;
-	t_shell     shell;
+    char *input;
+    t_token *tokens;
+    t_shell shell;
 
-	// atexit(leaks);
-	shell.env_list = NULL;
-	copy_env_vars(&shell, env);
-	shell.exit_code = 0;
-	while (1)
-	{
-		shell.cmds = NULL;
-		tokens = NULL;
+    shell.env_list = NULL;
+    copy_env_vars(&shell, env);
+    shell.exit_code = 0;
 
-		if (isatty(fileno(stdin)))
-			input = readline("minishell> ");
-		else
-		{
-			char *line;
-			line = get_next_line(fileno(stdin));
-			input = ft_strtrim(line, "\n");
-			free(line);
-		}
-		// input = readline("minishell> ");
-		if (!input)
-			exit(0);
-        add_history(input);
-        // printf("%s\n", input);
-		input = ft_expander(input, &shell);
-		// printf("%s\n", input);
-		if (ft_strcmp(input, "") == 0)
-		{
-			free(input);
-			break ;
-		}
-		ft_lexer(input, &tokens);
-		// print_token_list(tokens);
-		// /printf
-		ft_parser(&shell.cmds, &tokens);
-		// PRINTING SHELL STRUCT!!!
-		// print_command_details(shell.cmds);
-		// EXECUTION
-		if (is_builtin(shell.cmds->argv[0]))
-		{
-			execute_builtin(shell.cmds, &shell);
-		}
-		else
-		{
-			execute_commands(shell.cmds, shell.env_list);
-		}
-		free_command(shell.cmds);
-		free_token_list(tokens);
-		free(input);
-	}
-	free_env_vars(shell.env_list);
-	return (0);
+    while (1)
+    {
+        shell.cmds = NULL;
+        tokens = NULL;
+        if (isatty(fileno(stdin)))
+            input = readline("minishell> ");
+        else
+        {
+            char *line = get_next_line(fileno(stdin));
+            input = ft_strtrim(line, "\n");
+            free(line);
+        }
+        if (!input)
+            exit(0);
+        input = ft_expander(input, shell.env_list);
+        if (ft_strcmp(input, "") == 0)
+        {
+            free(input);
+            break;
+        }
+        ft_lexer(input, &tokens);
+        print_token_list(tokens);
+        ft_parser(&shell.cmds, &tokens);
+
+        if (is_builtin(shell.cmds->argv[0]))
+        {
+            shell.exit_code = execute_builtin(shell.cmds, &shell);
+        }
+        else
+        {
+            execute_commands(shell.cmds, &shell);
+        }
+        free_command(shell.cmds);
+        free_token_list(tokens);
+        free(input);
+    }
+    free_env_vars(shell.env_list);
+    return shell.exit_code;
 }
-
-// #define TESTER 1
-
-
 
 
 // TO DO

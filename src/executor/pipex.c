@@ -1,6 +1,7 @@
 #include "../../includes/executor.h"
 #include "../../includes/builtins.h"
 
+// Function to free a split array
 void ft_free_split(char **arr)
 {
     int i;
@@ -16,6 +17,7 @@ void ft_free_split(char **arr)
     free(arr);
 }
 
+// Find the correct path for the given command
 char *find_correct_path(char *cmd, t_env_var *env_list)
 {
     char *path_var;
@@ -54,6 +56,7 @@ char *find_correct_path(char *cmd, t_env_var *env_list)
     return (NULL);
 }
 
+// Create a full path for the command
 char *create_cmd_path(char *dir, char *cmd)
 {
     char *path;
@@ -65,6 +68,7 @@ char *create_cmd_path(char *dir, char *cmd)
     return (full_path);
 }
 
+// Setup input redirection
 void setup_input_redirection(int input_fd, t_redirection *input)
 {
     int fd;
@@ -96,6 +100,7 @@ void setup_input_redirection(int input_fd, t_redirection *input)
     }
 }
 
+// Setup output redirection
 void setup_output_redirection(int output_fd, t_redirection *output)
 {
     int fd;
@@ -130,6 +135,7 @@ void setup_output_redirection(int output_fd, t_redirection *output)
     }
 }
 
+// Check if a command is a built-in command
 int is_builtin(char *cmd)
 {
     if (ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "cd") == 0 || ft_strcmp(cmd, "export") == 0 || ft_strcmp(cmd, "pwd") == 0 || ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "env") == 0 || ft_strcmp(cmd, "exit") == 0)
@@ -139,41 +145,47 @@ int is_builtin(char *cmd)
     return 0;
 }
 
-void execute_builtin(t_command *cmd, t_shell *shell)
+// Execute a built-in command
+int execute_builtin(t_command *cmd, t_shell *shell)
 {
-	if (ft_strcmp(cmd->argv[0], "echo") == 0)
-	{
-		ft_echo(cmd->argv, shell->env_list);
-	}
-	else if (ft_strcmp(cmd->argv[0], "cd") == 0)
-	{
-		ft_cd(cmd->argv, &shell->env_list, shell);
-	}
-	else if (ft_strcmp(cmd->argv[0], "export") == 0)
-	{
-		ft_export(cmd->argv, &shell->env_list);
-	}
-	else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
-	{
-		ft_pwd();
-	}
-	else if (ft_strcmp(cmd->argv[0], "unset") == 0)
-	{
-		ft_unset(cmd->argv, &shell->env_list);
-	}
-	else if (ft_strcmp(cmd->argv[0], "env") == 0)
-	{
-		print_env_vars(shell->env_list);
-	}
-	else if (ft_strcmp(cmd->argv[0], "exit") == 0)
-	{
-		ft_exit(cmd->argv);
-	}
+    if (ft_strcmp(cmd->argv[0], "echo") == 0)
+    {
+        ft_echo(cmd->argv, shell->env_list);
+        return 0;
+    }
+    else if (ft_strcmp(cmd->argv[0], "cd") == 0)
+    {
+        return ft_cd(cmd->argv, &shell->env_list);
+    }
+    else if (ft_strcmp(cmd->argv[0], "export") == 0)
+    {
+        ft_export(cmd->argv, &shell->env_list);
+        return 0;
+    }
+    else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
+    {
+        ft_pwd();
+        return 0;
+    }
+    else if (ft_strcmp(cmd->argv[0], "unset") == 0)
+    {
+        ft_unset(cmd->argv, &shell->env_list);
+        return 0;
+    }
+    else if (ft_strcmp(cmd->argv[0], "env") == 0)
+    {
+        print_env_vars(shell->env_list);
+        return 0;
+    }
+    else if (ft_strcmp(cmd->argv[0], "exit") == 0)
+    {
+        ft_exit(cmd->argv);
+    }
+    return 1; // Return 1 if command is not a known built-in
 }
 
-
-
-void execute_command(t_command *cmd, t_env_var *env_list)
+// Execute a non-built-in command
+void execute_command(t_command *cmd, t_shell *shell)
 {
     char *executable_path;
     char **envp;
@@ -183,8 +195,8 @@ void execute_command(t_command *cmd, t_env_var *env_list)
 
     if (is_builtin(cmd->argv[0]))
     {
-        execute_builtin(cmd, &env_list);
-        exit(0);
+        shell->exit_code = execute_builtin(cmd, shell);
+        exit(shell->exit_code);
     }
     if (ft_strchr(cmd->argv[0], '/') != NULL)
     {
@@ -192,28 +204,25 @@ void execute_command(t_command *cmd, t_env_var *env_list)
     }
     else
     {
-        executable_path = find_correct_path(cmd->argv[0], env_list);
+        executable_path = find_correct_path(cmd->argv[0], shell->env_list);
         if (executable_path == NULL)
         {
-			//TODO: NEED TO COMPARE TO REAL BASH (command should go first).
-            // fprintf(stderr, "command not found: %s\n", cmd->argv[0]);
-			// printf("%s: No such file or directory\n", cmd->argv[0]);
-			char *error_message = ft_strjoin(cmd->argv[0], ": No such file or directory\n");
-			write(STDERR_FILENO, error_message, ft_strlen(error_message));
-			free(error_message);
+            char *error_message = ft_strjoin(cmd->argv[0], ": No such file or directory\n");
+            write(STDERR_FILENO, error_message, ft_strlen(error_message));
+            free(error_message);
             exit(127);
         }
     }
 
     env_count = 0;
-    current = env_list;
+    current = shell->env_list;
     while (current)
     {
         env_count++;
         current = current->next;
     }
     envp = (char **)malloc((env_count + 1) * sizeof(char *));
-    current = env_list;
+    current = shell->env_list;
     i = 0;
     while (current)
     {
@@ -231,13 +240,15 @@ void execute_command(t_command *cmd, t_env_var *env_list)
     exit(EXIT_FAILURE);
 }
 
-void setup_child(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd)
+// Setup the child process for execution
+void setup_child(t_command *cmd, t_shell *shell, int input_fd, int output_fd)
 {
     setup_input_redirection(input_fd, cmd->input);
     setup_output_redirection(output_fd, cmd->output);
-    execute_command(cmd, env_list);
+    execute_command(cmd, shell);
 }
 
+// Close file descriptors
 void close_fds(int *input_fd, int *pipe_fd)
 {
     if (*input_fd != -1)
@@ -246,6 +257,7 @@ void close_fds(int *input_fd, int *pipe_fd)
         close(pipe_fd[1]);
 }
 
+// Handle pipes
 void handle_pipe(int *pipe_fd, t_command *cmd)
 {
     if (cmd->next != NULL)
@@ -263,7 +275,8 @@ void handle_pipe(int *pipe_fd, t_command *cmd)
     }
 }
 
-void fork_and_setup(int input_fd, int *pipe_fd, t_command *cmd, t_env_var *env_list)
+// Fork and setup the child process
+void fork_and_setup(int input_fd, int *pipe_fd, t_command *cmd, t_shell *shell)
 {
     pid_t pid;
 
@@ -275,11 +288,12 @@ void fork_and_setup(int input_fd, int *pipe_fd, t_command *cmd, t_env_var *env_l
     }
     else if (pid == 0)
     {
-        setup_child(cmd, env_list, input_fd, pipe_fd[1]);
+        setup_child(cmd, shell, input_fd, pipe_fd[1]);
     }
 }
 
-void execute_commands(t_command *commands, t_env_var *env_list)
+// Execute the list of commands
+void execute_commands(t_command *commands, t_shell *shell)
 {
     int pipe_fd[2];
     int input_fd;
@@ -291,7 +305,7 @@ void execute_commands(t_command *commands, t_env_var *env_list)
     while (cmd)
     {
         handle_pipe(pipe_fd, cmd);
-        fork_and_setup(input_fd, pipe_fd, cmd, env_list);
+        fork_and_setup(input_fd, pipe_fd, cmd, shell);
         close_fds(&input_fd, pipe_fd);
         input_fd = pipe_fd[0];
         cmd = cmd->next;

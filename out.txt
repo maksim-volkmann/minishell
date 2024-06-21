@@ -1,0 +1,15 @@
+mvolkman$USERtext oui oui oui oui mvolkman oui mvolkman
+mvolkman$USERtext oui oui oui oui mvolkman oui mvolkman
+mvolkman$USERtext oui oui oui oui mvolkman oui mvolkman
+mvolkman$USERtext oui oui oui oui mvolkman oui mvolkman
+
+minishell> echo '' ""
+
+minishell>
+bash-3.2$ echo '' ""
+
+bash-3.2$
+
+
+minishell: cd: ?: No such file or directory
+minishell: cd: ?: No such file or directory
