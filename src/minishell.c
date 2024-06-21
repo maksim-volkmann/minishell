@@ -201,7 +201,7 @@ int main(int argc, char **argv, char **env)
 			exit(0);
         add_history(input);
         // printf("%s\n", input);
-		input = ft_expander(input, shell.env_list);
+		input = ft_expander(input, &shell);
 		// printf("%s\n", input);
 		if (ft_strcmp(input, "") == 0)
 		{

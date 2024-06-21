@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_out_node.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 17:48:08 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/20 15:52:57 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/06/21 11:28:44 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	ft_handle_out_files(t_redirection *new_n, char **cmd, int actual)
 	if (fd < 0)
 	{
 		ft_putstr_fd(new_n->file, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
+		ft_putstr_fd(": No such file or directory ee\n", 2);
 		return ;
 	}
 	close(fd);
