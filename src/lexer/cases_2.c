@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 15:05:33 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/20 15:38:22 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/21 11:34:25 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ t_token	*ft_if_do_quot(const char *line, int *i)
 {
 	t_token	*new_token;
 	char	*token;
+	char	*temp;
 	int		start;
 	int		end;
 
@@ -42,12 +43,12 @@ t_token	*ft_if_do_quot(const char *line, int *i)
 	if (line[end] == '\"')
 	{
 		(*i)++;
-		token = ft_extract_str((char *)line, start, end + 1);
-		// token = ft_strtrim(temp, "\"");
+		temp = ft_extract_str((char *)line, start, end + 1);
+		token = ft_strtrim(temp, "\"");
 		if (ft_strcmp(token, "") == 0)
 			return (NULL);
 		new_token = ft_new_token(token, DQUOTE);
-		// free(temp);
+		free(temp);
 	}
 	else
 	{

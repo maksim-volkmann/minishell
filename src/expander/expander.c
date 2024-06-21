@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:51:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/20 16:23:29 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/06/21 12:39:08 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ char	*ft_extract_sq(char *input, int *i)
 	int		start;
 	int		end;
 
-	(*i)++;
 	start = (*i);
+	(*i)++;
 	while (input[(*i)] != 0 && input[(*i)] != '\'')
 		(*i)++;
-	end = (*i);
 	if (input[*i] == '\'' && input[(*i) + 1] != 0)
 		(*i)++;
+	end = (*i);
 	segment = ft_extract_str(input, start, end);
 	return (segment);
 }
@@ -63,6 +63,7 @@ char	*ft_extract_dq(char *input, int *i, t_env_var *env)
 	}
 	if (input[*i] == '\"')
 		(*i)++;
+	segment = ft_quote_string(segment);
 	return (segment);
 }
 
@@ -98,7 +99,7 @@ char	*ft_extract_segment(char *input, int *i, t_env_var *env)
 	return (segment);
 }
 
-char	*ft_expander(char *input, t_env_var *env)
+char	*ft_expander(char *input, t_shell *shell)
 {
 	char	*exp_input;
 	char	*temp;
@@ -116,13 +117,13 @@ char	*ft_expander(char *input, t_env_var *env)
 		}
 		else if (input[i] == '\"')
 		{
-			temp = ft_extract_dq(input, &i, env);
+			temp = ft_extract_dq(input, &i, shell->env_list);
 			exp_input = ft_join_input(exp_input, temp);
 			free(temp);
 		}
 		else
 		{
-			temp = ft_extract_segment(input, &i, env);
+			temp = ft_extract_segment(input, &i, shell->env_list);
 			exp_input = ft_join_input(exp_input, temp);
 			free(temp);
 		}

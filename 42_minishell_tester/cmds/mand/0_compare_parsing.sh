@@ -3,268 +3,266 @@
 # **************************************************************************** #
 
 ### comparing your input parsing to bash ###
-# Test 1
+# 1. Echo the exit code of the last command with double quotes around it
 /bin/echo ""$?""
 
-# Test 2
+# 2. Echo the exit code of the command "42" (interpreted as a string)
 /bin/echo $?"42"
 
-# Test 3
+# 3. Echo the literal characters "$?" surrounded by single quotes and followed by "42"
 /bin/echo ''$?''"42"
 
-# Test 4
+# 4. Echo the value of the environment variable $USER surrounded by double quotes
 /bin/echo '"$USER"'
 
-# Test 5
+# 5. Echo the value of the environment variable $USER surrounded by single quotes
 /bin/echo "'$USER'"
 
-# Test 6
+# 6. Echo the literal characters "$USER" surrounded by double quotes
 /bin/echo ""'$USER'""
 
-# Test 7
+# 7. Echo the value of the environment variable $USER surrounded by single and double quotes
 /bin/echo '"'$USER'"'
 
-# Test 8
+# 8. Echo the literal characters "''$USER''"
 /bin/echo "''$USER''"
 
-# Test 9
+# 9. Echo the value of the environment variable $USER surrounded by nested single quotes and double quotes
 /bin/echo "'"'$USER'"'"
 
-# Test 10
+# 10. Echo the value of the environment variable $USER surrounded by triple single quotes
 /bin/echo '"'"$USER"'"'
 
-# Test 11
+# 11. Echo the value of the environment variable $HOME followed immediately by the value of $USER (without space)
 /bin/echo $"HOME"$USER
 
-# Test 12
+# 12. Echo the literal characters "HOM" followed by the value of the environment variable $USER
 /bin/echo $"HOM"E$USER
 
-# Test 13
+# 13. Echo a concatenated string with variables $?, $USER, and $HOME
 /bin/echo "exit_code ->$? user ->$USER home -> $HOME"
 
-# Test 14
+# 14. Echo the value of the environment variable $HOME (interpreted as a string)
 /bin/echo $"HOME"
 
-# Test 15
+# 15. Echo the literal characters "42$"
 /bin/echo $"42$"
 
-# Test 16
+# 16. Echo the literal characters "$ "
 /bin/echo "$ "
 
-# Test 17
+# 17. Echo the literal string "hi" to a file "./outfiles/outfile01" and then echo "bye"
 /bin/echo hi >./outfiles/outfile01 | /bin/echo bye
 
-# Test 18
+# 18. Echo the literal strings "<123 <456 hi" and then echo "42"
 /bin/echo <123 <456 hi | /bin/echo 42
 
-# Test 19
+# 19. Echo the literal characters "$="
 /bin/echo '$='
 
-# Test 20
+# 20. Echo the literal characters "$ "
 /bin/echo '$ '
 
-# Test 21
+# 21. Echo the exit code of the last command
 /bin/echo "$?"
 
-# Test 22
+# 22. Echo the literal characters "$?"
 /bin/echo '$?'
 
-# Test 23
+# 23. Echo the literal characters "'$?'"
 /bin/echo "'$?'"
 
-# Test 24
+# 24. Echo the literal characters "$USER"
 /bin/echo \$USER
 
-# Test 25
+# 25. Echo the literal characters "\$USER"
 /bin/echo \\$USER
 
-# Test 26
+# 26. Echo the literal characters "\\$USER"
 /bin/echo \\\$USER
 
-# Test 27
+# 27. Echo the literal characters "\\\\$USER"
 /bin/echo \\\\$USER
 
-# Test 28
-/bin/echo \\\\\$USER
+# 28. Echo the literal characters "\\\\\$USER"
+/bin/echo \\\\\\$USER
 
-# Test 29
-/bin/echo \\\\\\\\\$USER
+# 29. Echo the literal characters "\\\\\\\\$USER"
+/bin/echo \\\\\\\\$USER
 
-# Test 30
+# 30. Echo the literal characters "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\$USER", $PATH, and \$PWD
 /bin/echo \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\$USER \$PATH \\$PWD
 
-# Test 31
+# 31. Echo the literal string "cat lol.c | cat > lol.c"
 /bin/echo "cat lol.c | cat > lol.c"
 
-# Test 32
+# 32. Echo the literal string "cat lol.c '|' cat > lol.c"
 /bin/echo "cat lol.c '|' cat > lol.c"
 
-# Test 33
+# 33. Echo the literal characters '$USER', the value of $USER, and the literal string "text  ' text"
 /bin/echo '$USER' "$USER" "text  ' text"
 
-# Test 34
+# 34. Echo the value of $USER followed by the literal characters "=intergalaktikus miaf*szomez"
 /bin/echo $USER =intergalaktikus miaf*szomez
 
-# Test 35
+# 35. Echo the literal string "-n" followed by "bonjour"
 /bin/echo -n"-n" bonjour
 
-# Test 36
+# 36. Echo the literal characters "'$USER'"
 /bin/echo "'$USER'"
 
-# Test 37
+# 37. Echo the literal characters " '$USER' "
 /bin/echo " '$USER' "
 
-# Test 38
+# 38. Echo the literal characters "text" followed by the value of $USER
 /bin/echo text"$USER"
 
-# Test 39
+# 39. Echo the literal characters "text", the value of $USER surrounded by single quotes, and the literal string " $USER "
 /bin/echo text"'$USER'" ' $USER '
 
-# Test 40
+# 40. Echo the literal characters "text", the value of $USER twice
 /bin/echo "text"   "$USER"    "$USER"
 
-# Test 41
+# 41. Echo the literal characters "              $USER          "
 /bin/echo '              $USER          '
 
-# Test 42
+# 42. Echo the literal characters "''''''''''$USER''''''''''"
 /bin/echo ''''''''''$USER''''''''''
 
-# Test 43
-/bin/echo """"""""$USER""""""""
-
-# Test 44
+# 43. Echo the literal characters '""""""""$USER""""""""'
 /bin/echo '""""""""$USER""""""""'
 
-# Test 45
+# 44. Echo the literal characters ""'""""""$USER""""""'""
 /bin/echo ""'""""""$USER""""""'""
 
-# Test 46
+# 45. Echo the literal characters """"""""'$USER'""""""""
 /bin/echo """"""""'$USER'""""""""
 
-# Test 47
+# 46. Echo the literal characters """""""'"$USER"'"""""""
 /bin/echo """""""'"$USER"'"""""""
 
-# Test 48
+# 47. Echo the literal characters """"""'""$USER""'""""""
 /bin/echo """"""'""$USER""'""""""
 
-# Test 49
+# 48. Echo the literal characters ""'""'""""$USER""""'""'""
 /bin/echo ""'""'""""$USER""""'""'""
 
-# Test 50
+# 49. Echo the literal characters '""'""'""""$USER""""'""'""'
 /bin/echo '""'""'""""$USER""""'""'""'
 
-# Test 51
+# 50. Echo the values of $USER followed by '$USER', and additional literal characters
 /bin/echo $USER'$USER'text oui oui     oui  oui $USER oui      $USER ''
 
-# Test 52
+# 51. Echo the literal characters "text", "text" followed by the value of $USER, and literal characters
 /bin/echo "text" "text$USER" ... "$USER"
 
-# Test 53
+# 52. Echo an empty line
 /bin/echo
 
-# Test 54
+# 53. Echo an empty string
 /bin/echo ''
 
-# Test 55
+# 54. Echo an empty string
 /bin/echo ""
 
-# Test 56
+# 55. Echo an empty single-quoted string followed by an empty double-quoted string
 /bin/echo '' ""
 
+# 56. Echo the literal string "/bin/echo"
 /bin/echo /bin/echo
 
-# Test 57
+# 57. Echo the literal string "test1"
 /bin/echo test1
 
-# Test 58
+# 58. Echo the literal string "test1" surrounded by single quotes
 /bin/echo 'test1'
 
-# Test 59
+# 59. Echo the literal string "/bin/echo hallo"
 /bin/echo "/bin/echo hallo"
 
-# Test 60
+# 60. Echo the literal string "/bin/echo1"
 /bin/echo /bin/echo"1"
 
-# Test 61
+# 61. Echo the literal strings "test1 test2"
 /bin/echo "test1 test2"
 
-# Test 62
+# 62. Echo the literal strings "test1  test2" and "test3"
 /bin/echo "test1  test2" test3
 
-# Test 63
+# 63. Echo the literal string " test1 test2 " and the literal string "test3 "
 /bin/echo " test1 test2 " 'test3 '
 
-# Test 64
+# 64. Echo the literal string "test1" followed by a tab character and "test2"
 /bin/echo test1		test2
 
-# Test 65
+# 65. Echo the values of $USER, $TESTNOTFOUND, $HOME, and an empty variable $ (interpreted as strings)
 /bin/echo $USER$TESTNOTFOUND$HOME$
 
-# Test 66
+# 66. Echo the values of $USER, $TESTNOTFOUND, $HOME, $WTF, and $PWD (interpreted as strings)
 /bin/echo $USER$TESTNOTFOUND$HOME$WTF$PWD
 
-# Test 67
+# 67. Echo the literal string "test1" without a newline character
 /bin/echo -n test1
 
-# Test 68
+# 68. Echo the literal strings "test1 test2" without a newline character
 /bin/echo -n "test1 test2"
 
-# Test 69
+# 69. Echo the literal strings "test1 test2" without a newline character followed by "test3"
 /bin/echo -n "test1 test2" test3
 
-# Test 70
+# 70. Echo the literal string " test1 test2 " without a newline character and "test3 " with a space
 /bin/echo -n " test1 test2 " 'test3 '
 
-# Test 71
+# 71. Echo the literal string "test1" followed by a tab character and "test2" without a newline character
 /bin/echo -n test1		test2
 
-# Test 72
+# 72. Echo the literal string "test1" followed by the literal characters "-n"
 /bin/echo test1 -n
 
-# Test 73
+# 73. Echo the literal string "test1 -n"
 /bin/echo "test1 -n"
 
-# Test 74
+# 74. Echo the literal string "-n" without a newline character followed by "test1"
 /bin/echo -n -n test1
 
-# Test 75
+# 75. Echo the literal string "-n" without a newline character repeated five times followed by "test1"
 /bin/echo -n -n -n -n -n test1
 
-# Test 76
+# 76. Echo the literal string "  -nn "
 /bin/echo "  -nn "
 
-# Test 77
+# 77. Echo the literal string "-n test1 -n test2"
 /bin/echo "-n test1 -n test2"
 
-# Test 78
+# 78. Echo the literal strings "test1 -n test2"
 /bin/echo "test1 -n test2"
 
-# Test 79
+# 79. Echo the literal string "~42"
 /bin/echo ~42
 
-# Test 80
+# 80. Echo the literal string "-n -nasd"
 /bin/echo -n -n -nasd
 
-# Test 81
+# 81. Echo the literal string "-n -n-nnnnn"
 /bin/echo -n -n -n-nnnnn
 
-# Test 82
+# 82. Echo the literal strings "-nnnnnnn -n -nnn -nnnnn -n-n"
 /bin/echo -n -nnnnnnn -n -nnn -nnnnn -n-n
 
-# Test 83
+# 83. Echo the literal strings "-nnnnnnn -n -nnn -nnnnn -n feel my pain"
 /bin/echo -n -nnnnnnn -n -nnn -nnnnn -n feel my pain
 
-# Test 84
+# 84. Echo the literal string "-n -n-n"
 /bin/echo -n -n -n-n
 
-# Test 85
+# 85. Echo the literal characters "'totally logical'"
 /bin/echo "'totally logical'"
 
-# Test 86
+# 86. Echo the literal characters "totally logical" surrounded by single quotes
 /bin/echo 'totally logical'
 
-# Test 87
+# 87. Echo the literal characters "totally logical"
 /bin/echo ''totally logical''
 
-# Test 88
+# 88. Echo the literal characters "totally logical"
 /bin/echo ""'totally logical'""

@@ -45,3 +45,8 @@ To install the script, copy and run following command:
 
 1. Need to modify my own env to be able to use in execve.
 // TEST: echo -- -n "Hello, world!"
+
+[A-Z][a-z][_]
+
+bash-3.2$ /bin/echo "$123123"
+23123
