@@ -4,9 +4,7 @@
 // Function to free a split array
 void ft_free_split(char **arr)
 {
-    int i;
-
-    i = 0;
+    int i = 0;
     if (!arr)
         return;
     while (arr[i])
@@ -20,14 +18,12 @@ void ft_free_split(char **arr)
 // Find the correct path for the given command
 char *find_correct_path(char *cmd, t_env_var *env_list)
 {
-    char *path_var;
-    t_env_var *current;
+    char *path_var = NULL;
+    t_env_var *current = env_list;
     char **paths;
     char *correct_path;
-    int i;
+    int i = 0;
 
-    path_var = NULL;
-    current = env_list;
     while (current)
     {
         if (ft_strcmp(current->key, "PATH") == 0)
@@ -38,42 +34,36 @@ char *find_correct_path(char *cmd, t_env_var *env_list)
         current = current->next;
     }
     if (!path_var)
-        return (NULL);
+        return NULL;
     paths = ft_split(path_var, ':');
-    i = 0;
     while (paths[i])
     {
         correct_path = create_cmd_path(paths[i], cmd);
         if (access(correct_path, X_OK) == 0)
         {
             ft_free_split(paths);
-            return (correct_path);
+            return correct_path;
         }
         free(correct_path);
         i++;
     }
     ft_free_split(paths);
-    return (NULL);
+    return NULL;
 }
 
 // Create a full path for the command
 char *create_cmd_path(char *dir, char *cmd)
 {
-    char *path;
-    char *full_path;
-
-    path = ft_strjoin(dir, "/");
-    full_path = ft_strjoin(path, cmd);
+    char *path = ft_strjoin(dir, "/");
+    char *full_path = ft_strjoin(path, cmd);
     free(path);
-    return (full_path);
+    return full_path;
 }
 
 // Setup input redirection
 void setup_input_redirection(int input_fd, t_redirection *input)
 {
-    int fd;
-
-    fd = -1;
+    int fd = -1;
     if (input_fd != -1)
     {
         if (dup2(input_fd, STDIN_FILENO) == -1)
@@ -83,7 +73,7 @@ void setup_input_redirection(int input_fd, t_redirection *input)
         }
         close(input_fd);
     }
-    if (input != NULL && input->file != NULL)
+    if (input && input->file)
     {
         fd = open(input->file, O_RDONLY);
         if (fd == -1)
@@ -103,9 +93,7 @@ void setup_input_redirection(int input_fd, t_redirection *input)
 // Setup output redirection
 void setup_output_redirection(int output_fd, t_redirection *output)
 {
-    int fd;
-
-    fd = -1;
+    int fd = -1;
     if (output_fd != -1)
     {
         if (dup2(output_fd, STDOUT_FILENO) == -1)
@@ -115,7 +103,7 @@ void setup_output_redirection(int output_fd, t_redirection *output)
         }
         close(output_fd);
     }
-    if (output != NULL && output->file != NULL)
+    if (output && output->file)
     {
         if (output->type == REDIR_OUTPUT)
             fd = open(output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -138,66 +126,81 @@ void setup_output_redirection(int output_fd, t_redirection *output)
 // Check if a command is a built-in command
 int is_builtin(char *cmd)
 {
-    if (ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "cd") == 0 || ft_strcmp(cmd, "export") == 0 || ft_strcmp(cmd, "pwd") == 0 || ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "env") == 0 || ft_strcmp(cmd, "exit") == 0)
-    {
-        return 1;
-    }
-    return 0;
+    return (ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "cd") == 0 ||
+            ft_strcmp(cmd, "export") == 0 || ft_strcmp(cmd, "pwd") == 0 ||
+            ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "env") == 0 ||
+            ft_strcmp(cmd, "exit") == 0);
 }
 
 // Execute a built-in command
-int execute_builtin(t_command *cmd, t_shell *shell)
+int execute_builtin(t_command *cmd, t_shell *shell, int output_fd)
 {
+    int saved_stdout = dup(STDOUT_FILENO); // Save the original stdout
+
+    if (output_fd != STDOUT_FILENO)
+    {
+        if (dup2(output_fd, STDOUT_FILENO) == -1) // Redirect stdout to the specified output_fd
+        {
+            perror("dup2 output_fd");
+            return 1;
+        }
+    }
+
     if (ft_strcmp(cmd->argv[0], "echo") == 0)
     {
         ft_echo(cmd->argv, shell->env_list);
-        return 0;
     }
     else if (ft_strcmp(cmd->argv[0], "cd") == 0)
     {
-        return ft_cd(cmd->argv, &shell->env_list);
+        shell->exit_code = ft_cd(cmd->argv, &shell->env_list);
     }
     else if (ft_strcmp(cmd->argv[0], "export") == 0)
     {
         ft_export(cmd->argv, &shell->env_list);
-        return 0;
     }
     else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
     {
         ft_pwd();
-        return 0;
     }
     else if (ft_strcmp(cmd->argv[0], "unset") == 0)
     {
         ft_unset(cmd->argv, &shell->env_list);
-        return 0;
     }
     else if (ft_strcmp(cmd->argv[0], "env") == 0)
     {
-        print_env_vars(shell->env_list);
-        return 0;
+        shell->exit_code = ft_env(cmd->argv, shell);
     }
     else if (ft_strcmp(cmd->argv[0], "exit") == 0)
     {
         ft_exit(cmd->argv);
     }
-    return 1; // Return 1 if command is not a known built-in
+
+    if (output_fd != STDOUT_FILENO)
+    {
+        dup2(saved_stdout, STDOUT_FILENO); // Restore the original stdout
+        close(saved_stdout);
+    }
+
+    return shell->exit_code;
 }
 
-// Execute a non-built-in command
+// Execute a command
 void execute_command(t_command *cmd, t_shell *shell)
 {
     char *executable_path;
     char **envp;
-    int env_count;
-    t_env_var *current;
-    int i;
+    int env_count = 0;
+    t_env_var *current = shell->env_list;
+    int i = 0;
 
     if (is_builtin(cmd->argv[0]))
     {
-        shell->exit_code = execute_builtin(cmd, shell);
-        exit(shell->exit_code);
+        shell->exit_code = execute_builtin(cmd, shell, STDOUT_FILENO);
+        if (cmd->next == NULL) // If it's the only command
+            exit(shell->exit_code);
+        return;
     }
+
     if (ft_strchr(cmd->argv[0], '/') != NULL)
     {
         executable_path = ft_strdup(cmd->argv[0]);
@@ -214,7 +217,6 @@ void execute_command(t_command *cmd, t_shell *shell)
         }
     }
 
-    env_count = 0;
     current = shell->env_list;
     while (current)
     {
@@ -288,6 +290,25 @@ void fork_and_setup(int input_fd, int *pipe_fd, t_command *cmd, t_shell *shell)
     }
     else if (pid == 0)
     {
+        if (pipe_fd[1] != -1)
+        {
+            close(pipe_fd[0]);
+            if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
+            {
+                perror("dup2 output_fd");
+                exit(EXIT_FAILURE);
+            }
+            close(pipe_fd[1]);
+        }
+        if (input_fd != -1)
+        {
+            if (dup2(input_fd, STDIN_FILENO) == -1)
+            {
+                perror("dup2 input_fd");
+                exit(EXIT_FAILURE);
+            }
+            close(input_fd);
+        }
         setup_child(cmd, shell, input_fd, pipe_fd[1]);
     }
 }
@@ -296,17 +317,16 @@ void fork_and_setup(int input_fd, int *pipe_fd, t_command *cmd, t_shell *shell)
 void execute_commands(t_command *commands, t_shell *shell)
 {
     int pipe_fd[2];
-    int input_fd;
+    int input_fd = -1;
     pid_t pid;
-    t_command *cmd;
+    t_command *cmd = commands;
 
-    input_fd = -1;
-    cmd = commands;
     while (cmd)
     {
         handle_pipe(pipe_fd, cmd);
         fork_and_setup(input_fd, pipe_fd, cmd, shell);
-        close_fds(&input_fd, pipe_fd);
+        if (input_fd != -1)
+            close(input_fd);
         input_fd = pipe_fd[0];
         cmd = cmd->next;
     }

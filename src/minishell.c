@@ -1,5 +1,6 @@
 
 #include "../includes/executor.h"
+#include "../includes/builtins.h"
 #include <stdio.h>
 
 // extern int rl_replace_line(const char *text, int clear_undo);
@@ -232,6 +233,7 @@ void print_command_details(t_command *cmds)
 // }
 
 
+// Main function
 int main(int argc, char **argv, char **env)
 {
     char *input;
@@ -250,37 +252,47 @@ int main(int argc, char **argv, char **env)
             input = readline("minishell> ");
         else
         {
-            char *line = get_next_line(fileno(stdin));
+            char *line;
+            line = get_next_line(fileno(stdin));
             input = ft_strtrim(line, "\n");
             free(line);
         }
         if (!input)
-            exit(0);
-        input = ft_expander(input, shell.env_list);
+            exit(shell.exit_code);
+
+        input = ft_expander(input, &shell);
         if (ft_strcmp(input, "") == 0)
         {
             free(input);
             break;
         }
         ft_lexer(input, &tokens);
-        print_token_list(tokens);
+        // print_token_list(tokens);
         ft_parser(&shell.cmds, &tokens);
-
+		// PRINTING SHELL STRUCT!!!
+		// print_command_details(shell.cmds);
         if (is_builtin(shell.cmds->argv[0]))
         {
-            shell.exit_code = execute_builtin(shell.cmds, &shell);
+            shell.exit_code = execute_builtin(shell.cmds, &shell, STDOUT_FILENO);
         }
         else
         {
             execute_commands(shell.cmds, &shell);
         }
+
+        // Debug log for exit code
+        // printf("Debug: Shell exit code is %d\n", shell.exit_code);
+
         free_command(shell.cmds);
         free_token_list(tokens);
         free(input);
     }
+
     free_env_vars(shell.env_list);
+    printf("Debug: Exiting with code %d\n", shell.exit_code);
     return shell.exit_code;
 }
+
 
 
 // TO DO

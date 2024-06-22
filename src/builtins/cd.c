@@ -1,6 +1,5 @@
 #include "../../includes/builtins.h"
 
-// Updates the PWD and OLDPWD environment variables
 int update_pwd(t_env_var **env_list, char *old_pwd)
 {
     char buffer[1024];
@@ -44,7 +43,6 @@ int change_to_home(t_env_var **env_list)
 }
 
 // Changes the current working directory
-// Changes the current working directory
 int ft_cd(char **args, t_env_var **env_list)
 {
     char buffer[1024];
@@ -86,4 +84,3 @@ int ft_cd(char **args, t_env_var **env_list)
 
     return status; // Return the final status
 }
-
