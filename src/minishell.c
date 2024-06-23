@@ -234,63 +234,118 @@ void print_command_details(t_command *cmds)
 
 
 // Main function
+// NEWEST OLD
+// int main(int argc, char **argv, char **env)
+// {
+//     char *input;
+//     t_token *tokens;
+//     t_shell shell;
+
+//     shell.env_list = NULL;
+//     copy_env_vars(&shell, env);
+//     shell.exit_code = 0;
+
+//     while (1)
+//     {
+//         shell.cmds = NULL;
+//         tokens = NULL;
+//         if (isatty(fileno(stdin)))
+//             input = readline("minishell> ");
+//         else
+//         {
+//             char *line;
+//             line = get_next_line(fileno(stdin));
+//             input = ft_strtrim(line, "\n");
+//             free(line);
+//         }
+//         if (!input)
+//             exit(shell.exit_code);
+
+//         input = ft_expander(input, &shell);
+//         if (ft_strcmp(input, "") == 0)
+//         {
+//             free(input);
+//             break;
+//         }
+//         ft_lexer(input, &tokens);
+//         // print_token_list(tokens);
+//         ft_parser(&shell.cmds, &tokens);
+// 		// PRINTING SHELL STRUCT!!!
+// 		// print_command_details(shell.cmds);
+//         if (is_builtin(shell.cmds->argv[0]))
+//         {
+//             shell.exit_code = execute_builtin(shell.cmds, &shell, STDOUT_FILENO);
+//         }
+//         else
+//         {
+//             execute_commands(shell.cmds, &shell);
+//         }
+
+//         // Debug log for exit code
+//         // printf("Debug: Shell exit code is %d\n", shell.exit_code);
+
+//         free_command(shell.cmds);
+//         free_token_list(tokens);
+//         free(input);
+//     }
+
+//     free_env_vars(shell.env_list);
+//     printf("Debug: Exiting with code %d\n", shell.exit_code);
+//     return shell.exit_code;
+// }
+
+
 int main(int argc, char **argv, char **env)
 {
-    char *input;
-    t_token *tokens;
-    t_shell shell;
+    char        *input;
+    t_token     *tokens;
+    t_shell     shell;
 
+    // Initialize shell structure
     shell.env_list = NULL;
-    copy_env_vars(&shell, env);
     shell.exit_code = 0;
+    // copy_env_vars(&shell, env); // Assuming you have a function to copy env vars
 
     while (1)
     {
         shell.cmds = NULL;
         tokens = NULL;
+
         if (isatty(fileno(stdin)))
             input = readline("minishell> ");
         else
         {
-            char *line;
-            line = get_next_line(fileno(stdin));
+            char *line = get_next_line(fileno(stdin)); // Assuming you have get_next_line implemented
             input = ft_strtrim(line, "\n");
             free(line);
         }
-        if (!input)
-            exit(shell.exit_code);
 
-        input = ft_expander(input, &shell);
+        if (!input)
+            exit(0);
+
+        add_history(input);
+
+        input = ft_expander(input, &shell); // Assuming you have a function for variable expansion
+
         if (ft_strcmp(input, "") == 0)
         {
             free(input);
-            break;
+            continue;
         }
-        ft_lexer(input, &tokens);
-        // print_token_list(tokens);
-        ft_parser(&shell.cmds, &tokens);
+
+        ft_lexer(input, &tokens); // Assuming you have a function for tokenization
+        ft_parser(&shell.cmds, &tokens); // Assuming you have a function for parsing tokens into commands
 		// PRINTING SHELL STRUCT!!!
 		// print_command_details(shell.cmds);
-        if (is_builtin(shell.cmds->argv[0]))
-        {
-            shell.exit_code = execute_builtin(shell.cmds, &shell, STDOUT_FILENO);
-        }
-        else
-        {
-            execute_commands(shell.cmds, &shell);
-        }
+        execute_commands(shell.cmds, env);
 
-        // Debug log for exit code
-        // printf("Debug: Shell exit code is %d\n", shell.exit_code);
-
-        free_command(shell.cmds);
-        free_token_list(tokens);
+        free_command(shell.cmds); // Assuming you have a function to free commands
+        free_token_list(tokens);  // Assuming you have a function to free tokens
         free(input);
     }
 
-    free_env_vars(shell.env_list);
-    printf("Debug: Exiting with code %d\n", shell.exit_code);
-    return shell.exit_code;
+    free_env_vars(shell.env_list); // Assuming you have a function to free env vars
+    return (0);
 }
 
 

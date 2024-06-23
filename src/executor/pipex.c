@@ -1,5 +1,4 @@
 #include "../../includes/executor.h"
-#include "../../includes/builtins.h"
 
 // Function to free a split array
 void ft_free_split(char **arr)
@@ -16,26 +15,26 @@ void ft_free_split(char **arr)
 }
 
 // Find the correct path for the given command
-char *find_correct_path(char *cmd, t_env_var *env_list)
+char *find_correct_path(char *cmd, char **env)
 {
     char *path_var = NULL;
-    t_env_var *current = env_list;
     char **paths;
     char *correct_path;
     int i = 0;
 
-    while (current)
+    while (env[i])
     {
-        if (ft_strcmp(current->key, "PATH") == 0)
+        if (ft_strncmp(env[i], "PATH=", 5) == 0)
         {
-            path_var = current->value;
+            path_var = env[i] + 5;
             break;
         }
-        current = current->next;
+        i++;
     }
     if (!path_var)
         return NULL;
     paths = ft_split(path_var, ':');
+    i = 0;
     while (paths[i])
     {
         correct_path = create_cmd_path(paths[i], cmd);
@@ -61,18 +60,9 @@ char *create_cmd_path(char *dir, char *cmd)
 }
 
 // Setup input redirection
-void setup_input_redirection(int input_fd, t_redirection *input)
+void setup_input_redirection(t_redirection *input)
 {
-    int fd = -1;
-    if (input_fd != -1)
-    {
-        if (dup2(input_fd, STDIN_FILENO) == -1)
-        {
-            perror("dup2 input_fd");
-            exit(EXIT_FAILURE);
-        }
-        close(input_fd);
-    }
+    int fd;
     if (input && input->file)
     {
         fd = open(input->file, O_RDONLY);
@@ -91,18 +81,9 @@ void setup_input_redirection(int input_fd, t_redirection *input)
 }
 
 // Setup output redirection
-void setup_output_redirection(int output_fd, t_redirection *output)
+void setup_output_redirection(t_redirection *output)
 {
-    int fd = -1;
-    if (output_fd != -1)
-    {
-        if (dup2(output_fd, STDOUT_FILENO) == -1)
-        {
-            perror("dup2 output_fd");
-            exit(EXIT_FAILURE);
-        }
-        close(output_fd);
-    }
+    int fd;
     if (output && output->file)
     {
         if (output->type == REDIR_OUTPUT)
@@ -123,83 +104,10 @@ void setup_output_redirection(int output_fd, t_redirection *output)
     }
 }
 
-// Check if a command is a built-in command
-int is_builtin(char *cmd)
-{
-    return (ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "cd") == 0 ||
-            ft_strcmp(cmd, "export") == 0 || ft_strcmp(cmd, "pwd") == 0 ||
-            ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "env") == 0 ||
-            ft_strcmp(cmd, "exit") == 0);
-}
-
-// Execute a built-in command
-int execute_builtin(t_command *cmd, t_shell *shell, int output_fd)
-{
-    int saved_stdout = dup(STDOUT_FILENO); // Save the original stdout
-
-    if (output_fd != STDOUT_FILENO)
-    {
-        if (dup2(output_fd, STDOUT_FILENO) == -1) // Redirect stdout to the specified output_fd
-        {
-            perror("dup2 output_fd");
-            return 1;
-        }
-    }
-
-    if (ft_strcmp(cmd->argv[0], "echo") == 0)
-    {
-        ft_echo(cmd->argv, shell->env_list);
-    }
-    else if (ft_strcmp(cmd->argv[0], "cd") == 0)
-    {
-        shell->exit_code = ft_cd(cmd->argv, &shell->env_list);
-    }
-    else if (ft_strcmp(cmd->argv[0], "export") == 0)
-    {
-        ft_export(cmd->argv, &shell->env_list);
-    }
-    else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
-    {
-        ft_pwd();
-    }
-    else if (ft_strcmp(cmd->argv[0], "unset") == 0)
-    {
-        ft_unset(cmd->argv, &shell->env_list);
-    }
-    else if (ft_strcmp(cmd->argv[0], "env") == 0)
-    {
-        shell->exit_code = ft_env(cmd->argv, shell);
-    }
-    else if (ft_strcmp(cmd->argv[0], "exit") == 0)
-    {
-        ft_exit(cmd->argv);
-    }
-
-    if (output_fd != STDOUT_FILENO)
-    {
-        dup2(saved_stdout, STDOUT_FILENO); // Restore the original stdout
-        close(saved_stdout);
-    }
-
-    return shell->exit_code;
-}
-
 // Execute a command
-void execute_command(t_command *cmd, t_shell *shell)
+void execute_command(t_command *cmd, char **env)
 {
     char *executable_path;
-    char **envp;
-    int env_count = 0;
-    t_env_var *current = shell->env_list;
-    int i = 0;
-
-    if (is_builtin(cmd->argv[0]))
-    {
-        shell->exit_code = execute_builtin(cmd, shell, STDOUT_FILENO);
-        if (cmd->next == NULL) // If it's the only command
-            exit(shell->exit_code);
-        return;
-    }
 
     if (ft_strchr(cmd->argv[0], '/') != NULL)
     {
@@ -207,99 +115,32 @@ void execute_command(t_command *cmd, t_shell *shell)
     }
     else
     {
-        executable_path = find_correct_path(cmd->argv[0], shell->env_list);
+        executable_path = find_correct_path(cmd->argv[0], env);
         if (executable_path == NULL)
         {
-            char *error_message = ft_strjoin(cmd->argv[0], ": No such file or directory\n");
-            write(STDERR_FILENO, error_message, ft_strlen(error_message));
-            free(error_message);
+            fprintf(stderr, "%s: command not found\n", cmd->argv[0]);
             exit(127);
         }
     }
 
-    current = shell->env_list;
-    while (current)
-    {
-        env_count++;
-        current = current->next;
-    }
-    envp = (char **)malloc((env_count + 1) * sizeof(char *));
-    current = shell->env_list;
-    i = 0;
-    while (current)
-    {
-        envp[i] = ft_strjoin(current->key, "=");
-        envp[i] = ft_strjoin(envp[i], current->value);
-        current = current->next;
-        i++;
-    }
-    envp[i] = NULL;
-
-    execve(executable_path, cmd->argv, envp);
+    execve(executable_path, cmd->argv, env);
     perror("execve failed");
     free(executable_path);
-    ft_free_split(envp);
     exit(EXIT_FAILURE);
 }
 
-// Setup the child process for execution
-void setup_child(t_command *cmd, t_shell *shell, int input_fd, int output_fd)
+// Fork and execute the command with proper redirections
+void fork_and_execute(t_command *cmd, char **env, int input_fd, int output_fd)
 {
-    setup_input_redirection(input_fd, cmd->input);
-    setup_output_redirection(output_fd, cmd->output);
-    execute_command(cmd, shell);
-}
-
-// Close file descriptors
-void close_fds(int *input_fd, int *pipe_fd)
-{
-    if (*input_fd != -1)
-        close(*input_fd);
-    if (pipe_fd[1] != -1)
-        close(pipe_fd[1]);
-}
-
-// Handle pipes
-void handle_pipe(int *pipe_fd, t_command *cmd)
-{
-    if (cmd->next != NULL)
-    {
-        if (pipe(pipe_fd) == -1)
-        {
-            perror("pipe");
-            exit(EXIT_FAILURE);
-        }
-    }
-    else
-    {
-        pipe_fd[0] = -1;
-        pipe_fd[1] = -1;
-    }
-}
-
-// Fork and setup the child process
-void fork_and_setup(int input_fd, int *pipe_fd, t_command *cmd, t_shell *shell)
-{
-    pid_t pid;
-
-    pid = fork();
+    pid_t pid = fork();
     if (pid == -1)
     {
         perror("fork");
         exit(EXIT_FAILURE);
     }
-    else if (pid == 0)
+    else if (pid == 0)  // Child process
     {
-        if (pipe_fd[1] != -1)
-        {
-            close(pipe_fd[0]);
-            if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
-            {
-                perror("dup2 output_fd");
-                exit(EXIT_FAILURE);
-            }
-            close(pipe_fd[1]);
-        }
+        // Setup input redirection from a pipe or file
         if (input_fd != -1)
         {
             if (dup2(input_fd, STDIN_FILENO) == -1)
@@ -309,27 +150,74 @@ void fork_and_setup(int input_fd, int *pipe_fd, t_command *cmd, t_shell *shell)
             }
             close(input_fd);
         }
-        setup_child(cmd, shell, input_fd, pipe_fd[1]);
+
+        // Setup output redirection to a pipe or file
+        if (output_fd != -1)
+        {
+            if (dup2(output_fd, STDOUT_FILENO) == -1)
+            {
+                perror("dup2 output_fd");
+                exit(EXIT_FAILURE);
+            }
+            close(output_fd);
+        }
+
+        // Setup additional input/output redirections if specified in the command
+        setup_input_redirection(cmd->input);
+        setup_output_redirection(cmd->output);
+
+        // Execute the command
+        execute_command(cmd, env);
     }
 }
 
-// Execute the list of commands
-void execute_commands(t_command *commands, t_shell *shell)
+// Execute the list of commands with piping
+// This function handles the creation of pipes, forking of processes, and execution of commands in a pipeline.
+void execute_commands(t_command *commands, char **env)
 {
-    int pipe_fd[2];
-    int input_fd = -1;
-    pid_t pid;
-    t_command *cmd = commands;
+    int pipe_fd[2];       // Array to hold the file descriptors for the pipe
+    int input_fd = -1;    // Initial input is standard input (STDIN)
+    t_command *cmd = commands;  // Pointer to the current command
 
+    // Iterate over each command in the linked list
     while (cmd)
     {
-        handle_pipe(pipe_fd, cmd);
-        fork_and_setup(input_fd, pipe_fd, cmd, shell);
+        // Check if there is a next command
+        // If there is a next command, create a pipe
+        if (cmd->next != NULL)
+        {
+            if (pipe(pipe_fd) == -1)
+            {
+                perror("pipe");
+                exit(EXIT_FAILURE);
+            }
+        }
+        else
+        {
+            // No next command, so no need for a pipe
+            pipe_fd[0] = -1;
+            pipe_fd[1] = -1;
+        }
+
+        // Fork and execute the current command
+        // The current command's output will be piped to the next command's input
+        fork_and_execute(cmd, env, input_fd, pipe_fd[1]);
+
+        // Close the input file descriptor if it is valid
         if (input_fd != -1)
             close(input_fd);
+
+        // Close the write end of the pipe in the parent process
+        if (pipe_fd[1] != -1)
+            close(pipe_fd[1]);
+
+        // The read end of the pipe becomes the input for the next command
         input_fd = pipe_fd[0];
+
+        // Move to the next command in the list
         cmd = cmd->next;
     }
-    while ((pid = wait(NULL)) > 0)
-        ;
+
+    // Wait for all child processes to finish
+    while (wait(NULL) > 0);
 }

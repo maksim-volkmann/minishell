@@ -62,6 +62,7 @@
 	"executor.h": "c",
 	"iterator": "c",
 	"builtins.h": "c",
-	"readline.h": "c"
+	"readline.h": "c",
+	"stdlib.h": "c"
 }
 }
