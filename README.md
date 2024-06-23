@@ -50,3 +50,9 @@ To install the script, copy and run following command:
 
 bash-3.2$ /bin/echo "$123123"
 23123
+
+
+------
+
+
+ ctrl + \ . - interrupting running processes
