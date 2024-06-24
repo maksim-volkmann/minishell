@@ -43,13 +43,19 @@
 
 // Function declarations
 void ft_free_split(char **arr);
-char *find_correct_path(char *cmd, char **env);
+char *get_env_value(t_env_var *env_list, const char *key);
+char *find_correct_path(char *cmd, t_env_var *env_list);
 char *create_cmd_path(char *dir, char *cmd);
 void setup_input_redirection(t_redirection *input);
 void setup_output_redirection(t_redirection *output);
-void execute_command(t_command *cmd, char **env);
-void fork_and_execute(t_command *cmd, char **env, int input_fd, int output_fd);
-void execute_commands(t_command *commands, char **env);
+void print_env_vars(t_env_var *env_list);
+void execute_command(t_command *cmd, t_env_var *env_list);
+void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd);
+void execute_commands(t_command *commands, t_shell *shell);
 
+void execute_echo(char **argv);
+void execute_pwd(void);
+void execute_cd(char **argv);
+void execute_exit(char **argv);
 
 #endif

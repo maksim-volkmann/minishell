@@ -1,4 +1,5 @@
 #include "../../includes/executor.h"
+#include <unistd.h> // For getcwd and chdir
 
 // Function to free a split array
 void ft_free_split(char **arr)
@@ -14,23 +15,27 @@ void ft_free_split(char **arr)
     free(arr);
 }
 
-// Find the correct path for the given command
-char *find_correct_path(char *cmd, char **env)
+// Function to find the value of an environment variable
+char *get_env_value(t_env_var *env_list, const char *key)
 {
-    char *path_var = NULL;
+    t_env_var *current = env_list;
+    while (current)
+    {
+        if (ft_strcmp(current->key, key) == 0)
+            return current->value;
+        current = current->next;
+    }
+    return NULL;
+}
+
+// Find the correct path for the given command
+char *find_correct_path(char *cmd, t_env_var *env_list)
+{
+    char *path_var = get_env_value(env_list, "PATH");
     char **paths;
     char *correct_path;
     int i = 0;
 
-    while (env[i])
-    {
-        if (ft_strncmp(env[i], "PATH=", 5) == 0)
-        {
-            path_var = env[i] + 5;
-            break;
-        }
-        i++;
-    }
     if (!path_var)
         return NULL;
     paths = ft_split(path_var, ':');
@@ -104,10 +109,103 @@ void setup_output_redirection(t_redirection *output)
     }
 }
 
+// Function to print environment variables
+void print_env_vars(t_env_var *env_list)
+{
+    t_env_var *current = env_list;
+
+    while (current)
+    {
+        printf("%s=%s\n", current->key, current->value);
+        current = current->next;
+    }
+}
+
+// Function to handle the echo command
+void execute_echo(char **argv)
+{
+    int i = 1;
+    int newline = 1;
+
+    // Check for -n flag
+    if (argv[i] && ft_strcmp(argv[i], "-n") == 0)
+    {
+        newline = 0;
+        i++;
+    }
+
+    // Print the arguments
+    while (argv[i])
+    {
+        printf("%s", argv[i]);
+        if (argv[i + 1])
+            printf(" ");
+        i++;
+    }
+
+    // Print newline if -n flag is not set
+    if (newline)
+        printf("\n");
+}
+
+// Function to handle the pwd command
+void execute_pwd(void)
+{
+    char cwd[1024];
+    if (getcwd(cwd, sizeof(cwd)) != NULL)
+    {
+        printf("%s\n", cwd);
+    }
+    else
+    {
+        perror("getcwd");
+        exit(1);
+    }
+}
+
+// Function to handle the cd command
+void execute_cd(char **argv)
+{
+    if (argv[1] == NULL)
+    {
+        fprintf(stderr, "cd: missing argument\n");
+        exit(1);
+    }
+    if (chdir(argv[1]) != 0)
+    {
+        perror("cd");
+        exit(1);
+    }
+}
+
 // Execute a command
-void execute_command(t_command *cmd, char **env)
+void execute_command(t_command *cmd, t_env_var *env_list)
 {
     char *executable_path;
+
+    if (ft_strcmp(cmd->argv[0], "env") == 0)
+    {
+        print_env_vars(env_list);
+        exit(0);
+    }
+
+    if (ft_strcmp(cmd->argv[0], "echo") == 0)
+    {
+        execute_echo(cmd->argv);
+        exit(0);
+    }
+
+    if (ft_strcmp(cmd->argv[0], "pwd") == 0)
+    {
+        execute_pwd();
+        exit(0);
+    }
+
+    if (ft_strcmp(cmd->argv[0], "cd") == 0)
+    {
+        execute_cd(cmd->argv);
+        exit(0);
+    }
 
     if (ft_strchr(cmd->argv[0], '/') != NULL)
     {
@@ -115,7 +213,7 @@ void execute_command(t_command *cmd, char **env)
     }
     else
     {
-        executable_path = find_correct_path(cmd->argv[0], env);
+        executable_path = find_correct_path(cmd->argv[0], env_list);
         if (executable_path == NULL)
         {
             fprintf(stderr, "%s: command not found\n", cmd->argv[0]);
@@ -123,14 +221,41 @@ void execute_command(t_command *cmd, char **env)
         }
     }
 
-    execve(executable_path, cmd->argv, env);
+    // Convert t_env_var list to envp array for execve
+    int env_count = 0;
+    t_env_var *current = env_list;
+    while (current)
+    {
+        env_count++;
+        current = current->next;
+    }
+
+    char **envp = malloc(sizeof(char *) * (env_count + 1));
+    current = env_list;
+    for (int i = 0; i < env_count; i++)
+    {
+        envp[i] = malloc(strlen(current->key) + strlen(current->value) + 2);
+        sprintf(envp[i], "%s=%s", current->key, current->value);
+        current = current->next;
+    }
+    envp[env_count] = NULL;
+
+    execve(executable_path, cmd->argv, envp);
+
+    // Free envp array
+    for (int i = 0; i < env_count; i++)
+    {
+        free(envp[i]);
+    }
+    free(envp);
+
     perror("execve failed");
     free(executable_path);
     exit(EXIT_FAILURE);
 }
 
 // Fork and execute the command with proper redirections
-void fork_and_execute(t_command *cmd, char **env, int input_fd, int output_fd)
+void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd)
 {
     pid_t pid = fork();
     if (pid == -1)
@@ -167,23 +292,22 @@ void fork_and_execute(t_command *cmd, char **env, int input_fd, int output_fd)
         setup_output_redirection(cmd->output);
 
         // Execute the command
-        execute_command(cmd, env);
+        execute_command(cmd, env_list);
     }
 }
 
 // Execute the list of commands with piping
 // This function handles the creation of pipes, forking of processes, and execution of commands in a pipeline.
-void execute_commands(t_command *commands, char **env)
+void execute_commands(t_command *commands, t_shell *shell)
 {
-    int pipe_fd[2];       // Array to hold the file descriptors for the pipe
-    int input_fd = -1;    // Initial input is standard input (STDIN)
-    t_command *cmd = commands;  // Pointer to the current command
+    int pipe_fd[2];
+    int input_fd = -1;
+    t_command *cmd = commands;
+    pid_t pid;
+    int status;
 
-    // Iterate over each command in the linked list
     while (cmd)
     {
-        // Check if there is a next command
-        // If there is a next command, create a pipe
         if (cmd->next != NULL)
         {
             if (pipe(pipe_fd) == -1)
@@ -194,30 +318,31 @@ void execute_commands(t_command *commands, char **env)
         }
         else
         {
-            // No next command, so no need for a pipe
             pipe_fd[0] = -1;
             pipe_fd[1] = -1;
         }
 
-        // Fork and execute the current command
-        // The current command's output will be piped to the next command's input
-        fork_and_execute(cmd, env, input_fd, pipe_fd[1]);
+        fork_and_execute(cmd, shell->env_list, input_fd, pipe_fd[1]);
 
-        // Close the input file descriptor if it is valid
         if (input_fd != -1)
             close(input_fd);
 
-        // Close the write end of the pipe in the parent process
         if (pipe_fd[1] != -1)
             close(pipe_fd[1]);
 
-        // The read end of the pipe becomes the input for the next command
         input_fd = pipe_fd[0];
-
-        // Move to the next command in the list
         cmd = cmd->next;
     }
 
-    // Wait for all child processes to finish
-    while (wait(NULL) > 0);
+    while ((pid = wait(&status)) > 0)
+    {
+        if (WIFEXITED(status))
+        {
+            shell->exit_code = WEXITSTATUS(status);
+        }
+        else if (WIFSIGNALED(status))
+        {
+            shell->exit_code = WTERMSIG(status) + 128;
+        }
+    }
 }

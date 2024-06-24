@@ -106,6 +106,34 @@ void print_command(t_command *cmd) {
     }
 }
 
+// Function to add an environment variable to the list
+void add_env_var(t_env_var **env_list, const char *key, const char *value)
+{
+    t_env_var *new_var = malloc(sizeof(t_env_var));
+    t_env_var *current;
+
+    if (!new_var)
+        return;
+
+    new_var->key = ft_strdup(key);
+    new_var->value = ft_strdup(value);
+    new_var->next = NULL;
+
+    if (!*env_list)
+    {
+        *env_list = new_var;
+    }
+    else
+    {
+        current = *env_list;
+        while (current->next)
+        {
+            current = current->next;
+        }
+        current->next = new_var;
+    }
+}
+
 void copy_env_vars(t_shell *shell, char **env)
 {
     int        i;
@@ -130,6 +158,17 @@ void copy_env_vars(t_shell *shell, char **env)
         i++;
     }
 }
+
+// void print_env_vars(t_env_var *env_list)
+// {
+//     t_env_var *current = env_list;
+
+//     while (current)
+//     {
+//         printf("%s=%s\n", current->key, current->value);
+//         current = current->next;
+//     }
+// }
 
 void print_command_details(t_command *cmds)
 {
@@ -173,128 +212,6 @@ void print_command_details(t_command *cmds)
     }
 }
 
-// int main(int argc, char **argv, char **env)
-// {
-// 	char        *input;
-// 	t_token     *tokens;
-// 	t_shell     shell;
-
-// 	// atexit(leaks);
-// 	shell.env_list = NULL;
-// 	copy_env_vars(&shell, env);
-// 	shell.exit_code = 0;
-// 	while (1)
-// 	{
-// 		shell.cmds = NULL;
-// 		tokens = NULL;
-
-// 		if (isatty(fileno(stdin)))
-// 			input = readline("minishell> ");
-// 		else
-// 		{
-// 			char *line;
-// 			line = get_next_line(fileno(stdin));
-// 			input = ft_strtrim(line, "\n");
-// 			free(line);
-// 		}
-// 		// input = readline("minishell> ");
-// 		if (!input)
-// 			exit(0);
-//         add_history(input);
-//         // printf("%s\n", input);
-// 		input = ft_expander(input, &shell);
-// 		// printf("%s\n", input);
-// 		if (ft_strcmp(input, "") == 0)
-// 		{
-// 			free(input);
-// 			break ;
-// 		}
-// 		ft_lexer(input, &tokens);
-// 		// print_token_list(tokens);
-// 		// /printf
-// 		ft_parser(&shell.cmds, &tokens);
-// 		// PRINTING SHELL STRUCT!!!
-// 		// print_command_details(shell.cmds);
-// 		// EXECUTION
-//         if (is_builtin(shell.cmds->argv[0]))
-//         {
-//             shell.exit_code = execute_builtin(shell.cmds, &shell); // Capture and set exit code
-//         }
-//         else
-//         {
-//             execute_commands(shell.cmds, shell.env_list);
-//         }
-// 		free_command(shell.cmds);
-// 		free_token_list(tokens);
-// 		free(input);
-// 	}
-// 	free_env_vars(shell.env_list);
-// 	return 0;
-// }
-
-
-// Main function
-// NEWEST OLD
-// int main(int argc, char **argv, char **env)
-// {
-//     char *input;
-//     t_token *tokens;
-//     t_shell shell;
-
-//     shell.env_list = NULL;
-//     copy_env_vars(&shell, env);
-//     shell.exit_code = 0;
-
-//     while (1)
-//     {
-//         shell.cmds = NULL;
-//         tokens = NULL;
-//         if (isatty(fileno(stdin)))
-//             input = readline("minishell> ");
-//         else
-//         {
-//             char *line;
-//             line = get_next_line(fileno(stdin));
-//             input = ft_strtrim(line, "\n");
-//             free(line);
-//         }
-//         if (!input)
-//             exit(shell.exit_code);
-
-//         input = ft_expander(input, &shell);
-//         if (ft_strcmp(input, "") == 0)
-//         {
-//             free(input);
-//             break;
-//         }
-//         ft_lexer(input, &tokens);
-//         // print_token_list(tokens);
-//         ft_parser(&shell.cmds, &tokens);
-// 		// PRINTING SHELL STRUCT!!!
-// 		// print_command_details(shell.cmds);
-//         if (is_builtin(shell.cmds->argv[0]))
-//         {
-//             shell.exit_code = execute_builtin(shell.cmds, &shell, STDOUT_FILENO);
-//         }
-//         else
-//         {
-//             execute_commands(shell.cmds, &shell);
-//         }
-
-//         // Debug log for exit code
-//         // printf("Debug: Shell exit code is %d\n", shell.exit_code);
-
-//         free_command(shell.cmds);
-//         free_token_list(tokens);
-//         free(input);
-//     }
-
-//     free_env_vars(shell.env_list);
-//     printf("Debug: Exiting with code %d\n", shell.exit_code);
-//     return shell.exit_code;
-// }
-
-
 int main(int argc, char **argv, char **env)
 {
     char        *input;
@@ -304,7 +221,9 @@ int main(int argc, char **argv, char **env)
     // Initialize shell structure
     shell.env_list = NULL;
     shell.exit_code = 0;
-    // copy_env_vars(&shell, env); // Assuming you have a function to copy env vars
+    copy_env_vars(&shell, env); // Assuming you have a function to copy env vars
+
+	// print_env_vars(shell.env_list);
 
     while (1)
     {
@@ -337,7 +256,10 @@ int main(int argc, char **argv, char **env)
         ft_parser(&shell.cmds, &tokens); // Assuming you have a function for parsing tokens into commands
 		// PRINTING SHELL STRUCT!!!
 		// print_command_details(shell.cmds);
-        execute_commands(shell.cmds, env);
+		//TODO: ADD PRECHECK IF CMD IS NOT EMPTY.
+        // execute_commands(shell.cmds, env); //DELETE THIS IF WORKS
+		// execute_commands(shell.cmds, shell.env_list);
+		 execute_commands(shell.cmds, &shell);
 
         free_command(shell.cmds); // Assuming you have a function to free commands
         free_token_list(tokens);  // Assuming you have a function to free tokens
