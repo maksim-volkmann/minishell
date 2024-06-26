@@ -61,4 +61,6 @@ void print_env_vars(t_env_var *env_list);
 void free_env_vars(t_env_var *env_list);
 void free_command2(t_command *cmd);
 
+int ft_isnumber(const char *str);
+
 #endif
