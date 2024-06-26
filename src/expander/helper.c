@@ -27,6 +27,8 @@ char	*ft_extract_var(char *input, int *i)
 		(*i)++;
 		return (var);
 	}
+	if (input[(*i)] == ' ' || input[(*i)] == '\t' || input[(*i)] == '\0')
+		return (ft_strdup(" "));
 	var = malloc(var_len + 1);
 	j = 0;
 	while (input[(*i)] != 0)
@@ -41,6 +43,7 @@ char	*ft_extract_var(char *input, int *i)
 		}
 	}
 	var[j] = '\0';
+
 	return (var);
 }
 
@@ -71,6 +74,8 @@ char	*ft_expand_var(t_shell *shell, char *var)
 
 	if (ft_strcmp(var, "?") == 0)
 		return (ft_itoa(shell->exit_code));
+	if (ft_strcmp(var, " ") == 0)
+		return (ft_strdup("$"));
 	current = shell->env_list;
 	while (current != NULL)
 	{

@@ -174,9 +174,9 @@ void print_command_details(t_command *cmds)
 
 int main(int argc, char **argv, char **env)
 {
-	char        *input;
-	t_token     *tokens;
-	t_shell     shell;
+	char		*input;
+	t_token		*tokens;
+	t_shell		shell;
 
 	// atexit(leaks);
 	shell.env_list = NULL;
@@ -186,6 +186,7 @@ int main(int argc, char **argv, char **env)
 	{
 		shell.cmds = NULL;
 		tokens = NULL;
+		// shell.error_present = false;
 
 		if (isatty(fileno(stdin)))
 			input = readline("minishell> ");
@@ -199,8 +200,7 @@ int main(int argc, char **argv, char **env)
 		// input = readline("minishell> ");
 		if (!input)
 			exit(0);
-        add_history(input);
-        // printf("%s\n", input);
+		add_history(input);
 		input = ft_expander(input, &shell);
 		// printf("%s\n", input);
 		if (ft_strcmp(input, "") == 0)
@@ -210,8 +210,14 @@ int main(int argc, char **argv, char **env)
 		}
 		ft_lexer(input, &tokens);
 		// print_token_list(tokens);
-		// /printf
-		ft_parser(&shell.cmds, &tokens);
+		ft_parser(&shell, &tokens);
+		if (shell.error_present == true)
+		{
+			free_command(shell.cmds);
+			free_token_list(tokens);
+			free(input);
+			continue ;
+		}
 		// PRINTING SHELL STRUCT!!!
 		// print_command_details(shell.cmds);
 		// EXECUTION
@@ -230,6 +236,57 @@ int main(int argc, char **argv, char **env)
 	free_env_vars(shell.env_list);
 	return (0);
 }
+
+// int main(int argc, char **argv, char **env)
+// {
+// 	char	*input;
+// 	t_token	*tokens;
+// 	t_shell	shell;
+
+// 	shell.env_list = NULL;
+// 	copy_env_vars(&shell, env);
+// 	shell.exit_code = 0;
+
+// 	while (1)
+// 	{
+// 		shell.cmds = NULL;
+// 		tokens = NULL;
+// 		shell.error_present = false;
+
+// 		input = readline("minishell> ");
+// 		if (!input)
+// 			exit(0);
+// 		add_history(input);
+// 		input = ft_expander(input, &shell);
+
+// 		if (ft_strcmp(input, "") == 0)
+// 		{
+// 			free(input);
+// 			break ;
+// 		}
+
+// 		ft_lexer(input, &tokens);
+// 		ft_parser(&shell, &tokens);
+// 		if (shell.error_present == true)
+// 		{
+// 			free_command(shell.cmds);
+// 			free_token_list(tokens);
+// 			free(input);
+// 			continue ;
+// 		}
+
+// 		if (is_builtin(shell.cmds->argv[0]))
+// 			execute_builtin(shell.cmds, &shell);
+
+// 		else
+// 			execute_commands(shell.cmds, shell.env_list);
+// 		free_command(shell.cmds);
+// 		free_token_list(tokens);
+// 		free(input);
+// 	}
+// 	free_env_vars(shell.env_list);
+// 	return (0);
+// }
 
 // #define TESTER 1
 

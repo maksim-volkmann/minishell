@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/30 10:33:59 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/20 10:33:15 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/26 11:11:12 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <string.h>
 # include <stdio.h>
 # include "./lexer.h"
+# include <stdbool.h>
 
 typedef enum e_redir_type
 {
@@ -45,9 +46,9 @@ typedef struct s_command
 
 typedef struct s_env_var
 {
-	char	*key;
-	char	*value;
-	struct	s_env_var *next;
+	char				*key;
+	char				*value;
+	struct s_env_var	*next;
 }	t_env_var;
 
 typedef struct s_shell
@@ -55,10 +56,11 @@ typedef struct s_shell
 	t_command	*cmds;
 	t_env_var	*env_list;
 	int			exit_code;
+	bool		error_present;
 }	t_shell;
 
 // parser.c
-void			ft_parser(t_command **cmds, t_token **tokens);
+void			ft_parser(t_shell *shell, t_token **tokens);
 void			print_command(t_command *cmd);
 void			print_redirection(t_redirection *redir);
 
@@ -68,22 +70,20 @@ void			add_or_init_node(t_command **cmds, t_command *new_n);
 
 // darray.c
 int				ft_darray_size(t_token	*tokens);
-char			**ft_get_darray(t_token **tokens);
+char			**ft_get_darray(t_token **tokens, t_shell *shell);
 
-// fill_in_node
-t_redirection	*ft_fill_input(char **cmd);
-int				check_for_input(char **cmd, int current);
-void			ft_handle_in_files(t_redirection *new_n,
-					char **cmd, int actual);
-
-// fill_out_node.c
-t_redirection	*ft_fill_output(char **cmd);
-int				check_for_output(char **cmd, int current);
-void			ft_handle_out_files(t_redirection *new_n,
-					char **cmd, int actual);
+// handle_redir.c
+void			ft_handle_redir(t_token *tokens, t_shell *shell);
+void			ft_handle_input(t_token *tokens, t_shell *shell);
+void			ft_handle_output(t_token *tokens, t_shell *shell);
 
 // free.c
 void			free_redirection(t_redirection *redir);
 void			free_command(t_command *cmd);
+
+// helper.c
+char			*ft_heredoc_join(char *s1, char *s2);
+int				ft_open_file(char *filename, char *content);
+char			*ft_heredoc(char *delimiter, t_shell *shell);
 
 #endif

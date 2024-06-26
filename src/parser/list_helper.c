@@ -6,11 +6,12 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 09:56:09 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/05 17:46:24 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:09:50 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
+#include <sys/_types/_null.h>
 
 t_command	*ft_new_node(void)
 {
@@ -20,8 +21,14 @@ t_command	*ft_new_node(void)
 	if (!new)
 		return (NULL);
 	new->argv = NULL;
-	new->input = NULL;
-	new->output = NULL;
+	new->output = malloc(sizeof(t_redirection));
+	new->input = malloc(sizeof(t_redirection));
+	if (!new->input || !new->output)
+		return (NULL);
+	new->input->file = NULL;
+	new->output->file = NULL;
+	new->input->type = REDIR_NONE;
+	new->output->type = REDIR_NONE;
 	new->next = NULL;
 	return (new);
 }
