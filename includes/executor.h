@@ -44,23 +44,28 @@
 // Function declarations
 void execute_commands(t_command *commands, t_shell *shell);
 char *find_correct_path(char *cmd, t_env_var *env_list);
+char *create_cmd_path(char *dir, char *cmd);
+char *get_env_value(t_env_var *env_list, const char *key);
 
 // Redirection functions
 void setup_input_redirection(t_redirection *input);
 void setup_output_redirection(t_redirection *output);
 
+// Built-in commands
 void execute_echo(char **argv);
 void execute_pwd(void);
 void execute_cd(char **argv);
-void execute_exit(char **argv, t_shell *shell);
+int execute_exit(char **argv, t_shell *shell);
+// void execute_exit(char **argv, t_shell *shell);
+// Command execution
 void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell);
 void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd, t_shell *shell);
 
+// Utility functions
 void ft_free_split(char **arr);
 void print_env_vars(t_env_var *env_list);
 void free_env_vars(t_env_var *env_list);
-void free_command2(t_command *cmd);
+int handle_builtin(t_command *cmd, t_shell *shell);
 
-int ft_isnumber(const char *str);
 
 #endif

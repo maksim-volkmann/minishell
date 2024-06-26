@@ -1,0 +1,2296 @@
+Failed test: echo cd ~ //1
+
+Failure Category: STD_OUT
+Expected: cd /Users/mvolkman //1
+Actual: cd ~ //1
+------
+Failed test: echo ''$?''"42"
+
+Failure Category: STD_OUT
+Expected: 042
+Actual: 
+------
+Failed test: echo "'$USER'"
+
+Failure Category: STD_OUT
+Expected: 'mvolkman'
+Actual: 
+------
+Failed test: echo "'"'$USER'"'"
+
+Failure Category: STD_OUT
+Expected: '$USER'
+Actual: 
+------
+Failed test: echo '"'"$USER"'"'
+
+Failure Category: STD_OUT
+Expected: "mvolkman"
+Actual: 
+------
+Failed test: echo $"HOME"$USER
+
+Failure Category: STD_OUT
+Expected: HOMEmvolkman
+Actual: 
+------
+Failed test: echo $"HOME"
+
+Failure Category: STD_OUT
+Expected: HOME
+Actual: 
+------
+Failed test: echo $"42$"
+
+Failure Category: STD_OUT
+Expected: 42$
+Actual: 
+------
+Failed test: echo hi >./outfiles/outfile01 | echo bye
+
+Failure Category: STD_OUT
+Expected: bye
+Actual: 
+------
+Failed test: echo hi >./outfiles/outfile01 | echo bye
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 134
+------
+Failed test: echo <123 <456 hi | echo 42
+
+Failure Category: STD_OUT
+Expected: 42
+Actual: 
+------
+Failed test: echo <123 <456 hi | echo 42
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 134
+------
+Failed test: echo '$='
+
+Failure Category: STD_OUT
+Expected: $=
+Actual: 
+------
+Failed test: echo "'$?'"
+
+Failure Category: STD_OUT
+Expected: '0'
+Actual: 
+------
+Failed test: echo \$USER
+
+Failure Category: STD_OUT
+Expected: $USER
+Actual: 
+------
+Failed test: echo \\$USER
+
+Failure Category: STD_OUT
+Expected: \mvolkman
+Actual: \\mvolkman
+------
+Failed test: echo \\\$USER
+
+Failure Category: STD_OUT
+Expected: \$USER
+Actual: \\\mvolkman
+------
+Failed test: echo \\\\$USER
+
+Failure Category: STD_OUT
+Expected: \\mvolkman
+Actual: 
+------
+Failed test: echo \\\\\$USER
+
+Failure Category: STD_OUT
+Expected: \\$USER
+Actual: 
+------
+Failed test: echo \\\\\\\\\$USER
+
+Failure Category: STD_OUT
+Expected: \\\\$USER
+Actual: \\\\\\\\\mvolkman
+------
+Failed test: echo \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\$USER \$PATH \\$PWD
+
+Failure Category: STD_OUT
+Expected: \\\\\\\\\\\\\\\\$USER $PATH \/Users/mvolkman/minishell2/42_minishell_tester
+Actual: \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\mvolkman \/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin \\/Users/mvolkman/minishell2/42_minishell_tester
+------
+Failed test: echo '$USER' "$USER" "text  ' text"
+
+Failure Category: STD_OUT
+Expected: $USER mvolkman text  ' text
+Actual: 
+------
+Failed test: echo -n"-n" bonjour
+
+Failure Category: STD_OUT
+Expected: -n-n bonjour
+Actual: 
+------
+Failed test: echo '              $USER          '
+
+Failure Category: STD_OUT
+Expected:               $USER          
+Actual: 
+------
+Failed test: echo """"""""$USER""""""""
+
+Failure Category: STD_OUT
+Expected: mvolkman
+Actual: 
+------
+Failed test: echo $USER'$USER'text oui oui     oui  oui $USER oui      $USER ''
+
+Failure Category: STD_OUT
+Expected: mvolkman$USERtext oui oui oui oui mvolkman oui mvolkman 
+Actual: 
+------
+Failed test: echo
+
+Failure Category: STD_OUT
+Expected: 
+Actual: 
+------
+Failed test: echo '' ""
+
+Failure Category: STD_OUT
+Expected:  
+Actual: 
+------
+Failed test: echo echo
+
+Failure Category: STD_OUT
+Expected: echo
+Actual: 
+------
+Failed test: echo test1
+
+Failure Category: STD_OUT
+Expected: test1
+Actual: 
+------
+Failed test: echo 'test1'
+
+Failure Category: STD_OUT
+Expected: test1
+Actual: 
+------
+Failed test: echo "echo hallo"
+
+Failure Category: STD_OUT
+Expected: echo hallo
+Actual: 
+------
+Failed test: echo "test1 test2"
+
+Failure Category: STD_OUT
+Expected: test1 test2
+Actual: 
+------
+Failed test: echo "test1  test2" test3
+
+Failure Category: STD_OUT
+Expected: test1  test2 test3
+Actual: 
+------
+Failed test: echo test1		test2
+
+Failure Category: STD_OUT
+Expected: test1 test2
+Actual: 
+------
+Failed test: echo test1		test2
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 130
+------
+Failed test: echo $USER$TESTNOTFOUND$HOME$
+
+Failure Category: STD_OUT
+Expected: mvolkman/Users/mvolkman$
+Actual: 
+------
+Failed test: echo $USER$TESTNOTFOUND$HOME$WTF$PWD
+
+Failure Category: STD_OUT
+Expected: mvolkman/Users/mvolkman/Users/mvolkman/minishell2/42_minishell_tester
+Actual: 
+------
+Failed test: echo -n "test1 test2"
+
+Failure Category: STD_OUT
+Expected: test1 test2
+Actual: 
+------
+Failed test: echo -n test1		test2
+
+Failure Category: STD_OUT
+Expected: test1 test2
+Actual: 
+------
+Failed test: echo -n test1		test2
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 130
+------
+Failed test: echo "test1 -n"
+
+Failure Category: STD_OUT
+Expected: test1 -n
+Actual: 
+------
+Failed test: echo -
+echo --
+
+Failure Category: STD_OUT
+Expected: -
+--
+Actual: 
+------
+Failed test: echo "  -nn "
+
+Failure Category: STD_OUT
+Expected:   -nn 
+Actual: 
+------
+Failed test: echo "-n test1 -n test2"
+
+Failure Category: STD_OUT
+Expected: -n test1 -n test2
+Actual: 
+------
+Failed test: echo "test1 -n test2"
+
+Failure Category: STD_OUT
+Expected: test1 -n test2
+Actual: 
+------
+Failed test: echo -n -nnnnnnn -n -nnn -nnnnn -n-n
+
+Failure Category: STD_OUT
+Expected: -n-n
+Actual: -nnnnnnn -n -nnn -nnnnn -n-n
+------
+Failed test: echo -n -nnnnnnn -n -nnn -nnnnn -n feel my pain
+
+Failure Category: STD_OUT
+Expected: feel my pain
+Actual: -nnnnnnn -n -nnn -nnnnn -n feel my pain
+------
+Failed test: echo -n -n -n-n
+
+Failure Category: STD_OUT
+Expected: -n-n
+Actual: 
+------
+Failed test: echo "'totally logical'"
+
+Failure Category: STD_OUT
+Expected: 'totally logical'
+Actual: 
+------
+Failed test: echo 'totally logical'
+
+Failure Category: STD_OUT
+Expected: totally logical
+Actual: 
+------
+Failed test: echo ''totally logical''
+
+Failure Category: STD_OUT
+Expected: totally logical
+Actual: 
+------
+Failed test: eChO
+
+Failure Category: STD_OUT
+Expected: 
+Actual: 
+------
+Failed test: eCHO
+
+Failure Category: STD_OUT
+Expected: 
+Actual: 
+------
+Failed test: ECHO
+
+Failure Category: STD_OUT
+Expected: 
+Actual: 
+------
+Failed test: pwd
+cd
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman
+Actual: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/42_minishell_tester
+------
+Failed test: pwd
+cd
+pwd
+
+Failure Category: STD_ERR
+Expected: 
+Actual: cd: missing argument
+------
+Failed test: cd ..
+cd $OLDPWD
+
+Failure Category: STD_ERR
+Expected: 
+Actual: cd: missing argument
+------
+Failed test: pwd
+cd ./././
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/42_minishell_tester
+Actual: 
+------
+Failed test: pwd
+cd /
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/
+Actual: 
+------
+Failed test: pwd
+cd "$PWD/file_tests"
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/42_minishell_tester
+Actual: 
+------
+Failed test: pwd
+cd "$PWD/file_tests"
+pwd
+
+Failure Category: STD_ERR
+Expected: bash: line 3: cd: /Users/mvolkman/minishell2/42_minishell_tester/file_tests: No such file or directory
+Actual: 
+------
+Failed test: cd '/////' 2>/dev/null
+
+Failure Category: STD_ERR
+Expected: 
+Actual: AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==22384==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000010 (pc 0x0001035117e5 bp 0x7ffeec6fc520 sp 0x7ffeec6fc420 T0)
+==22384==The signal is caused by a READ memory access.
+==22384==Hint: address points to the zero page.
+    #0 0x1035117e5 in ft_handle_output handle_redir.c:21
+    #1 0x10351272e in ft_handle_redir handle_redir.c:80
+    #2 0x1035111db in ft_get_darray darray.c:47
+    #3 0x103513cf5 in ft_parser parser.c:47
+    #4 0x1035105e9 in main minishell.c:253
+    #5 0x7fff6e48acc8 in start+0x0 (libdyld.dylib:x86_64+0x1acc8)
+
+==22384==Register values:
+rax = 0x0000000000000010  rbx = 0x00007ffeec6fc760  rcx = 0x0000000000000010  rdx = 0x0000100000000002  
+rdi = 0x0000100000000000  rsi = 0x0000100000000000  rbp = 0x00007ffeec6fc520  rsp = 0x00007ffeec6fc420  
+ r8 = 0x0000100000000000   r9 = 0x0000000000000000  r10 = 0xffffffffffffffff  r11 = 0x00000fffffffffff  
+r12 = 0x0000000000000000  r13 = 0x0000000000000000  r14 = 0x0000000000000000  r15 = 0x0000000000000000  
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV handle_redir.c:21 in ft_handle_output
+==22384==ABORTING
+------
+Failed test: cd '/////' 2>/dev/null
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 134
+------
+Failed test: cd "doesntexist" 2>/dev/null
+
+Failure Category: STD_ERR
+Expected: 
+Actual: AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==22407==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000010 (pc 0x00010c9107e5 bp 0x7ffee32fd520 sp 0x7ffee32fd420 T0)
+==22407==The signal is caused by a READ memory access.
+==22407==Hint: address points to the zero page.
+    #0 0x10c9107e5 in ft_handle_output handle_redir.c:21
+    #1 0x10c91172e in ft_handle_redir handle_redir.c:80
+    #2 0x10c9101db in ft_get_darray darray.c:47
+    #3 0x10c912cf5 in ft_parser parser.c:47
+    #4 0x10c90f5e9 in main minishell.c:253
+    #5 0x7fff6e48acc8 in start+0x0 (libdyld.dylib:x86_64+0x1acc8)
+
+==22407==Register values:
+rax = 0x0000000000000010  rbx = 0x00007ffee32fd760  rcx = 0x0000000000000010  rdx = 0x0000100000000002  
+rdi = 0x0000100000000000  rsi = 0x0000100000000000  rbp = 0x00007ffee32fd520  rsp = 0x00007ffee32fd420  
+ r8 = 0x0000100000000000   r9 = 0x0000000000000000  r10 = 0xffffffffffffffff  r11 = 0x00000fffffffffff  
+r12 = 0x0000000000000000  r13 = 0x0000000000000000  r14 = 0x0000000000000000  r15 = 0x0000000000000000  
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV handle_redir.c:21 in ft_handle_output
+==22407==ABORTING
+------
+Failed test: cd "doesntexist" 2>/dev/null
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 134
+------
+Failed test: cd "wtf" 2>/dev/null
+
+Failure Category: STD_ERR
+Expected: 
+Actual: AddressSanitizer:DEADLYSIGNAL
+=================================================================
+==22433==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000010 (pc 0x000107d337e5 bp 0x7ffee7eda520 sp 0x7ffee7eda420 T0)
+==22433==The signal is caused by a READ memory access.
+==22433==Hint: address points to the zero page.
+    #0 0x107d337e5 in ft_handle_output handle_redir.c:21
+    #1 0x107d3472e in ft_handle_redir handle_redir.c:80
+    #2 0x107d331db in ft_get_darray darray.c:47
+    #3 0x107d35cf5 in ft_parser parser.c:47
+    #4 0x107d325e9 in main minishell.c:253
+    #5 0x7fff6e48acc8 in start+0x0 (libdyld.dylib:x86_64+0x1acc8)
+
+==22433==Register values:
+rax = 0x0000000000000010  rbx = 0x00007ffee7eda760  rcx = 0x0000000000000010  rdx = 0x0000100000000002  
+rdi = 0x0000100000000000  rsi = 0x0000100000000000  rbp = 0x00007ffee7eda520  rsp = 0x00007ffee7eda420  
+ r8 = 0x0000100000000000   r9 = 0x0000000000000000  r10 = 0xffffffffffffffff  r11 = 0x00000fffffffffff  
+r12 = 0x0000000000000000  r13 = 0x0000000000000000  r14 = 0x0000000000000000  r15 = 0x0000000000000000  
+AddressSanitizer can not provide additional info.
+SUMMARY: AddressSanitizer: SEGV handle_redir.c:21 in ft_handle_output
+==22433==ABORTING
+------
+Failed test: cd "wtf" 2>/dev/null
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 134
+------
+Failed test: cd ?
+
+Failure Category: STD_ERR
+Expected: bash: line 2: cd: |: Not a directory
+Actual: 
+------
+Failed test: cd ?
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: cd +
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: cd _
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: cd woof
+
+Failure Category: STD_ERR
+Expected: bash: line 2: cd: woof: No such file or directory
+Actual: 
+------
+Failed test: cd woof
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: cd bark bark
+
+Failure Category: STD_ERR
+Expected: bash: line 2: cd: bark: No such file or directory
+Actual: 
+------
+Failed test: cd bark bark
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: pwd
+cd "doesntexist"
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/42_minishell_tester
+Actual: 
+------
+Failed test: pwd
+cd "doesntexist"
+pwd
+
+Failure Category: STD_ERR
+Expected: bash: line 3: cd: doesntexist: No such file or directory
+Actual: 
+------
+Failed test: pwd
+cd "doesntexist"
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/42_minishell_tester
+Actual: 
+------
+Failed test: pwd
+cd "doesntexist"
+pwd
+
+Failure Category: STD_ERR
+Expected: bash: line 3: cd: doesntexist: No such file or directory
+Actual: 
+------
+Failed test: pwd
+cd ../../..
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users
+Actual: 
+------
+Failed test: pwd
+cd ..
+cd ..
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman
+Actual: 
+------
+Failed test: pwd
+cd _
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/42_minishell_tester
+Actual: 
+------
+Failed test: pwd
+cd _
+pwd
+
+Failure Category: STD_ERR
+Expected: bash: line 3: cd: _: No such file or directory
+Actual: 
+------
+Failed test: cd ../../
+cd -
+cd -
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman
+Actual: 
+------
+Failed test: cd ../../
+cd -
+cd -
+
+Failure Category: STD_ERR
+Expected: 
+Actual: cd: No such file or directory
+cd: No such file or directory
+------
+Failed test: pwd
+cd echo
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/42_minishell_tester
+Actual: 
+------
+Failed test: pwd
+cd echo
+pwd
+
+Failure Category: STD_ERR
+Expected: bash: line 3: cd: echo: No such file or directory
+Actual: 
+------
+Failed test: pwd
+cd $PWD/file_tests
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/42_minishell_tester
+Actual: 
+------
+Failed test: pwd
+cd $PWD/file_tests
+pwd
+
+Failure Category: STD_ERR
+Expected: bash: line 3: cd: /Users/mvolkman/minishell2/42_minishell_tester/file_tests: No such file or directory
+Actual: 
+------
+Failed test: pwd
+cd ~
+cd - ananas dot jpeg
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/42_minishell_tester
+Actual: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/42_minishell_tester
+------
+Failed test: pwd
+cd ~
+cd - ananas dot jpeg
+pwd
+
+Failure Category: STD_ERR
+Expected: 
+Actual: cd: No such file or directory
+cd: No such file or directory
+------
+Failed test: pwd
+cd ~ asd w dd q asd
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman
+Actual: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/42_minishell_tester
+------
+Failed test: pwd
+cd ~ asd w dd q asd
+pwd
+
+Failure Category: STD_ERR
+Expected: 
+Actual: cd: No such file or directory
+------
+Failed test: pwd
+cd ~
+cd -
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/42_minishell_tester
+Actual: 
+------
+Failed test: pwd
+cd -
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/42_minishell_tester
+Actual: 
+------
+Failed test: pwd
+cd -
+pwd
+
+Failure Category: STD_ERR
+Expected: bash: line 3: cd: OLDPWD not set
+Actual: 
+------
+Failed test: pwd
+cd ~
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman
+Actual: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/42_minishell_tester
+------
+Failed test: pwd
+cd ~
+pwd
+
+Failure Category: STD_ERR
+Expected: 
+Actual: cd: No such file or directory
+------
+Failed test: pwd
+cd ../libft
+pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+/Users/mvolkman/minishell2/libft
+Actual: 
+------
+Failed test: env | grep DOESNT_EXIST
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: env | grep HOME
+
+Failure Category: STD_OUT
+Expected: HOME=/Users/mvolkman
+Actual: 
+------
+Failed test: env | grep USER
+
+Failure Category: STD_OUT
+Expected: USER=mvolkman
+Actual: TERM_PROGRAM=Apple_Terminal
+SHELL=/bin/zsh
+TERM=xterm-256color
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n000cjy00034gh/T/
+TERM_PROGRAM_VERSION=433
+TERM_SESSION_ID=859B4238-5A8D-4CB6-B905-F7E2CD8C0590
+ZSH=/Users/mvolkman/.oh-my-zsh
+USER=mvolkman
+LS_COLORS=di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.8H9zKjyDFf/Listeners
+PAGER=less
+LSCOLORS=Gxfxcxdxbxegedabagacad
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+LaunchInstanceID=92C8A924-9CCF-403C-841E-B9B9A79A71A0
+PWD=/Users/mvolkman/minishell2/42_minishell_tester
+LANG=en_US.UTF-8
+XPC_FLAGS=0x0
+EXECUTABLE=minishell
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/mvolkman
+MINISHELL_PATH=./
+LESS=-R
+LOGNAME=mvolkman
+SECURITYSESSIONID=186ca
+_=.//minishell
+------
+Failed test: env | grep USER
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 1
+------
+Failed test: env | wc -l
+
+Failure Category: STD_OUT
+Expected:       26
+Actual: 
+------
+Failed test: "pwd"
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+Actual: 
+------
+Failed test: pwd test42
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+Actual: 
+------
+Failed test: pwd pwd
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman/minishell2/42_minishell_tester
+Actual: 
+------
+Failed test: /bin/echo $HALLO42
+env | grep HALLO42
+export HALLO42=42
+/bin/echo $HALLO42
+env | grep HALLO42
+
+Failure Category: STD_OUT
+Expected: 
+42
+HALLO42=42
+Actual: 
+p HALLO42
+TERM_PROGRAM=Apple_Terminal
+SHELL=/bin/zsh
+TERM=xterm-256color
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n000cjy00034gh/T/
+TERM_PROGRAM_VERSION=433
+TERM_SESSION_ID=859B4238-5A8D-4CB6-B905-F7E2CD8C0590
+ZSH=/Users/mvolkman/.oh-my-zsh
+USER=mvolkman
+LS_COLORS=di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.8H9zKjyDFf/Listeners
+PAGER=less
+LSCOLORS=Gxfxcxdxbxegedabagacad
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+LaunchInstanceID=92C8A924-9CCF-403C-841E-B9B9A79A71A0
+PWD=/Users/mvolkman/minishell2/42_minishell_tester
+LANG=en_US.UTF-8
+XPC_FLAGS=0x0
+EXECUTABLE=minishell
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/mvolkman
+MINISHELL_PATH=./
+LESS=-R
+LOGNAME=mvolkman
+SECURITYSESSIONID=186ca
+_=.//minishell
+
+TERM_PROGRAM=Apple_Terminal
+SHELL=/bin/zsh
+TERM=xterm-256color
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n000cjy00034gh/T/
+TERM_PROGRAM_VERSION=433
+TERM_SESSION_ID=859B4238-5A8D-4CB6-B905-F7E2CD8C0590
+ZSH=/Users/mvolkman/.oh-my-zsh
+USER=mvolkman
+LS_COLORS=di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.8H9zKjyDFf/Listeners
+PAGER=less
+LSCOLORS=Gxfxcxdxbxegedabagacad
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+LaunchInstanceID=92C8A924-9CCF-403C-841E-B9B9A79A71A0
+PWD=/Users/mvolkman/minishell2/42_minishell_tester
+LANG=en_US.UTF-8
+XPC_FLAGS=0x0
+EXECUTABLE=minishell
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/mvolkman
+MINISHELL_PATH=./
+LESS=-R
+LOGNAME=mvolkman
+SECURITYSESSIONID=186ca
+_=.//minishell
+TERM_PROGRAM=Apple_Terminal
+SHELL=/bin/zsh
+TERM=xterm-256color
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n000cjy00034gh/T/
+TERM_PROGRAM_VERSION=433
+TERM_SESSION_ID=859B4238-5A8D-4CB6-B905-F7E2CD8C0590
+ZSH=/Users/mvolkman/.oh-my-zsh
+USER=mvolkman
+LS_COLORS=di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.8H9zKjyDFf/Listeners
+PAGER=less
+LSCOLORS=Gxfxcxdxbxegedabagacad
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+LaunchInstanceID=92C8A924-9CCF-403C-841E-B9B9A79A71A0
+PWD=/Users/mvolkman/minishell2/42_minishell_tester
+LANG=en_US.UTF-8
+XPC_FLAGS=0x0
+EXECUTABLE=minishell
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/mvolkman
+MINISHELL_PATH=./
+LESS=-R
+LOGNAME=mvolkman
+SECURITYSESSIONID=186ca
+_=.//minishell
+TERM_PROGRAM=Apple_Terminal
+SHELL=/bin/zsh
+TERM=xterm-256color
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n000cjy00034gh/T/
+TERM_PROGRAM_VERSION=433
+TERM_SESSION_ID=859B4238-5A8D-4CB6-B905-F7E2CD8C0590
+ZSH=/Users/mvolkman/.oh-my-zsh
+USER=mvolkman
+LS_COLORS=di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.8H9zKjyDFf/Listeners
+PAGER=less
+LSCOLORS=Gxfxcxdxbxegedabagacad
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+LaunchInstanceID=92C8A924-9CCF-403C-841E-B9B9A79A71A0
+PWD=/Users/mvolkman/minishell2/42_minishell_tester
+LANG=en_US.UTF-8
+XPC_FLAGS=0x0
+EXECUTABLE=minishell
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/mvolkman
+MINISHELL_PATH=./
+LESS=-R
+LOGNAME=mvolkman
+SECURITYSESSIONID=186ca
+_=.//minishell
+TERM_PROGRAM=Apple_Terminal
+SHELL=/bin/zsh
+TERM=xterm-256color
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n000cjy00034gh/T/
+TERM_PROGRAM_VERSION=433
+TERM_SESSION_ID=859B4238-5A8D-4CB6-B905-F7E2CD8C0590
+ZSH=/Users/mvolkman/.oh-my-zsh
+USER=mvolkman
+LS_COLORS=di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.8H9zKjyDFf/Listeners
+PAGER=less
+LSCOLORS=Gxfxcxdxbxegedabagacad
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+LaunchInstanceID=92C8A924-9CCF-403C-841E-B9B9A79A71A0
+PWD=/Users/mvolkman/minishell2/42_minishell_tester
+LANG=en_US.UTF-8
+XPC_FLAGS=0x0
+EXECUTABLE=minishell
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/mvolkman
+MINISHELL_PATH=./
+LESS=-R
+LOGNAME=mvolkman
+SECURITYSESSIONID=186ca
+_=.//minishell
+------
+Failed test: /bin/echo $HALLO42
+env | grep HALLO42
+export HALLO42=42
+/bin/echo $HALLO42
+env | grep HALLO42
+
+Failure Category: STD_ERR
+Expected: 
+Actual: export: command not found
+gre: command not found
+------
+Failed test: /bin/echo $HALLO42
+env | grep HALLO42
+export HALLO42=42
+/bin/echo $HALLO42
+env | grep HALLO42
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 127
+------
+Failed test: /bin/echo $HOME
+env | grep HOME
+export HOME=42
+/bin/echo $HOME
+env | grep HOME
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman
+HOME=/Users/mvolkman
+42
+HOME=42
+Actual: /Users/mvolkman
+TERM_PROGRAM=Apple_Terminal
+SHELL=/bin/zsh
+TERM=xterm-256color
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n000cjy00034gh/T/
+TERM_PROGRAM_VERSION=433
+TERM_SESSION_ID=859B4238-5A8D-4CB6-B905-F7E2CD8C0590
+ZSH=/Users/mvolkman/.oh-my-zsh
+USER=mvolkman
+LS_COLORS=di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.8H9zKjyDFf/Listeners
+PAGER=less
+LSCOLORS=Gxfxcxdxbxegedabagacad
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+LaunchInstanceID=92C8A924-9CCF-403C-841E-B9B9A79A71A0
+PWD=/Users/mvolkman/minishell2/42_minishell_tester
+LANG=en_US.UTF-8
+XPC_FLAGS=0x0
+EXECUTABLE=minishell
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/mvolkman
+MINISHELL_PATH=./
+LESS=-R
+LOGNAME=mvolkman
+SECURITYSESSIONID=186ca
+_=.//minishell
+/Users/mvolkman
+TERM_PROGRAM=Apple_Terminal
+SHELL=/bin/zsh
+TERM=xterm-256color
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n000cjy00034gh/T/
+TERM_PROGRAM_VERSION=433
+TERM_SESSION_ID=859B4238-5A8D-4CB6-B905-F7E2CD8C0590
+ZSH=/Users/mvolkman/.oh-my-zsh
+USER=mvolkman
+LS_COLORS=di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.8H9zKjyDFf/Listeners
+PAGER=less
+LSCOLORS=Gxfxcxdxbxegedabagacad
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+LaunchInstanceID=92C8A924-9CCF-403C-841E-B9B9A79A71A0
+PWD=/Users/mvolkman/minishell2/42_minishell_tester
+LANG=en_US.UTF-8
+XPC_FLAGS=0x0
+EXECUTABLE=minishell
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/mvolkman
+MINISHELL_PATH=./
+LESS=-R
+LOGNAME=mvolkman
+SECURITYSESSIONID=186ca
+_=.//minishell
+TERM_PROGRAM=Apple_Terminal
+SHELL=/bin/zsh
+TERM=xterm-256color
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n000cjy00034gh/T/
+TERM_PROGRAM_VERSION=433
+TERM_SESSION_ID=859B4238-5A8D-4CB6-B905-F7E2CD8C0590
+ZSH=/Users/mvolkman/.oh-my-zsh
+USER=mvolkman
+LS_COLORS=di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.8H9zKjyDFf/Listeners
+PAGER=less
+LSCOLORS=Gxfxcxdxbxegedabagacad
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+LaunchInstanceID=92C8A924-9CCF-403C-841E-B9B9A79A71A0
+PWD=/Users/mvolkman/minishell2/42_minishell_tester
+LANG=en_US.UTF-8
+XPC_FLAGS=0x0
+EXECUTABLE=minishell
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/mvolkman
+MINISHELL_PATH=./
+LESS=-R
+LOGNAME=mvolkman
+SECURITYSESSIONID=186ca
+_=.//minishell
+------
+Failed test: /bin/echo $HOME
+env | grep HOME
+export HOME=42
+/bin/echo $HOME
+env | grep HOME
+
+Failure Category: STD_ERR
+Expected: 
+Actual: export: command not found
+------
+Failed test: /bin/echo $HOME
+env | grep HOME
+export HOME=42
+/bin/echo $HOME
+env | grep HOME
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 1
+------
+Failed test: export =============123
+
+Failure Category: STD_ERR
+Expected: bash: line 2: export: `=============123': not a valid identifier
+Actual: 
+------
+Failed test: export =============123
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: export
+
+Failure Category: STD_OUT
+Expected: declare -x EXECUTABLE="minishell"
+declare -x HOME="/Users/mvolkman"
+declare -x LANG="en_US.UTF-8"
+declare -x LESS="-R"
+declare -x LOGNAME="mvolkman"
+declare -x LSCOLORS="Gxfxcxdxbxegedabagacad"
+declare -x LS_COLORS="di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
+declare -x LaunchInstanceID="92C8A924-9CCF-403C-841E-B9B9A79A71A0"
+declare -x MINISHELL_PATH="./"
+declare -x OLDPWD
+declare -x PAGER="less"
+declare -x PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+declare -x PWD="/Users/mvolkman/minishell2/42_minishell_tester"
+declare -x SECURITYSESSIONID="186ca"
+declare -x SHELL="/bin/zsh"
+declare -x SHLVL="3"
+declare -x SSH_AUTH_SOCK="/private/tmp/com.apple.launchd.8H9zKjyDFf/Listeners"
+declare -x TERM="xterm-256color"
+declare -x TERM_PROGRAM="Apple_Terminal"
+declare -x TERM_PROGRAM_VERSION="433"
+declare -x TERM_SESSION_ID="859B4238-5A8D-4CB6-B905-F7E2CD8C0590"
+declare -x TMPDIR="/var/folders/zz/zyxvpxvq6csfxvn_n000cjy00034gh/T/"
+declare -x USER="mvolkman"
+declare -x XPC_FLAGS="0x0"
+declare -x XPC_SERVICE_NAME="0"
+declare -x ZSH="/Users/mvolkman/.oh-my-zsh"
+Actual: 
+------
+Failed test: export
+
+Failure Category: STD_ERR
+Expected: 
+Actual: export: command not found
+------
+Failed test: export
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 127
+------
+Failed test: export =
+
+Failure Category: STD_ERR
+Expected: bash: line 2: export: `=': not a valid identifier
+Actual: 
+------
+Failed test: export =
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: export =42
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: export ''=''
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: export ""=""
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: export $?
+
+Failure Category: STD_ERR
+Expected: bash: line 2: export: `0': not a valid identifier
+Actual: 
+------
+Failed test: export $?
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: export TEST
+
+Failure Category: STD_ERR
+Expected: 
+Actual: export: command not found
+------
+Failed test: export TEST
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 127
+------
+Failed test: export TEST=
+
+Failure Category: STD_ERR
+Expected: 
+Actual: export: command not found
+------
+Failed test: export TEST=
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 127
+------
+Failed test: export TEST=123
+
+Failure Category: STD_ERR
+Expected: 
+Actual: export: command not found
+------
+Failed test: export TEST=123
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 127
+------
+Failed test: export --TEST=123
+
+Failure Category: EXIT_CODE
+Expected: 2
+Actual: 127
+------
+Failed test: export ''=''
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: export "="="="
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: export '='='='
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: export TE-ST=100
+
+Failure Category: STD_ERR
+Expected: bash: line 2: export: `TE-ST=100': not a valid identifier
+Actual: 
+------
+Failed test: export TE-ST=100
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: export -TEST=100
+
+Failure Category: STD_ERR
+Expected: bash: line 2: export: -T: invalid option
+export: usage: export [-nf] [name[=value] ...] or export -p
+Actual: 
+------
+Failed test: export -TEST=100
+
+Failure Category: EXIT_CODE
+Expected: 2
+Actual: 0
+------
+Failed test: export TEST-=100
+
+Failure Category: STD_ERR
+Expected: bash: line 2: export: `TEST-=100': not a valid identifier
+Actual: 
+------
+Failed test: export TEST-=100
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: export _TEST=100
+
+Failure Category: STD_ERR
+Expected: 
+Actual: export: command not found
+------
+Failed test: export _TEST=100
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 127
+------
+Failed test: export ==========
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: export 1TEST=
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: export ""=""
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: export TE+S=T=""
+
+Failure Category: STD_ERR
+Expected: bash: line 2: export: `TE+S=T=': not a valid identifier
+Actual: 
+------
+Failed test: export TE+S=T=""
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: export TES.T=123
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: export TES.T=123
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: export TES+T=123
+
+Failure Category: STD_ERR
+Expected: bash: line 2: export: `TES+T=123': not a valid identifier
+Actual: 
+------
+Failed test: export TES+T=123
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: export TES}T=123
+
+Failure Category: STD_ERR
+Expected: bash: line 2: export: `TES}T=123': not a valid identifier
+Actual: 
+------
+Failed test: export TES}T=123
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: export TES{T=123
+
+Failure Category: STD_ERR
+Expected: bash: line 2: export: `TES{T=123': not a valid identifier
+Actual: 
+------
+Failed test: export TES{T=123
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: export TES-T=123
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: export -TEST=123
+
+Failure Category: STD_ERR
+Expected: bash: line 2: export: -T: invalid option
+export: usage: export [-nf] [name[=value] ...] or export -p
+Actual: 
+------
+Failed test: export -TEST=123
+
+Failure Category: EXIT_CODE
+Expected: 2
+Actual: 0
+------
+Failed test: export TE*ST=123
+
+Failure Category: STD_ERR
+Expected: bash: line 2: export: `TE*ST=123': not a valid identifier
+Actual: 
+------
+Failed test: export TE*ST=123
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: export TES#T=123
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: export TES@T=123
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: export TES!T=123
+
+Failure Category: STD_ERR
+Expected: bash: line 2: export: `TES!T=123': not a valid identifier
+Actual: 
+------
+Failed test: export TES!T=123
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: export =============123
+
+Failure Category: STD_ERR
+Expected: bash: line 2: export: `=============123': not a valid identifier
+Actual: 
+------
+Failed test: export =============123
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: export +++++++=123
+
+Failure Category: STD_ERR
+Expected: bash: line 2: export: `+++++++=123': not a valid identifier
+Actual: 
+------
+Failed test: export +++++++=123
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: export TES^T=123
+
+Failure Category: STD_ERR
+Expected: bash: line 2: export: `TES^T=123': not a valid identifier
+Actual: 
+------
+Failed test: export TES^T=123
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: export TES!T=123
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: export TES\~T=123
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: export TES_T=123
+/bin/echo $TES_T
+env | grep TES_T
+
+Failure Category: STD_OUT
+Expected: 123
+TES_T=123
+Actual: 
+TERM_PROGRAM=Apple_Terminal
+SHELL=/bin/zsh
+TERM=xterm-256color
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n000cjy00034gh/T/
+TERM_PROGRAM_VERSION=433
+TERM_SESSION_ID=859B4238-5A8D-4CB6-B905-F7E2CD8C0590
+ZSH=/Users/mvolkman/.oh-my-zsh
+USER=mvolkman
+LS_COLORS=di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.8H9zKjyDFf/Listeners
+PAGER=less
+LSCOLORS=Gxfxcxdxbxegedabagacad
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+LaunchInstanceID=92C8A924-9CCF-403C-841E-B9B9A79A71A0
+PWD=/Users/mvolkman/minishell2/42_minishell_tester
+LANG=en_US.UTF-8
+XPC_FLAGS=0x0
+EXECUTABLE=minishell
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/mvolkman
+MINISHELL_PATH=./
+LESS=-R
+LOGNAME=mvolkman
+SECURITYSESSIONID=186ca
+_=.//minishell
+------
+Failed test: export TES_T=123
+/bin/echo $TES_T
+env | grep TES_T
+
+Failure Category: STD_ERR
+Expected: 
+Actual: export: command not found
+------
+Failed test: export TES_T=123
+/bin/echo $TES_T
+env | grep TES_T
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 1
+------
+Failed test: export HELLO42=T=""
+/bin/echo $HELLO42
+env | grep HELLO42
+env | grep HELLO42=T=
+
+Failure Category: STD_OUT
+Expected: T=
+HELLO42=T=
+HELLO42=T=
+Actual: 
+TERM_PROGRAM=Apple_Terminal
+SHELL=/bin/zsh
+TERM=xterm-256color
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n000cjy00034gh/T/
+TERM_PROGRAM_VERSION=433
+TERM_SESSION_ID=859B4238-5A8D-4CB6-B905-F7E2CD8C0590
+ZSH=/Users/mvolkman/.oh-my-zsh
+USER=mvolkman
+LS_COLORS=di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.8H9zKjyDFf/Listeners
+PAGER=less
+LSCOLORS=Gxfxcxdxbxegedabagacad
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+LaunchInstanceID=92C8A924-9CCF-403C-841E-B9B9A79A71A0
+PWD=/Users/mvolkman/minishell2/42_minishell_tester
+LANG=en_US.UTF-8
+XPC_FLAGS=0x0
+EXECUTABLE=minishell
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/mvolkman
+MINISHELL_PATH=./
+LESS=-R
+LOGNAME=mvolkman
+SECURITYSESSIONID=186ca
+_=.//minishell
+TERM_PROGRAM=Apple_Terminal
+SHELL=/bin/zsh
+TERM=xterm-256color
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n000cjy00034gh/T/
+TERM_PROGRAM_VERSION=433
+TERM_SESSION_ID=859B4238-5A8D-4CB6-B905-F7E2CD8C0590
+ZSH=/Users/mvolkman/.oh-my-zsh
+USER=mvolkman
+LS_COLORS=di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.8H9zKjyDFf/Listeners
+PAGER=less
+LSCOLORS=Gxfxcxdxbxegedabagacad
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+LaunchInstanceID=92C8A924-9CCF-403C-841E-B9B9A79A71A0
+PWD=/Users/mvolkman/minishell2/42_minishell_tester
+LANG=en_US.UTF-8
+XPC_FLAGS=0x0
+EXECUTABLE=minishell
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/mvolkman
+MINISHELL_PATH=./
+LESS=-R
+LOGNAME=mvolkman
+SECURITYSESSIONID=186ca
+_=.//minishell
+------
+Failed test: export HELLO42=T=""
+/bin/echo $HELLO42
+env | grep HELLO42
+env | grep HELLO42=T=
+
+Failure Category: STD_ERR
+Expected: 
+Actual: export: command not found
+------
+Failed test: export HELLO42=T=""
+/bin/echo $HELLO42
+env | grep HELLO42
+env | grep HELLO42=T=
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 1
+------
+Failed test: echo $?
+export ?=hallo
+echo $?
+
+Failure Category: STD_OUT
+Expected: 0
+1
+Actual: 
+------
+Failed test: echo $?
+export ?=hallo
+echo $?
+
+Failure Category: STD_ERR
+Expected: bash: line 3: export: `?=hallo': not a valid identifier
+Actual: 
+------
+Failed test: /bin/echo $test
+export test=42 | echo 99
+/bin/echo $test
+
+Failure Category: STD_OUT
+Expected: 
+99
+Actual: 
+
+99
+------
+Failed test: /bin/echo $test
+export test=42 | echo 99
+/bin/echo $test
+
+Failure Category: STD_ERR
+Expected: 
+Actual: export: command not found
+------
+Failed test: /bin/echo $mini_test
+env | grep mini_test
+export mini_test=
+/bin/echo $mini_test
+env | grep mini_test
+
+Failure Category: STD_OUT
+Expected: 
+
+mini_test=
+Actual: 
+ | grep mini_test
+TERM_PROGRAM=Apple_Terminal
+SHELL=/bin/zsh
+TERM=xterm-256color
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n000cjy00034gh/T/
+TERM_PROGRAM_VERSION=433
+TERM_SESSION_ID=859B4238-5A8D-4CB6-B905-F7E2CD8C0590
+ZSH=/Users/mvolkman/.oh-my-zsh
+USER=mvolkman
+LS_COLORS=di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.8H9zKjyDFf/Listeners
+PAGER=less
+LSCOLORS=Gxfxcxdxbxegedabagacad
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+LaunchInstanceID=92C8A924-9CCF-403C-841E-B9B9A79A71A0
+PWD=/Users/mvolkman/minishell2/42_minishell_tester
+LANG=en_US.UTF-8
+XPC_FLAGS=0x0
+EXECUTABLE=minishell
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/mvolkman
+MINISHELL_PATH=./
+LESS=-R
+LOGNAME=mvolkman
+SECURITYSESSIONID=186ca
+_=.//minishell
+
+TERM_PROGRAM=Apple_Terminal
+SHELL=/bin/zsh
+TERM=xterm-256color
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n000cjy00034gh/T/
+TERM_PROGRAM_VERSION=433
+TERM_SESSION_ID=859B4238-5A8D-4CB6-B905-F7E2CD8C0590
+ZSH=/Users/mvolkman/.oh-my-zsh
+USER=mvolkman
+LS_COLORS=di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.8H9zKjyDFf/Listeners
+PAGER=less
+LSCOLORS=Gxfxcxdxbxegedabagacad
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+LaunchInstanceID=92C8A924-9CCF-403C-841E-B9B9A79A71A0
+PWD=/Users/mvolkman/minishell2/42_minishell_tester
+LANG=en_US.UTF-8
+XPC_FLAGS=0x0
+EXECUTABLE=minishell
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/mvolkman
+MINISHELL_PATH=./
+LESS=-R
+LOGNAME=mvolkman
+SECURITYSESSIONID=186ca
+_=.//minishell
+TERM_PROGRAM=Apple_Terminal
+SHELL=/bin/zsh
+TERM=xterm-256color
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n000cjy00034gh/T/
+TERM_PROGRAM_VERSION=433
+TERM_SESSION_ID=859B4238-5A8D-4CB6-B905-F7E2CD8C0590
+ZSH=/Users/mvolkman/.oh-my-zsh
+USER=mvolkman
+LS_COLORS=di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.8H9zKjyDFf/Listeners
+PAGER=less
+LSCOLORS=Gxfxcxdxbxegedabagacad
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki:/Library/Apple/usr/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin
+LaunchInstanceID=92C8A924-9CCF-403C-841E-B9B9A79A71A0
+PWD=/Users/mvolkman/minishell2/42_minishell_tester
+LANG=en_US.UTF-8
+XPC_FLAGS=0x0
+EXECUTABLE=minishell
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/mvolkman
+MINISHELL_PATH=./
+LESS=-R
+LOGNAME=mvolkman
+SECURITYSESSIONID=186ca
+_=.//minishell
+------
+Failed test: /bin/echo $mini_test
+env | grep mini_test
+export mini_test=
+/bin/echo $mini_test
+env | grep mini_test
+
+Failure Category: STD_ERR
+Expected: 
+Actual: export: command not found
+------
+Failed test: unset ""
+
+Failure Category: STD_ERR
+Expected: bash: line 2: unset: `': not a valid identifier
+Actual: 
+------
+Failed test: unset ""
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: unset =
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: unset "="
+
+Failure Category: STD_ERR
+Expected: bash: line 2: unset: `=': not a valid identifier
+Actual: 
+------
+Failed test: unset "="
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: unset ""=
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: unset =""
+
+Failure Category: STD_ERR
+Expected: bash: line 2: unset: `=': not a valid identifier
+Actual: 
+------
+Failed test: unset =""
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: unset ==
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: unset ?
+
+Failure Category: STD_ERR
+Expected: bash: line 2: unset: `|': not a valid identifier
+Actual: 
+------
+Failed test: unset ?
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: unset "?"
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: unset $
+
+Failure Category: STD_ERR
+Expected: bash: line 2: unset: `$': not a valid identifier
+Actual: 
+------
+Failed test: unset $
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: unset "$"
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: unset $""
+
+Failure Category: STD_ERR
+Expected: bash: line 2: unset: `': not a valid identifier
+Actual: 
+------
+Failed test: unset $""
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: unset PATH
+
+Failure Category: STD_ERR
+Expected: 
+Actual: unset: command not found
+------
+Failed test: unset PATH
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 127
+------
+Failed test: unset TES;T
+
+Failure Category: STD_ERR
+Expected: bash: line 2: T: command not found
+Actual: 
+------
+Failed test: unset TES;T
+
+Failure Category: EXIT_CODE
+Expected: 127
+Actual: 0
+------
+Failed test: unset TES.T
+
+Failure Category: STD_ERR
+Expected: bash: line 2: unset: `TES.T': not a valid identifier
+Actual: 
+------
+Failed test: unset TES.T
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: unset TES+T
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: unset TES=T
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: unset TES}T
+
+Failure Category: STD_ERR
+Expected: bash: line 2: unset: `TES}T': not a valid identifier
+Actual: 
+------
+Failed test: unset TES}T
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: unset TES{T
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: unset TES-T
+
+Failure Category: STD_ERR
+Expected: bash: line 2: unset: `TES-T': not a valid identifier
+Actual: 
+------
+Failed test: unset TES-T
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: unset -TEST
+
+Failure Category: EXIT_CODE
+Expected: 2
+Actual: 127
+------
+Failed test: unset TES_T
+
+Failure Category: STD_ERR
+Expected: 
+Actual: unset: command not found
+------
+Failed test: unset TES_T
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 127
+------
+Failed test: unset TE*ST
+
+Failure Category: STD_ERR
+Expected: bash: line 2: unset: `TE*ST': not a valid identifier
+Actual: 
+------
+Failed test: unset TE*ST
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: unset TES#T
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: unset TES@T
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: unset TES!T
+
+Failure Category: STD_ERR
+Expected: bash: line 2: unset: `TES!T': not a valid identifier
+Actual: 
+------
+Failed test: unset TES!T
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: unset ============
+
+Failure Category: STD_ERR
+Expected: bash: line 2: unset: `============': not a valid identifier
+Actual: 
+------
+Failed test: unset ============
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: unset +++++++
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: unset ________
+
+Failure Category: STD_ERR
+Expected: 
+Actual: unset: command not found
+------
+Failed test: unset ________
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 127
+------
+Failed test: unset export
+
+Failure Category: STD_ERR
+Expected: 
+Actual: unset: command not found
+------
+Failed test: unset export
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 127
+------
+Failed test: unset echo
+
+Failure Category: STD_ERR
+Expected: 
+Actual: unset: command not found
+------
+Failed test: unset echo
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 127
+------
+Failed test: unset cd
+
+Failure Category: STD_ERR
+Expected: 
+Actual: unset: command not found
+------
+Failed test: unset cd
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 127
+------
+Failed test: unset sudo
+
+Failure Category: STD_ERR
+Expected: 
+Actual: unset: command not found
+------
+Failed test: unset sudo
+
+Failure Category: EXIT_CODE
+Expected: 0
+Actual: 127
+------
+Failed test: unset TES^T
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: unset TES!T
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 127
+------
+Failed test: unset TES\~T
+
+Failure Category: STD_ERR
+Expected: bash: line 2: unset: `TES~T': not a valid identifier
+Actual: 
+------
+Failed test: unset TES\~T
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: /bin/echo $HOME
+unset HOME
+/bin/echo $HOME
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman
+Actual: /Users/mvolkman
+/Users/mvolkman
+------
+Failed test: /bin/echo $HOME
+unset HOME
+/bin/echo $HOME
+
+Failure Category: STD_ERR
+Expected: 
+Actual: unset: command not found
+------
+Failed test: /bin/echo $HOME
+unset HOME
+unset HOME
+unset HOME
+/bin/echo $HOME
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman
+Actual: 
+------
+Failed test: /bin/echo $HOME
+unset HOME
+unset HOME
+unset HOME
+unset HOME
+/bin/echo $HOME
+
+Failure Category: STD_OUT
+Expected: /Users/mvolkman
+Actual: /Users/mvolkman
+/Users/mvolkman
+------
+Failed test: /bin/echo $HOME
+unset HOME
+unset HOME
+unset HOME
+unset HOME
+/bin/echo $HOME
+
+Failure Category: STD_ERR
+Expected: 
+Actual: unset: command not found
+unset: command not found
+unset: command not found
+unset: command not found
+------
+Failed test: exit ""
+
+Failure Category: STD_ERR
+Expected: bash: line 2: exit: : numeric argument required
+Actual: 
+------
+Failed test: exit ""
+
+Failure Category: EXIT_CODE
+Expected: 255
+Actual: 0
+------
+Failed test: exit 1
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: exit -----
+
+Failure Category: STD_ERR
+Expected: bash: line 2: exit: -----: numeric argument required
+Actual: 
+------
+Failed test: exit -----
+
+Failure Category: EXIT_CODE
+Expected: 255
+Actual: 0
+------
+Failed test: exit ------
+
+Failure Category: STD_ERR
+Expected: bash: line 2: exit: ------: numeric argument required
+Actual: 
+------
+Failed test: exit ------
+
+Failure Category: EXIT_CODE
+Expected: 255
+Actual: 0
+------
+Failed test: exit 255
+
+Failure Category: EXIT_CODE
+Expected: 255
+Actual: 0
+------
+Failed test: exit 1 2
+
+Failure Category: STD_ERR
+Expected: bash: line 2: exit: too many arguments
+Actual: 
+------
+Failed test: exit 1 2
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: exit 1 2 3
+
+Failure Category: STD_ERR
+Expected: bash: line 2: exit: too many arguments
+Actual: 
+------
+Failed test: exit 1 2 3
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: exit A
+
+Failure Category: STD_ERR
+Expected: bash: line 2: exit: A: numeric argument required
+Actual: 
+------
+Failed test: exit A
+
+Failure Category: EXIT_CODE
+Expected: 255
+Actual: 0
+------
+Failed test: exit "A"
+
+Failure Category: STD_ERR
+Expected: bash: line 2: exit: A: numeric argument required
+Actual: 
+------
+Failed test: exit "A"
+
+Failure Category: EXIT_CODE
+Expected: 255
+Actual: 0
+------
+Failed test: exit 01
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: exit 001
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: exit 0001
+
+Failure Category: EXIT_CODE
+Expected: 1
+Actual: 0
+------
+Failed test: exit +++000
+
+Failure Category: STD_ERR
+Expected: bash: line 2: exit: +++000: numeric argument required
+Actual: 
+------
+Failed test: exit +++000
+
+Failure Category: EXIT_CODE
+Expected: 255
+Actual: 0
+------
+Failed test: exit ++++000
+
+Failure Category: STD_ERR
+Expected: bash: line 2: exit: ++++000: numeric argument required
+Actual: 
+------
+Failed test: exit ++++000
+
+Failure Category: EXIT_CODE
+Expected: 255
+Actual: 0
+------
+Failed test: exit echo
+
+Failure Category: STD_ERR
+Expected: bash: line 2: exit: echo: numeric argument required
+Actual: 
+------
+Failed test: exit echo
+
+Failure Category: EXIT_CODE
+Expected: 255
+Actual: 0
+------

@@ -39,14 +39,25 @@ typedef struct s_env_var
 	struct s_env_var	*next;
 }	t_env_var;
 
+// typedef struct s_cleanup
+// {
+// 	t_command	*cmds;
+// 	t_env_var	*env_list;
+// 	char		*input;
+// }	t_cleanup;
+
+
 typedef struct s_shell
 {
+//	t_cleanup	to_free;
 	t_command	*cmds;
 	t_env_var	*env_list;
 	int			exit_code;
 	bool		error_present;
+	char		*input;
 }	t_shell;
 
+void	ft_exit(t_shell *shell);
 // parser.c
 void			ft_parser(t_shell *shell, t_token **tokens);
 void			print_command(t_command *cmd);
