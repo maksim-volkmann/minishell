@@ -1,5 +1,6 @@
 
 #include "../includes/executor.h"
+#include "../includes/builtins.h"
 #include <stdio.h>
 
 // extern int rl_replace_line(const char *text, int clear_undo);
@@ -105,6 +106,34 @@ void print_command(t_command *cmd) {
     }
 }
 
+// Function to add an environment variable to the list
+void add_env_var(t_env_var **env_list, const char *key, const char *value)
+{
+    t_env_var *new_var = malloc(sizeof(t_env_var));
+    t_env_var *current;
+
+    if (!new_var)
+        return;
+
+    new_var->key = ft_strdup(key);
+    new_var->value = ft_strdup(value);
+    new_var->next = NULL;
+
+    if (!*env_list)
+    {
+        *env_list = new_var;
+    }
+    else
+    {
+        current = *env_list;
+        while (current->next)
+        {
+            current = current->next;
+        }
+        current->next = new_var;
+    }
+}
+
 void copy_env_vars(t_shell *shell, char **env)
 {
     int        i;
@@ -129,6 +158,17 @@ void copy_env_vars(t_shell *shell, char **env)
         i++;
     }
 }
+
+// void print_env_vars(t_env_var *env_list)
+// {
+//     t_env_var *current = env_list;
+
+//     while (current)
+//     {
+//         printf("%s=%s\n", current->key, current->value);
+//         current = current->next;
+//     }
+// }
 
 void print_command_details(t_command *cmds)
 {
@@ -174,14 +214,17 @@ void print_command_details(t_command *cmds)
 
 int main(int argc, char **argv, char **env)
 {
-	char		*input;
-	t_token		*tokens;
-	t_shell		shell;
+	char        *input;
+	t_token     *tokens;
+	t_shell     shell;
 
 	// atexit(leaks);
 	shell.env_list = NULL;
 	copy_env_vars(&shell, env);
 	shell.exit_code = 0;
+
+	// print_env_vars(shell.env_list);
+
 	while (1)
 	{
 		shell.cmds = NULL;
@@ -221,14 +264,7 @@ int main(int argc, char **argv, char **env)
 		// PRINTING SHELL STRUCT!!!
 		// print_command_details(shell.cmds);
 		// EXECUTION
-		if (is_builtin(shell.cmds->argv[0]))
-		{
-			execute_builtin(shell.cmds, &shell);
-		}
-		else
-		{
-			execute_commands(shell.cmds, shell.env_list);
-		}
+		execute_commands(shell.cmds, &shell);
 		free_command(shell.cmds);
 		free_token_list(tokens);
 		free(input);
@@ -289,8 +325,6 @@ int main(int argc, char **argv, char **env)
 // }
 
 // #define TESTER 1
-
-
 
 
 // TO DO

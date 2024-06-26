@@ -46,6 +46,19 @@ To install the script, copy and run following command:
 bash-3.2$ /bin/echo "$123123"
 23123
 
+----------------------
+
+mvolkman$USERtext oui oui oui oui mvolkman oui mvolkman
+mvolkman$USERtext oui oui oui oui mvolkman oui mvolkman [SPACE HERE]
+
+there should a space at the end.
+
+minishell> echo '' ""
+
+minishell>
+bash-3.2$ echo '' ""
+[SPACE HERE]
+bash-3.2$
 bash-3.2$ /bin/echo $USER$TESTNOTFOUND$HOME$
 adrherna/Users/adrherna$
 
