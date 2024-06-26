@@ -16,8 +16,6 @@ bash-3.2$
 
 To Do:
 
--History
-
 -Signals
 
 -Heredoc
@@ -26,11 +24,8 @@ To Do:
 
 -Exit codes
 
--Segfault when setting input without command
+-How to organize Makefile
 
--How to organize
-
--
 export and env is different
 export starts at: declare -x
 if you "unset PATH" you should not access the "env", because env is part of "PATH" in real bash.
@@ -64,3 +59,23 @@ minishell>
 bash-3.2$ echo '' ""
 [SPACE HERE]
 bash-3.2$
+bash-3.2$ /bin/echo $USER$TESTNOTFOUND$HOME$
+adrherna/Users/adrherna$
+
+This should not be interpreted as redirection:
+minishell> ">>" asd          <- this is done
+
+
+
+this segfault happens when redirecting with no existing command.
+also like this:
+minishell> >> efe
+
+------
+
+
+ ctrl + \ . - interrupting running processes
+
+
+#REDIRECTIONS seg faults
+24

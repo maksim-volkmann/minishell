@@ -214,62 +214,117 @@ void print_command_details(t_command *cmds)
 
 int main(int argc, char **argv, char **env)
 {
-    char        *input;
-    t_token     *tokens;
-    t_shell     shell;
+	char        *input;
+	t_token     *tokens;
+	t_shell     shell;
 
-    // Initialize shell structure
-    shell.env_list = NULL;
-    shell.exit_code = 0;
-    copy_env_vars(&shell, env); // Assuming you have a function to copy env vars
+	// atexit(leaks);
+	shell.env_list = NULL;
+	copy_env_vars(&shell, env);
+	shell.exit_code = 0;
 
 	// print_env_vars(shell.env_list);
 
-    while (1)
-    {
-        shell.cmds = NULL;
-        tokens = NULL;
+	while (1)
+	{
+		shell.cmds = NULL;
+		tokens = NULL;
+		// shell.error_present = false;
 
-        if (isatty(fileno(stdin)))
-            input = readline("minishell> ");
-        else
-        {
-            char *line = get_next_line(fileno(stdin)); // Assuming you have get_next_line implemented
-            input = ft_strtrim(line, "\n");
-            free(line);
-        }
-
-        if (!input)
-            exit(0);
-
-        add_history(input);
-
-        input = ft_expander(input, &shell); // Assuming you have a function for variable expansion
-
-        if (ft_strcmp(input, "") == 0)
-        {
-            free(input);
-            continue;
-        }
-
-        ft_lexer(input, &tokens); // Assuming you have a function for tokenization
-        ft_parser(&shell.cmds, &tokens); // Assuming you have a function for parsing tokens into commands
+		if (isatty(fileno(stdin)))
+			input = readline("minishell> ");
+		else
+		{
+			char *line;
+			line = get_next_line(fileno(stdin));
+			input = ft_strtrim(line, "\n");
+			free(line);
+		}
+		// input = readline("minishell> ");
+		if (!input)
+			exit(0);
+		add_history(input);
+		input = ft_expander(input, &shell);
+		// printf("%s\n", input);
+		if (ft_strcmp(input, "") == 0)
+		{
+			free(input);
+			break ;
+		}
+		ft_lexer(input, &tokens);
+		// print_token_list(tokens);
+		ft_parser(&shell, &tokens);
+		if (shell.error_present == true)
+		{
+			free_command(shell.cmds);
+			free_token_list(tokens);
+			free(input);
+			continue ;
+		}
 		// PRINTING SHELL STRUCT!!!
 		// print_command_details(shell.cmds);
-		//TODO: ADD PRECHECK IF CMD IS NOT EMPTY.
-        // execute_commands(shell.cmds, env); //DELETE THIS IF WORKS
-		// execute_commands(shell.cmds, shell.env_list);
-		 execute_commands(shell.cmds, &shell);
-
-        free_command(shell.cmds); // Assuming you have a function to free commands
-        free_token_list(tokens);  // Assuming you have a function to free tokens
-        free(input);
-    }
-
-    free_env_vars(shell.env_list); // Assuming you have a function to free env vars
-    return (0);
+		// EXECUTION
+		execute_commands(shell.cmds, &shell);
+		free_command(shell.cmds);
+		free_token_list(tokens);
+		free(input);
+	}
+	free_env_vars(shell.env_list);
+	return (0);
 }
 
+// int main(int argc, char **argv, char **env)
+// {
+// 	char	*input;
+// 	t_token	*tokens;
+// 	t_shell	shell;
+
+// 	shell.env_list = NULL;
+// 	copy_env_vars(&shell, env);
+// 	shell.exit_code = 0;
+
+// 	while (1)
+// 	{
+// 		shell.cmds = NULL;
+// 		tokens = NULL;
+// 		shell.error_present = false;
+
+// 		input = readline("minishell> ");
+// 		if (!input)
+// 			exit(0);
+// 		add_history(input);
+// 		input = ft_expander(input, &shell);
+
+// 		if (ft_strcmp(input, "") == 0)
+// 		{
+// 			free(input);
+// 			break ;
+// 		}
+
+// 		ft_lexer(input, &tokens);
+// 		ft_parser(&shell, &tokens);
+// 		if (shell.error_present == true)
+// 		{
+// 			free_command(shell.cmds);
+// 			free_token_list(tokens);
+// 			free(input);
+// 			continue ;
+// 		}
+
+// 		if (is_builtin(shell.cmds->argv[0]))
+// 			execute_builtin(shell.cmds, &shell);
+
+// 		else
+// 			execute_commands(shell.cmds, shell.env_list);
+// 		free_command(shell.cmds);
+// 		free_token_list(tokens);
+// 		free(input);
+// 	}
+// 	free_env_vars(shell.env_list);
+// 	return (0);
+// }
+
+// #define TESTER 1
 
 
 // TO DO
