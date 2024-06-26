@@ -6,11 +6,12 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:46:42 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/06 14:26:41 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/25 10:02:42 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
+#include <stdio.h>
 
 int	ft_darray_size(t_token	*tokens)
 {
@@ -27,7 +28,7 @@ int	ft_darray_size(t_token	*tokens)
 	return (i);
 }
 
-char	**ft_get_darray(t_token **tokens)
+char	**ft_get_darray(t_token **tokens, t_shell *shell)
 {
 	char	**darray;
 	int		size;
@@ -40,6 +41,13 @@ char	**ft_get_darray(t_token **tokens)
 		return (NULL);
 	while ((*tokens) != NULL && (*tokens)->type != PIPE)
 	{
+		if ((*tokens)->type == DGREAT || (*tokens)->type == GREAT
+			|| (*tokens)->type == LESS || (*tokens)->type == DLESS)
+		{
+			ft_handle_redir((*tokens), shell);
+			(*tokens) = (*tokens)->next->next;
+			continue ;
+		}
 		darray[i] = (*tokens)->token;
 		i++;
 		(*tokens) = (*tokens)->next;
