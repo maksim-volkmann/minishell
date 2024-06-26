@@ -127,8 +127,8 @@ void execute_echo(char **argv)
     int i = 1;
     int newline = 1;
 
-    // Check for -n flag
-    if (argv[i] && ft_strcmp(argv[i], "-n") == 0)
+    // Check for multiple -n flags
+    while (argv[i] && ft_strcmp(argv[i], "-n") == 0)
     {
         newline = 0;
         i++;
