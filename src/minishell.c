@@ -237,85 +237,85 @@ int main(int argc, char **argv, char **env)
 	// ft_bzero(&shell, sizeof shell);
 	ft_init_shell(&shell, env);
 
-    while (1)
-    {
-        shell.cmds = NULL;
-        shell.tokens = NULL;
+	while (1)
+	{
+		shell.cmds = NULL;
+		shell.tokens = NULL;
 
-        if (isatty(fileno(stdin)))
-            shell.input = readline("minishell> ");
-        else
-        {
-            char *line;
-            line = get_next_line(fileno(stdin));
-            shell.input = ft_strtrim(line, "\n");
-            free(line);
-        }
+		if (isatty(fileno(stdin)))
+			shell.input = readline("minishell> ");
+		else
+		{
+			char *line;
+			line = get_next_line(fileno(stdin));
+			shell.input = ft_strtrim(line, "\n");
+			free(line);
+		}
 
-        if (!shell.input)
-           ft_exit(&shell);
+		if (!shell.input)
+			ft_exit(&shell);
 
-        add_history(shell.input);
-        shell.input = ft_expander(shell.input, &shell);
+		add_history(shell.input);
+		shell.input = ft_expander(shell.input, &shell);
 
-        if (ft_strcmp(shell.input, "") == 0)
-        {
-            free(shell.input);
-            break ;
-        }
+		if (ft_strcmp(shell.input, "") == 0)
+		{
+			free(shell.input);
+			break ;
+		}
 
-        ft_lexer(shell.input, &shell.tokens);
-        ft_parser(&shell, &shell.tokens);
+		ft_lexer(shell.input, &shell.tokens);
+		ft_parser(&shell, &shell.tokens);
 		// PRINTING SHELL STRUCT!!!
 		// print_command_details(shell.cmds);
-        if (shell.error_present == true)
-        {
-            free_command(shell.cmds);
-            free_token_list(shell.tokens);
-            free(shell.input);
-            continue ;
-        }
-        else if (shell.cmds && shell.cmds->next == NULL)
-        {
-            // Check for built-in commands
-            if (ft_strcmp(shell.cmds->argv[0], "exit") == 0)
-            {
-                shell.exit_code = execute_exit(shell.cmds->argv, &shell);
-                // free(input);
-                // free_command(shell.cmds);
-                // free_token_list(tokens);
-                // break;
-            }
+		if (shell.error_present == true)
+		{
+			free_command(shell.cmds);
+			free_token_list(shell.tokens);
+			free(shell.input);
+			continue ;
+		}
+		else if (shell.cmds && shell.cmds->next == NULL)
+		{
+			// Check for built-in commands
+			if (ft_strcmp(shell.cmds->argv[0], "exit") == 0)
+			{
+				shell.exit_code = execute_exit(shell.cmds->argv, &shell);
+				// free(input);
+				// free_command(shell.cmds);
+				// free_token_list(tokens);
+				// break;
+			}
 			char buffer[1025];
 			if (ft_strcmp(shell.cmds->argv[0], "pwd") == 0)
 				printf("%s\n", getcwd(buffer, sizeof(buffer)));
-            // else if (ft_strcmp(shell.cmds->argv[0], "echo") == 0)
-            //  execute_echo(shell.cmds->argv);
-            // else if (ft_strcmp(shell.cmds->argv[0], "cd") == 0)
-            //  execute_cd(shell.cmds->argv);
-            // else if (ft_strcmp(shell.cmds->argv[0], "pwd") == 0)
-            //  execute_pwd();
-            // else if (ft_strcmp(shell.cmds->argv[0], "export") == 0)
-            //  execute_export(shell.cmds->argv, shell.env_list);
-            // else if (ft_strcmp(shell.cmds->argv[0], "unset") == 0)
-            //  execute_unset(shell.cmds->argv, shell.env_list);
-            // else if (ft_strcmp(shell.cmds->argv[0], "env") == 0)
-            //  print_env_vars(shell.env_list);
-            else
-                execute_commands(shell.cmds, &shell);
-        }
-        else
-        {
-            execute_commands(shell.cmds, &shell);
-        }
+			else
+				execute_commands(shell.cmds, &shell);
+			// else if (ft_strcmp(shell.cmds->argv[0], "echo") == 0)
+			//  execute_echo(shell.cmds->argv);
+			// else if (ft_strcmp(shell.cmds->argv[0], "cd") == 0)
+			//  execute_cd(shell.cmds->argv);
+			// else if (ft_strcmp(shell.cmds->argv[0], "pwd") == 0)
+			//  execute_pwd();
+			// else if (ft_strcmp(shell.cmds->argv[0], "export") == 0)
+			//  execute_export(shell.cmds->argv, shell.env_list);
+			// else if (ft_strcmp(shell.cmds->argv[0], "unset") == 0)
+			//  execute_unset(shell.cmds->argv, shell.env_list);
+			// else if (ft_strcmp(shell.cmds->argv[0], "env") == 0)
+			//  print_env_vars(shell.env_list);
+		}
+		else
+		{
+			execute_commands(shell.cmds, &shell);
+		}
 
-        free_command(shell.cmds);
-        free_token_list(shell.tokens);
-        free(shell.input);
+		free_command(shell.cmds);
+		free_token_list(shell.tokens);
+		free(shell.input);
 		shell.input = NULL;
-    }
-    free_env_vars(shell.env_list);
-    return shell.exit_code;
+	}
+	free_env_vars(shell.env_list);
+	return shell.exit_code;
 }
 
 

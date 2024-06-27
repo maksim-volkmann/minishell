@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:49:44 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/27 11:58:37 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/27 14:57:19 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "./parser.h"
 # include "./lexer.h"
-#include <assert.h>
+
 // expander.c
 char	*ft_expander(char *input, t_shell *shell);
 char	*ft_extract_segment(char *input, int *i, t_shell *shell);
@@ -32,5 +32,5 @@ char	*ft_join_input(char *s1, char *s2);
 char	*ft_extract_segment_dq(char *input, int *i);
 char	*ft_segment_helper(char *input, int *i);
 char	*ft_quote_string(char *input);
-
+// char	*ft_expand_var_dq(t_shell *shell, char *var);
 #endif
