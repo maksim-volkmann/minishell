@@ -277,41 +277,21 @@ int main(int argc, char **argv, char **env)
             free(shell.input);
             continue ;
         }
-        else if (shell.cmds && shell.cmds->next == NULL)
+        else if (shell.cmds->argv[0] && shell.cmds->next == NULL)
         {
-				// printf("ping2\n");
-            // Check for built-in commands
-            if (ft_strcmp(shell.cmds->argv[0], "exit") == 0)
-            {
-                shell.exit_code = execute_exit(shell.cmds->argv, &shell);
-				// printf("ping3\n");
-                // free(input);
-                // free_command(shell.cmds);
-                // free_token_list(tokens);
-                // break;
-            }
-			// char buffer[1025];
-			// if (ft_strcmp(shell.cmds->argv[0], "pwd") == 0)
-			// 	printf("%s\n", getcwd(buffer, sizeof(buffer)));
-			if (ft_strcmp(shell.cmds->argv[0], "echo") == 0)
-				execute_echo(shell.cmds->argv);
-            // else if (ft_strcmp(shell.cmds->argv[0], "cd") == 0)
-            //  execute_cd(shell.cmds->argv);
-            // else if (ft_strcmp(shell.cmds->argv[0], "pwd") == 0)
-            //  execute_pwd();
-            // else if (ft_strcmp(shell.cmds->argv[0], "export") == 0)
-            //  execute_export(shell.cmds->argv, shell.env_list);
-            // else if (ft_strcmp(shell.cmds->argv[0], "unset") == 0)
-            //  execute_unset(shell.cmds->argv, shell.env_list);
-            // else if (ft_strcmp(shell.cmds->argv[0], "env") == 0)
-            //  print_env_vars(shell.env_list);
-            else
-                execute_commands(shell.cmds, &shell);
-        }
-        else
-        {
-            execute_commands(shell.cmds, &shell);
-        }
+			if(handle_builtin(shell.cmds, &shell) == -1)
+			{
+				continue ;
+			}
+			else
+			{
+				execute_commands(shell.cmds, &shell);
+			}
+		}
+		else
+		{
+			execute_commands(shell.cmds, &shell);
+		}
 
         free_command(shell.cmds);
         free_token_list(shell.tokens);

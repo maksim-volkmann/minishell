@@ -130,7 +130,7 @@ void execute_echo(char **argv)
     int i = 1;
     int newline = 1;
 
-	printf("echo pip1\n");
+	// printf("echo pip1\n");
 
     while (argv[i] && ft_strcmp(argv[i], "-n") == 0)
     {
@@ -244,11 +244,11 @@ int handle_builtin(t_command *cmd, t_shell *shell)
     //     return 1;
     // }
 
-    // if (ft_strcmp(cmd->argv[0], "echo") == 0)
-    // {
-    //     execute_echo(cmd->argv);
-    //     return 1;
-    // }
+    if (ft_strcmp(cmd->argv[0], "echo") == 0)
+    {
+        execute_echo(cmd->argv);
+        return 1;
+    }
 
     // if (ft_strcmp(cmd->argv[0], "pwd") == 0)
     // {
@@ -264,11 +264,11 @@ int handle_builtin(t_command *cmd, t_shell *shell)
 
     if (ft_strcmp(cmd->argv[0], "exit") == 0)
     {
-        execute_exit(cmd->argv, shell);
-        return 1;
+        shell->exit_code = execute_exit(cmd->argv, shell);
+        return (shell->exit_code);
     }
 
-    return 0; // Not a built-in command
+    return -1; // Not a built-in command
 }
 
 // Execute a command
