@@ -161,16 +161,16 @@ void copy_env_vars(t_shell *shell, char **env)
     }
 }
 
-// void print_env_vars(t_env_var *env_list)
-// {
-//     t_env_var *current = env_list;
+void print_env_vars(t_env_var *env_list)
+{
+    t_env_var *current = env_list;
 
-//     while (current)
-//     {
-//         printf("%s=%s\n", current->key, current->value);
-//         current = current->next;
-//     }
-// }
+    while (current)
+    {
+        printf("%s=%s\n", current->key, current->value);
+        current = current->next;
+    }
+}
 
 void print_command_details(t_command *cmds)
 {
@@ -268,50 +268,54 @@ int main(int argc, char **argv, char **env)
 		ft_parser(&shell, &shell.tokens);
 		// PRINTING SHELL STRUCT!!!
 		// print_command_details(shell.cmds);
-		if (shell.error_present == true)
-		{
-			free_command(shell.cmds);
-			free_token_list(shell.tokens);
-			free(shell.input);
-			continue ;
-		}
-		else if (shell.cmds && shell.cmds->next == NULL)
-		{
-			// Check for built-in commands
-			if (ft_strcmp(shell.cmds->argv[0], "exit") == 0)
-			{
-				shell.exit_code = execute_exit(shell.cmds->argv, &shell);
-				// free(input);
-				// free_command(shell.cmds);
-				// free_token_list(tokens);
-				// break;
-			}
-			char buffer[1025];
-			if (ft_strcmp(shell.cmds->argv[0], "pwd") == 0)
-				printf("%s\n", getcwd(buffer, sizeof(buffer)));
-			else
-				execute_commands(shell.cmds, &shell);
-			// else if (ft_strcmp(shell.cmds->argv[0], "echo") == 0)
-			//  execute_echo(shell.cmds->argv);
-			// else if (ft_strcmp(shell.cmds->argv[0], "cd") == 0)
-			//  execute_cd(shell.cmds->argv);
-			// else if (ft_strcmp(shell.cmds->argv[0], "pwd") == 0)
-			//  execute_pwd();
-			// else if (ft_strcmp(shell.cmds->argv[0], "export") == 0)
-			//  execute_export(shell.cmds->argv, shell.env_list);
-			// else if (ft_strcmp(shell.cmds->argv[0], "unset") == 0)
-			//  execute_unset(shell.cmds->argv, shell.env_list);
-			// else if (ft_strcmp(shell.cmds->argv[0], "env") == 0)
-			//  print_env_vars(shell.env_list);
-		}
-		else
-		{
-			execute_commands(shell.cmds, &shell);
-		}
+		// PRINT ENV VARIABLES
+		// print_env_vars(shell.env_list);
+        if (shell.error_present == true)
+        {
+            free_command(shell.cmds);
+            free_token_list(shell.tokens);
+            free(shell.input);
+            continue ;
+        }
+        else if (shell.cmds && shell.cmds->next == NULL)
+        {
+				// printf("ping2\n");
+            // Check for built-in commands
+            if (ft_strcmp(shell.cmds->argv[0], "exit") == 0)
+            {
+                shell.exit_code = execute_exit(shell.cmds->argv, &shell);
+				// printf("ping3\n");
+                // free(input);
+                // free_command(shell.cmds);
+                // free_token_list(tokens);
+                // break;
+            }
+			// char buffer[1025];
+			// if (ft_strcmp(shell.cmds->argv[0], "pwd") == 0)
+			// 	printf("%s\n", getcwd(buffer, sizeof(buffer)));
+			if (ft_strcmp(shell.cmds->argv[0], "echo") == 0)
+				execute_echo(shell.cmds->argv);
+            // else if (ft_strcmp(shell.cmds->argv[0], "cd") == 0)
+            //  execute_cd(shell.cmds->argv);
+            // else if (ft_strcmp(shell.cmds->argv[0], "pwd") == 0)
+            //  execute_pwd();
+            // else if (ft_strcmp(shell.cmds->argv[0], "export") == 0)
+            //  execute_export(shell.cmds->argv, shell.env_list);
+            // else if (ft_strcmp(shell.cmds->argv[0], "unset") == 0)
+            //  execute_unset(shell.cmds->argv, shell.env_list);
+            // else if (ft_strcmp(shell.cmds->argv[0], "env") == 0)
+            //  print_env_vars(shell.env_list);
+            else
+                execute_commands(shell.cmds, &shell);
+        }
+        else
+        {
+            execute_commands(shell.cmds, &shell);
+        }
 
-		free_command(shell.cmds);
-		free_token_list(shell.tokens);
-		free(shell.input);
+        free_command(shell.cmds);
+        free_token_list(shell.tokens);
+        free(shell.input);
 		shell.input = NULL;
 	}
 	free_env_vars(shell.env_list);
