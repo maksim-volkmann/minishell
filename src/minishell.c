@@ -254,6 +254,7 @@ int main(int argc, char **argv, char **env)
 		ft_lexer(input, &tokens);
 		// print_token_list(tokens);
 		ft_parser(&shell, &tokens);
+        // printf("|%s|\n", shell.cmds->argv[0]);
 		if (shell.error_present == true)
 		{
 			free_command(shell.cmds);
@@ -261,10 +262,26 @@ int main(int argc, char **argv, char **env)
 			free(input);
 			continue ;
 		}
+		else if (shell.cmds && ft_strcmp(shell.cmds->argv[0], "exit") == 0)
+		{
+			execute_exit(shell.cmds->argv, &shell);
+			free(input);
+			free_command(shell.cmds);
+			free_token_list(tokens);
+			break ;
+		}
+		else
+		{
+			execute_commands(shell.cmds, &shell);
+		}
+
 		// PRINTING SHELL STRUCT!!!
 		// print_command_details(shell.cmds);
 		// EXECUTION
-		execute_commands(shell.cmds, &shell);
+		  // Check if the first command is "exit" and handle it directly
+
+
+
 		free_command(shell.cmds);
 		free_token_list(tokens);
 		free(input);
@@ -310,12 +327,8 @@ int main(int argc, char **argv, char **env)
 // 			free(input);
 // 			continue ;
 // 		}
-
-// 		if (is_builtin(shell.cmds->argv[0]))
-// 			execute_builtin(shell.cmds, &shell);
-
-// 		else
-// 			execute_commands(shell.cmds, shell.env_list);
+// 		//command execv
+// 		execute_commands(shell.cmds, &shell);
 // 		free_command(shell.cmds);
 // 		free_token_list(tokens);
 // 		free(input);

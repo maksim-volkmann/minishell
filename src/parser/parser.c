@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 17:11:52 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/26 10:14:06 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/26 14:43:27 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_parser(t_shell *shell, t_token **tokens)
 		if (current->type == PIPE)
 			current = current->next;
 		new = ft_new_node();
-		new->argv = ft_get_darray(&current, shell);
+		new->argv = ft_get_darray(&current, &shell, new->input, new->output);
 		add_or_init_node(&shell->cmds, new);
 		// print_command(new);
 	}

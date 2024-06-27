@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:48:41 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/26 11:21:15 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/27 10:23:51 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,16 @@ int	ft_check_filepath(char *filepath)
 	char	*last_slash;
 
 	dir_path = ft_strdup(filepath);
-	last_slash = ft_strrchr(dir_path, '/');
+	last_slash = strrchr(dir_path, '/');
 	if (last_slash != NULL)
 	{
 		*last_slash = '\0';
 	}
 	else
 	{
-		// If there's no slash, use the current directory
 		free(dir_path);
-		dir_path = ft_strdup(".");
+		return (1);
 	}
-	// Check if the directory is writable
 	if (access(dir_path, W_OK) == 0)
 	{
 		free(dir_path);
@@ -49,6 +47,7 @@ int	ft_open_file(char *filename, char *content)
 	int		fd;
 	ssize_t	bytes_written;
 
+	printf("%s\n", content);
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 		exit(EXIT_FAILURE);
