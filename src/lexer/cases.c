@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cases.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:29:48 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/21 11:34:50 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/27 14:40:33 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,8 @@ t_token	*ft_if_quot(const char *line, int *i)
 		(*i)++;
 		temp = ft_extract_str((char *)line, start, end + 1);
 		token = ft_strtrim(temp, "\'");
-		if (ft_strcmp(token, "") == 0)
-			return (NULL);
+		// if (ft_strcmp(token, "") == 0)
+		// 	return (NULL);
 		new_token = ft_new_token(token, QUOTE);
 		free(temp);
 	}

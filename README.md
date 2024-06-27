@@ -79,3 +79,27 @@ minishell> >> efe
 
 #REDIRECTIONS seg faults
 24
+
+
+echo
+Echo
+ECho
+ECHo
+ECHO
+eCHO
+ecHO
+echO
+EchO
+eCHo
+
+pwd
+PWD
+Pwd
+PWd
+pWD
+
+env
+ENV
+Env
+ENv
+eVN

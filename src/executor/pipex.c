@@ -114,21 +114,23 @@ void setup_output_redirection(t_redirection *output)
 }
 
 // Function to print environment variables
-void print_env_vars(t_env_var *env_list)
-{
-    t_env_var *current = env_list;
-    while (current)
-    {
-        printf("%s=%s\n", current->key, current->value);
-        current = current->next;
-    }
-}
+// void print_env_vars(t_env_var *env_list)
+// {
+//     t_env_var *current = env_list;
+//     while (current)
+//     {
+//         printf("%s=%s\n", current->key, current->value);
+//         current = current->next;
+//     }
+// }
 
 // Function to handle the echo command
 void execute_echo(char **argv)
 {
     int i = 1;
     int newline = 1;
+
+	printf("echo pip1\n");
 
     while (argv[i] && ft_strcmp(argv[i], "-n") == 0)
     {
@@ -184,6 +186,7 @@ int execute_exit(char **argv, t_shell *shell)
 	int count = 0;
 	bool	has_sign = false;
 
+	// printf("ping1\n");
 	while (argv[count])
 		count++;
 	if (count == 1)
@@ -235,29 +238,29 @@ int execute_exit(char **argv, t_shell *shell)
 // Function to handle built-in commands
 int handle_builtin(t_command *cmd, t_shell *shell)
 {
-    if (ft_strcmp(cmd->argv[0], "env") == 0)
-    {
-        print_env_vars(shell->env_list);
-        return 1;
-    }
+    // if (ft_strcmp(cmd->argv[0], "env") == 0)
+    // {
+    //     print_env_vars(shell->env_list);
+    //     return 1;
+    // }
 
-    if (ft_strcmp(cmd->argv[0], "echo") == 0)
-    {
-        execute_echo(cmd->argv);
-        return 1;
-    }
+    // if (ft_strcmp(cmd->argv[0], "echo") == 0)
+    // {
+    //     execute_echo(cmd->argv);
+    //     return 1;
+    // }
 
-    if (ft_strcmp(cmd->argv[0], "pwd") == 0)
-    {
-        execute_pwd();
-        return 1;
-    }
+    // if (ft_strcmp(cmd->argv[0], "pwd") == 0)
+    // {
+    //     execute_pwd();
+    //     return 1;
+    // }
 
-    if (ft_strcmp(cmd->argv[0], "cd") == 0)
-    {
-        execute_cd(cmd->argv);
-        return 1;
-    }
+    // if (ft_strcmp(cmd->argv[0], "cd") == 0)
+    // {
+    //     execute_cd(cmd->argv);
+    //     return 1;
+    // }
 
     if (ft_strcmp(cmd->argv[0], "exit") == 0)
     {
@@ -271,7 +274,13 @@ int handle_builtin(t_command *cmd, t_shell *shell)
 // Execute a command
 void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell)
 {
-    char *executable_path;
+	char *executable_path;
+
+	if (handle_builtin(cmd, shell))
+	{
+		// Built-in command was handled
+		return;
+	}
 
     if (ft_strchr(cmd->argv[0], '/') != NULL)
     {
@@ -392,11 +401,11 @@ void execute_commands(t_command *commands, t_shell *shell)
             pipe_fd[1] = -1;
         }
 
-        if (handle_builtin(cmd, shell))
-        {
-            cmd = cmd->next;
-            continue;
-        }
+        // if (handle_builtin(cmd, shell))
+        // {
+        //     cmd = cmd->next;
+        //     continue;
+        // }
 
         fork_and_execute(cmd, shell->env_list, input_fd, pipe_fd[1], shell);
 
@@ -422,21 +431,6 @@ void execute_commands(t_command *commands, t_shell *shell)
         }
     }
 }
-
-// Function to free environment variables list
-// void free_env_vars(t_env_var *env_list)
-// {
-//     t_env_var *tmp;
-
-//     while (env_list)
-//     {
-//         tmp = env_list;
-//         env_list = env_list->next;
-//         free(tmp->key);
-//         free(tmp->value);
-//         free(tmp);
-//     }
-// }
 
 // Function to free the command list
 void free_command2(t_command *cmd)
