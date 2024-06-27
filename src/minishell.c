@@ -237,35 +237,35 @@ int main(int argc, char **argv, char **env)
 	// ft_bzero(&shell, sizeof shell);
 	ft_init_shell(&shell, env);
 
-    while (1)
-    {
-        shell.cmds = NULL;
-        shell.tokens = NULL;
+	while (1)
+	{
+		shell.cmds = NULL;
+		shell.tokens = NULL;
 
-        if (isatty(fileno(stdin)))
-            shell.input = readline("minishell> ");
-        else
-        {
-            char *line;
-            line = get_next_line(fileno(stdin));
-            shell.input = ft_strtrim(line, "\n");
-            free(line);
-        }
+		if (isatty(fileno(stdin)))
+			shell.input = readline("minishell> ");
+		else
+		{
+			char *line;
+			line = get_next_line(fileno(stdin));
+			shell.input = ft_strtrim(line, "\n");
+			free(line);
+		}
 
-        if (!shell.input)
-           ft_exit(&shell);
+		if (!shell.input)
+			ft_exit(&shell);
 
-        add_history(shell.input);
-        shell.input = ft_expander(shell.input, &shell);
+		add_history(shell.input);
+		shell.input = ft_expander(shell.input, &shell);
 
-        if (ft_strcmp(shell.input, "") == 0)
-        {
-            free(shell.input);
-            break ;
-        }
+		if (ft_strcmp(shell.input, "") == 0)
+		{
+			free(shell.input);
+			break ;
+		}
 
-        ft_lexer(shell.input, &shell.tokens);
-        ft_parser(&shell, &shell.tokens);
+		ft_lexer(shell.input, &shell.tokens);
+		ft_parser(&shell, &shell.tokens);
 		// PRINTING SHELL STRUCT!!!
 		// print_command_details(shell.cmds);
 		// PRINT ENV VARIABLES
@@ -317,9 +317,9 @@ int main(int argc, char **argv, char **env)
         free_token_list(shell.tokens);
         free(shell.input);
 		shell.input = NULL;
-    }
-    free_env_vars(shell.env_list);
-    return shell.exit_code;
+	}
+	free_env_vars(shell.env_list);
+	return shell.exit_code;
 }
 
 

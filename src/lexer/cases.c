@@ -6,14 +6,15 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:29:48 by adrherna          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/06/27 14:40:33 by mvolkman         ###   ########.fr       */
+=======
+/*   Updated: 2024/06/27 14:36:18 by adrherna         ###   ########.fr       */
+>>>>>>> 9e9ec0eb771f1fa39c57032bc3da32bd0b43f4c4
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
-
-// This function is called when a redirection op is found
-// It extracts the token and returns it
 
 t_token	*ft_if_redi_op(const char *line, int *i)
 {
@@ -107,8 +108,6 @@ t_token	*ft_if_quot(const char *line, int *i)
 		(*i)++;
 		temp = ft_extract_str((char *)line, start, end + 1);
 		token = ft_strtrim(temp, "\'");
-		// if (ft_strcmp(token, "") == 0)
-		// 	return (NULL);
 		new_token = ft_new_token(token, QUOTE);
 		free(temp);
 	}
