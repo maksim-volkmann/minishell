@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:58:01 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/27 11:02:14 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/27 14:27:54 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,12 @@ int	ft_is_separator(char c)
 	return (0);
 }
 
-void	ft_skip_spaces(const char *line, int *i)
+int	ft_isspace(int c)
 {
-	while (line[*i] == ' ' || line[*i] == '\t' || line[*i] == '\n')
-		(*i)++;
+	if (c == ' ' || c == '\t' || c == '\n'
+		|| c == '\v' || c == '\f' || c == '\r')
+	{
+		return (1);
+	}
+	return (0);
 }

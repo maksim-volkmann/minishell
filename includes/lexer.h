@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:43:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/27 12:05:25 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/27 14:28:11 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_token	*ft_if_space(const char *line, int *i);
 // helper.c
 int		ft_is_separator(char c);
 char	*ft_extract_str(char *line, int start, int end);
-// int		ft_strcmp(const char *s1, const char *s2);
+int		ft_isspace(int c);
 void	ft_skip_spaces(const char *line, int *i);
 
 // list_helper.c

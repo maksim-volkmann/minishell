@@ -6,11 +6,12 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:31:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/19 12:00:02 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/27 14:32:22 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
+#include <stdio.h>
 
 void	ft_lexer(const char *line, t_token **tokens)
 {
@@ -19,7 +20,8 @@ void	ft_lexer(const char *line, t_token **tokens)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (line[i] == ' ')
+		// printf("helo\n");
+		if (ft_isspace(line[i]))
 			ft_lst_add_token(tokens, ft_if_space(line, &i));
 		else if (line[i] == '<' || line[i] == '>')
 			ft_lst_add_token(tokens, ft_if_redi_op(line, &i));

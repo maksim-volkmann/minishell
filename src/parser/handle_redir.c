@@ -6,12 +6,14 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:38:09 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/27 10:18:51 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/27 14:08:28 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 #include <stdbool.h>
+#include <stdio.h>
+#include <unistd.h>
 
 void	ft_handle_output(t_token *tokens, t_shell *shell, t_redirection *output)
 {
@@ -19,7 +21,7 @@ void	ft_handle_output(t_token *tokens, t_shell *shell, t_redirection *output)
 
 	if (ft_check_filepath(tokens->next->token) == 0)
 	{
-		// shell->error_present = true;
+		shell->exit_code = 1;
 		ft_putstr_fd("No such Directory\n", 2);
 		return ;
 	}
@@ -53,8 +55,8 @@ void	ft_handle_input(t_token *tokens, t_shell *shell, t_redirection *input)
 		input->file = tokens->next->token;
 		if (access(input->file, F_OK) != -0)
 		{
-			ft_putstr_fd("Error with Input files, file does not exist\n", 2);
-			shell->error_present = true;
+			printf(stderr, "no such file or directory: %s\n", input->file);
+			shell->exit_code = 1;
 			return ;
 		}
 	}
@@ -70,11 +72,13 @@ void	ft_handle_redir(t_token *tokens, t_shell *shell, t_redirection *input, t_re
 	if (tokens->next == NULL)
 	{
 		printf("Non existing file out or in file\n");
+		shell->exit_code = 1;
 		shell->error_present = true;
 		return ;
 	}
 	if (tokens->next->type == PIPE)
 	{
+		shell->exit_code = 1;
 		ft_putstr_fd("syntax error near unexpected token ", 2);
 		ft_putstr_fd("'|'\n", 2);
 		shell->error_present = true;
