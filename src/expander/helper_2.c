@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 09:49:08 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/27 14:57:30 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/27 15:26:05 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	*ft_segment_helper(char *input, int *i)
 
 // 	if (ft_strcmp(var, "?") == 0)
 // 		return (ft_itoa(shell->exit_code));
-// 	if (ft_strcmp(var, " ") == 0 || ft_strcmp(var, "\""))
+// 	if (ft_strcmp(var, "") == 0)
 // 		return (ft_strdup("$"));
 // 	current = shell->env_list;
 // 	while (current != NULL)
