@@ -12,6 +12,7 @@
 # include "../libft/include/libft.h"
 # include "./minishell.h"
 
+void	ft_exit(t_shell *shell);
 // parser.c
 void			ft_parser(t_shell *shell, t_token **tokens);
 void			print_command(t_command *cmd);

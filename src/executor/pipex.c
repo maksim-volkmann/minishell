@@ -1,6 +1,8 @@
 #include "../../includes/executor.h"
-#include <limits.h> // For LONG_MIN and LONG_MAX
-#include <errno.h>  // For errno
+#include "../../includes/minishell.h"
+#include <unistd.h>
+#include <limits.h>
+#include <errno.h>
 
 // Function to free a split array
 void ft_free_split(char **arr)
@@ -128,14 +130,12 @@ void execute_echo(char **argv)
     int i = 1;
     int newline = 1;
 
-    // Check for multiple -n flags
     while (argv[i] && ft_strcmp(argv[i], "-n") == 0)
     {
         newline = 0;
         i++;
     }
 
-    // Print the arguments
     while (argv[i])
     {
         printf("%s", argv[i]);
@@ -144,7 +144,6 @@ void execute_echo(char **argv)
         i++;
     }
 
-    // Print newline if -n flag is not set
     if (newline)
         printf("\n");
 }
@@ -171,112 +170,108 @@ void execute_cd(char **argv)
     if (argv[1] == NULL)
     {
         fprintf(stderr, "cd: missing argument\n");
-        exit(1);
+        return;
     }
     if (chdir(argv[1]) != 0)
     {
         perror("cd");
-        exit(1);
     }
 }
-
-int ft_isnumber(const char *str)
-{
-    if (!str || *str == '\0')
-        return 0;
-    if (*str == '-' || *str == '+')
-        str++;
-    while (*str)
-    {
-        if (!ft_isdigit(*str))
-            return 0;
-        str++;
-    }
-    return 1;
-}
-
 
 // Function to handle the exit command
-void execute_exit(char **argv, t_shell *shell)
+int execute_exit(char **argv, t_shell *shell)
 {
-    long exit_code = 0;
-    int i = 0;
+	int count = 0;
+	bool	has_sign = false;
 
-    // Count the number of arguments
-    while (argv[i])
-        i++;
+	while (argv[count])
+		count++;
+	if (count == 1)
+		ft_exit(shell);
+	if (strcmp(argv[1], "") == 0)
+	{
+		shell->exit_code = 255;
+		fprintf(stderr, "exit\nminishell: exit: %s: numeric argument required\n", argv[1]);
+		ft_exit(shell);
+	}
+	int i = 0;
+	while (argv[1][i])
+	{
 
-    // If there are more than two arguments, check for non-numeric first argument
-    if (i > 2)
-    {
-        if (!ft_isnumber(argv[1]))
-        {
-            fprintf(stderr, "exit: %s: numeric argument required\n", argv[1]);
-            exit_code = 255;
-        }
-        else
-        {
-            fprintf(stderr, "exit: too many arguments\n");
-            shell->exit_code = 1;
-            return;
-        }
-    }
-    else if (i == 2)
-    {
-        // If there's one argument, check if it's numeric
-        char *endptr;
-        errno = 0;
-        exit_code = strtol(argv[1], &endptr, 10);
-
-        // Check for conversion errors or non-numeric characters
-        if (errno != 0 || *endptr != '\0' || argv[1][0] == '\0')
-        {
-            fprintf(stderr, "exit: %s: numeric argument required\n", argv[1]);
-            exit_code = 255;
-        }
-    }
-
-    // Free resources and exit
-    free_env_vars(shell->env_list);
-    free_command(shell->cmds);
-    exit((unsigned char)exit_code);
+		if ((!ft_isdigit(argv[1][i]) && argv[1][i] != '-' && argv[1][i] != '+')
+			|| (has_sign && (argv[1][i] == '-' || argv[1][i] == '+')))
+		{
+			//first_is_numeric = false;
+			shell->exit_code = 255;
+			if (count == 2)
+			{
+				fprintf(stderr, "exit\nminishell: exit: %s: numeric argument required\n", argv[1]);
+				ft_exit(shell);
+			}
+			else
+			{
+				fprintf(stderr, "exit\nminishell: exit: too many arguments\n");
+				ft_exit(shell);
+			}
+		}
+		if (argv[1][i] == '-' || argv[1][i] == '+')
+		{
+			has_sign = true;
+		}
+		i++;
+	}
+	if (count == 2)
+	{
+		shell->exit_code = ft_atoi(argv[1]);
+		ft_exit(shell);
+	}
+	fprintf(stderr, "exit\nminishell: exit: too many arguments\n");
+	shell->exit_code = 1;
+	return 1;
 }
 
 
-// Execute a command
-void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell)
-{
-    char *executable_path;
 
+// Function to handle built-in commands
+int handle_builtin(t_command *cmd, t_shell *shell)
+{
     if (ft_strcmp(cmd->argv[0], "env") == 0)
     {
-        print_env_vars(env_list);
-        exit(0);
+        print_env_vars(shell->env_list);
+        return 1;
     }
 
     if (ft_strcmp(cmd->argv[0], "echo") == 0)
     {
         execute_echo(cmd->argv);
-        exit(0);
+        return 1;
     }
 
     if (ft_strcmp(cmd->argv[0], "pwd") == 0)
     {
         execute_pwd();
-        exit(0);
+        return 1;
     }
 
     if (ft_strcmp(cmd->argv[0], "cd") == 0)
     {
         execute_cd(cmd->argv);
-        exit(0);
+        return 1;
     }
 
     if (ft_strcmp(cmd->argv[0], "exit") == 0)
     {
         execute_exit(cmd->argv, shell);
-        exit(0);
+        return 1;
     }
+
+    return 0; // Not a built-in command
+}
+
+// Execute a command
+void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell)
+{
+    char *executable_path;
 
     if (ft_strchr(cmd->argv[0], '/') != NULL)
     {
@@ -292,7 +287,6 @@ void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell)
         }
     }
 
-    // Convert t_env_var list to envp array for execve
     int env_count = 0;
     t_env_var *current = env_list;
     while (current)
@@ -313,7 +307,6 @@ void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell)
 
     execve(executable_path, cmd->argv, envp);
 
-    // Free envp array
     for (int i = 0; i < env_count; i++)
     {
         free(envp[i]);
@@ -397,6 +390,12 @@ void execute_commands(t_command *commands, t_shell *shell)
         {
             pipe_fd[0] = -1;
             pipe_fd[1] = -1;
+        }
+
+        if (handle_builtin(cmd, shell))
+        {
+            cmd = cmd->next;
+            continue;
         }
 
         fork_and_execute(cmd, shell->env_list, input_fd, pipe_fd[1], shell);

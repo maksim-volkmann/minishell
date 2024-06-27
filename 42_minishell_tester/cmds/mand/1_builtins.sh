@@ -208,10 +208,10 @@ echo test1 -n
 # Test 70
 echo "test1 -n"
 
-# Test 71
+# Test 71-
 echo -n -n test1
 
-# Test 72
+# Test 72-
 echo -n -n -n -n -n test1
 
 # Test 73

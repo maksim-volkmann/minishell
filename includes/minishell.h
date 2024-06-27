@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 12:02:48 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/27 12:05:20 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/27 12:29:27 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct s_shell
 	t_token		*tokens;
 	int			exit_code;
 	bool		error_present;
+	char		*input;
 }	t_shell;
 
 int		ft_strcmp(const char *s1, const char *s2);
