@@ -6,46 +6,11 @@
 # include <unistd.h>
 # include <string.h>
 # include <stdio.h>
-# include "./lexer.h"
 # include <stdbool.h>
-
-typedef enum e_redir_type
-{
-	REDIR_NONE,
-	REDIR_INPUT,
-	REDIR_OUTPUT,
-	REDIR_APPEND,
-	REDIR_HEREDOC
-}	t_redir_type;
-
-typedef struct s_redirection
-{
-	t_redir_type			type;
-	char					*file;
-}	t_redirection;
-
-typedef struct s_command
-{
-	char				**argv;
-	t_redirection		*input;
-	t_redirection		*output;
-	struct s_command	*next;
-}	t_command;
-
-typedef struct s_env_var
-{
-	char				*key;
-	char				*value;
-	struct s_env_var	*next;
-}	t_env_var;
-
-typedef struct s_shell
-{
-	t_command	*cmds;
-	t_env_var	*env_list;
-	int			exit_code;
-	bool		error_present;
-}	t_shell;
+# include <readline/readline.h>
+# include <readline/history.h>
+# include "../libft/include/libft.h"
+# include "./minishell.h"
 
 // parser.c
 void			ft_parser(t_shell *shell, t_token **tokens);
@@ -58,7 +23,7 @@ void			add_or_init_node(t_command **cmds, t_command *new_n);
 
 // darray.c
 int				ft_darray_size(t_token	*tokens);
-char	**ft_get_darray(t_token **tokens, t_shell **shell, t_redirection *input, t_redirection *output);
+char			**ft_get_darray(t_token **tokens, t_shell **shell, t_redirection *input, t_redirection *output);
 
 // handle_redir.c
 void			ft_handle_redir(t_token *tokens, t_shell *shell, t_redirection *input, t_redirection *output);
@@ -74,5 +39,4 @@ char			*ft_heredoc_join(char *s1, char *s2);
 int				ft_open_file(char *filename, char *content);
 char			*ft_heredoc(char *delimiter, t_shell *shell);
 int				ft_check_filepath(char *filepath);
-
 #endif

@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:43:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/19 11:59:29 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/27 12:05:25 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,34 +19,10 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../libft/include/libft.h"
-
+# include "./parser.h"
+# include "./minishell.h"
 # define NOWORD "<>|()& \t\n\'\""
 # define NOVAR " \"\'\t\n$"
-
-typedef enum e_token_type
-{
-	LESS = 0,
-	GREAT = 1,
-	PIPE = 2,
-	LPAR = 3,
-	RPAR = 4,
-	WORD = 5,
-	QUOTE = 6,
-	DQUOTE = 7,
-	DLESS = 8,
-	DGREAT = 9,
-	AND = 10,
-	DAND = 11,
-	NUM = 12,
-	SPACES = 13
-}	t_token_type;
-
-typedef struct s_token
-{
-	char				*token;
-	enum e_token_type	type;
-	struct s_token		*next;
-}	t_token;
 
 // lexer.c
 
@@ -71,7 +47,7 @@ t_token	*ft_if_space(const char *line, int *i);
 // helper.c
 int		ft_is_separator(char c);
 char	*ft_extract_str(char *line, int start, int end);
-int		ft_strcmp(const char *s1, const char *s2);
+// int		ft_strcmp(const char *s1, const char *s2);
 void	ft_skip_spaces(const char *line, int *i);
 
 // list_helper.c

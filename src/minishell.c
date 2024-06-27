@@ -1,6 +1,8 @@
 
 #include "../includes/executor.h"
 #include "../includes/builtins.h"
+#include "../includes/parser.h"
+#include "../includes/lexer.h"
 #include <stdio.h>
 
 // extern int rl_replace_line(const char *text, int clear_undo);
@@ -212,23 +214,26 @@ void print_command_details(t_command *cmds)
     }
 }
 
+void	ft_init_shell(t_shell *shell, char *env[])
+{
+	shell->env_list = NULL;
+	copy_env_vars(shell, env);
+	shell->exit_code = 0;
+}
+
 int main(int argc, char **argv, char **env)
 {
-	char        *input;
-	t_token     *tokens;
-	t_shell     shell;
+	char	*input;
+	t_token	*tokens;
+	t_shell	shell;
 
 	// atexit(leaks);
-	shell.env_list = NULL;
-	copy_env_vars(&shell, env);
-	shell.exit_code = 0;
-
 	// print_env_vars(shell.env_list);
-
+	ft_init_shell(&shell, env);
 	while (1)
 	{
 		shell.cmds = NULL;
-		tokens = NULL;
+		shell.tokens = NULL;
 		// shell.error_present = false;
 
 		if (isatty(fileno(stdin)))
@@ -251,14 +256,13 @@ int main(int argc, char **argv, char **env)
 			free(input);
 			break ;
 		}
-		ft_lexer(input, &tokens);
+		ft_lexer(input, &shell.tokens);
 		// print_token_list(tokens);
-		ft_parser(&shell, &tokens);
-        // printf("|%s|\n", shell.cmds->argv[0]);
+		ft_parser(&shell, &shell.tokens);
 		if (shell.error_present == true)
 		{
 			free_command(shell.cmds);
-			free_token_list(tokens);
+			free_token_list(shell.tokens);
 			free(input);
 			continue ;
 		}
@@ -267,7 +271,7 @@ int main(int argc, char **argv, char **env)
 			execute_exit(shell.cmds->argv, &shell);
 			free(input);
 			free_command(shell.cmds);
-			free_token_list(tokens);
+			free_token_list(shell.tokens);
 			break ;
 		}
 		else
@@ -283,7 +287,7 @@ int main(int argc, char **argv, char **env)
 
 
 		free_command(shell.cmds);
-		free_token_list(tokens);
+		free_token_list(shell.tokens);
 		free(input);
 	}
 	free_env_vars(shell.env_list);
