@@ -1,5 +1,6 @@
 #include "../../includes/executor.h"
-#include <unistd.h> // For getcwd and chdir
+#include <limits.h> // For LONG_MIN and LONG_MAX
+#include <errno.h>  // For errno
 
 // Function to free a split array
 void ft_free_split(char **arr)
@@ -28,6 +29,14 @@ char *get_env_value(t_env_var *env_list, const char *key)
     return NULL;
 }
 
+char *create_cmd_path(char *dir, char *cmd)
+{
+    char *path = ft_strjoin(dir, "/");
+    char *full_path = ft_strjoin(path, cmd);
+    free(path);
+    return full_path;
+}
+
 // Find the correct path for the given command
 char *find_correct_path(char *cmd, t_env_var *env_list)
 {
@@ -39,7 +48,6 @@ char *find_correct_path(char *cmd, t_env_var *env_list)
     if (!path_var)
         return NULL;
     paths = ft_split(path_var, ':');
-    i = 0;
     while (paths[i])
     {
         correct_path = create_cmd_path(paths[i], cmd);
@@ -56,13 +64,7 @@ char *find_correct_path(char *cmd, t_env_var *env_list)
 }
 
 // Create a full path for the command
-char *create_cmd_path(char *dir, char *cmd)
-{
-    char *path = ft_strjoin(dir, "/");
-    char *full_path = ft_strjoin(path, cmd);
-    free(path);
-    return full_path;
-}
+
 
 // Setup input redirection
 void setup_input_redirection(t_redirection *input)
@@ -113,7 +115,6 @@ void setup_output_redirection(t_redirection *output)
 void print_env_vars(t_env_var *env_list)
 {
     t_env_var *current = env_list;
-
     while (current)
     {
         printf("%s=%s\n", current->key, current->value);
@@ -127,8 +128,8 @@ void execute_echo(char **argv)
     int i = 1;
     int newline = 1;
 
-    // Check for -n flag
-    if (argv[i] && ft_strcmp(argv[i], "-n") == 0)
+    // Check for multiple -n flags
+    while (argv[i] && ft_strcmp(argv[i], "-n") == 0)
     {
         newline = 0;
         i++;
@@ -147,6 +148,7 @@ void execute_echo(char **argv)
     if (newline)
         printf("\n");
 }
+
 
 // Function to handle the pwd command
 void execute_pwd(void)
@@ -178,8 +180,71 @@ void execute_cd(char **argv)
     }
 }
 
+int ft_isnumber(const char *str)
+{
+    if (!str || *str == '\0')
+        return 0;
+    if (*str == '-' || *str == '+')
+        str++;
+    while (*str)
+    {
+        if (!ft_isdigit(*str))
+            return 0;
+        str++;
+    }
+    return 1;
+}
+
+
+// Function to handle the exit command
+void execute_exit(char **argv, t_shell *shell)
+{
+    long exit_code = 0;
+    int i = 0;
+
+    // Count the number of arguments
+    while (argv[i])
+        i++;
+
+    // If there are more than two arguments, check for non-numeric first argument
+    if (i > 2)
+    {
+        if (!ft_isnumber(argv[1]))
+        {
+            fprintf(stderr, "exit: %s: numeric argument required\n", argv[1]);
+            exit_code = 255;
+        }
+        else
+        {
+            fprintf(stderr, "exit: too many arguments\n");
+            shell->exit_code = 1;
+            return;
+        }
+    }
+    else if (i == 2)
+    {
+        // If there's one argument, check if it's numeric
+        char *endptr;
+        errno = 0;
+        exit_code = strtol(argv[1], &endptr, 10);
+
+        // Check for conversion errors or non-numeric characters
+        if (errno != 0 || *endptr != '\0' || argv[1][0] == '\0')
+        {
+            fprintf(stderr, "exit: %s: numeric argument required\n", argv[1]);
+            exit_code = 255;
+        }
+    }
+
+    // Free resources and exit
+    free_env_vars(shell->env_list);
+    free_command(shell->cmds);
+    exit((unsigned char)exit_code);
+}
+
+
 // Execute a command
-void execute_command(t_command *cmd, t_env_var *env_list)
+void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell)
 {
     char *executable_path;
 
@@ -204,6 +269,12 @@ void execute_command(t_command *cmd, t_env_var *env_list)
     if (ft_strcmp(cmd->argv[0], "cd") == 0)
     {
         execute_cd(cmd->argv);
+        exit(0);
+    }
+
+    if (ft_strcmp(cmd->argv[0], "exit") == 0)
+    {
+        execute_exit(cmd->argv, shell);
         exit(0);
     }
 
@@ -255,7 +326,7 @@ void execute_command(t_command *cmd, t_env_var *env_list)
 }
 
 // Fork and execute the command with proper redirections
-void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd)
+void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd, t_shell *shell)
 {
     pid_t pid = fork();
     if (pid == -1)
@@ -292,12 +363,18 @@ void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int out
         setup_output_redirection(cmd->output);
 
         // Execute the command
-        execute_command(cmd, env_list);
+        execute_command(cmd, env_list, shell);
+    }
+    else
+    {
+        if (input_fd != -1)
+            close(input_fd);
+        if (output_fd != -1)
+            close(output_fd);
     }
 }
 
 // Execute the list of commands with piping
-// This function handles the creation of pipes, forking of processes, and execution of commands in a pipeline.
 void execute_commands(t_command *commands, t_shell *shell)
 {
     int pipe_fd[2];
@@ -322,7 +399,7 @@ void execute_commands(t_command *commands, t_shell *shell)
             pipe_fd[1] = -1;
         }
 
-        fork_and_execute(cmd, shell->env_list, input_fd, pipe_fd[1]);
+        fork_and_execute(cmd, shell->env_list, input_fd, pipe_fd[1], shell);
 
         if (input_fd != -1)
             close(input_fd);
@@ -344,5 +421,44 @@ void execute_commands(t_command *commands, t_shell *shell)
         {
             shell->exit_code = WTERMSIG(status) + 128;
         }
+    }
+}
+
+// Function to free environment variables list
+// void free_env_vars(t_env_var *env_list)
+// {
+//     t_env_var *tmp;
+
+//     while (env_list)
+//     {
+//         tmp = env_list;
+//         env_list = env_list->next;
+//         free(tmp->key);
+//         free(tmp->value);
+//         free(tmp);
+//     }
+// }
+
+// Function to free the command list
+void free_command2(t_command *cmd)
+{
+    t_command *tmp;
+
+    while (cmd)
+    {
+        tmp = cmd;
+        cmd = cmd->next;
+        ft_free_split(tmp->argv);
+        if (tmp->input)
+        {
+            free(tmp->input->file);
+            free(tmp->input);
+        }
+        if (tmp->output)
+        {
+            free(tmp->output->file);
+            free(tmp->output);
+        }
+        free(tmp);
     }
 }

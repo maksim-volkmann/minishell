@@ -3,17 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   expander.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:49:44 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/21 13:05:06 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/06/27 11:58:37 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # ifndef EXPANDER_H
 # define EXPANDER_H
 
-# include "../includes/parser.h"
+# include "./parser.h"
+# include "./lexer.h"
 #include <assert.h>
 // expander.c
 char	*ft_expander(char *input, t_shell *shell);

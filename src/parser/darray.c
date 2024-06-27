@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:46:42 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/25 10:02:42 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/26 14:39:28 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_darray_size(t_token	*tokens)
 	return (i);
 }
 
-char	**ft_get_darray(t_token **tokens, t_shell *shell)
+char	**ft_get_darray(t_token **tokens, t_shell **shell, t_redirection *input, t_redirection *output)
 {
 	char	**darray;
 	int		size;
@@ -44,7 +44,7 @@ char	**ft_get_darray(t_token **tokens, t_shell *shell)
 		if ((*tokens)->type == DGREAT || (*tokens)->type == GREAT
 			|| (*tokens)->type == LESS || (*tokens)->type == DLESS)
 		{
-			ft_handle_redir((*tokens), shell);
+			ft_handle_redir((*tokens), (*shell), input, output);
 			(*tokens) = (*tokens)->next->next;
 			continue ;
 		}
