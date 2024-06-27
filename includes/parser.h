@@ -6,56 +6,11 @@
 # include <unistd.h>
 # include <string.h>
 # include <stdio.h>
-# include "./lexer.h"
 # include <stdbool.h>
-
-typedef enum e_redir_type
-{
-	REDIR_NONE,
-	REDIR_INPUT,
-	REDIR_OUTPUT,
-	REDIR_APPEND,
-	REDIR_HEREDOC
-}	t_redir_type;
-
-typedef struct s_redirection
-{
-	t_redir_type			type;
-	char					*file;
-}	t_redirection;
-
-typedef struct s_command
-{
-	char				**argv;
-	t_redirection		*input;
-	t_redirection		*output;
-	struct s_command	*next;
-}	t_command;
-
-typedef struct s_env_var
-{
-	char				*key;
-	char				*value;
-	struct s_env_var	*next;
-}	t_env_var;
-
-// typedef struct s_cleanup
-// {
-// 	t_command	*cmds;
-// 	t_env_var	*env_list;
-// 	char		*input;
-// }	t_cleanup;
-
-
-typedef struct s_shell
-{
-//	t_cleanup	to_free;
-	t_command	*cmds;
-	t_env_var	*env_list;
-	int			exit_code;
-	bool		error_present;
-	char		*input;
-}	t_shell;
+# include <readline/readline.h>
+# include <readline/history.h>
+# include "../libft/include/libft.h"
+# include "./minishell.h"
 
 void	ft_exit(t_shell *shell);
 // parser.c
@@ -69,12 +24,12 @@ void			add_or_init_node(t_command **cmds, t_command *new_n);
 
 // darray.c
 int				ft_darray_size(t_token	*tokens);
-char			**ft_get_darray(t_token **tokens, t_shell *shell);
+char			**ft_get_darray(t_token **tokens, t_shell **shell, t_redirection *input, t_redirection *output);
 
 // handle_redir.c
-void			ft_handle_redir(t_token *tokens, t_shell *shell);
-void			ft_handle_input(t_token *tokens, t_shell *shell);
-void			ft_handle_output(t_token *tokens, t_shell *shell);
+void			ft_handle_redir(t_token *tokens, t_shell *shell, t_redirection *input, t_redirection *output);
+void			ft_handle_input(t_token *tokens, t_shell *shell, t_redirection *input);
+void			ft_handle_output(t_token *tokens, t_shell *shell, t_redirection *output);
 
 // free.c
 void			free_redirection(t_redirection *redir);
@@ -84,5 +39,5 @@ void			free_command(t_command *cmd);
 char			*ft_heredoc_join(char *s1, char *s2);
 int				ft_open_file(char *filename, char *content);
 char			*ft_heredoc(char *delimiter, t_shell *shell);
-
+int				ft_check_filepath(char *filepath);
 #endif

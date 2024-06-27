@@ -1,4 +1,5 @@
 #include "../../includes/executor.h"
+#include "../../includes/minishell.h"
 #include <unistd.h>
 #include <limits.h>
 #include <errno.h>
@@ -30,6 +31,14 @@ char *get_env_value(t_env_var *env_list, const char *key)
     return NULL;
 }
 
+char *create_cmd_path(char *dir, char *cmd)
+{
+    char *path = ft_strjoin(dir, "/");
+    char *full_path = ft_strjoin(path, cmd);
+    free(path);
+    return full_path;
+}
+
 // Find the correct path for the given command
 char *find_correct_path(char *cmd, t_env_var *env_list)
 {
@@ -57,13 +66,7 @@ char *find_correct_path(char *cmd, t_env_var *env_list)
 }
 
 // Create a full path for the command
-char *create_cmd_path(char *dir, char *cmd)
-{
-    char *path = ft_strjoin(dir, "/");
-    char *full_path = ft_strjoin(path, cmd);
-    free(path);
-    return full_path;
-}
+
 
 // Setup input redirection
 void setup_input_redirection(t_redirection *input)
@@ -144,6 +147,7 @@ void execute_echo(char **argv)
     if (newline)
         printf("\n");
 }
+
 
 // Function to handle the pwd command
 void execute_pwd(void)
@@ -416,5 +420,44 @@ void execute_commands(t_command *commands, t_shell *shell)
         {
             shell->exit_code = WTERMSIG(status) + 128;
         }
+    }
+}
+
+// Function to free environment variables list
+// void free_env_vars(t_env_var *env_list)
+// {
+//     t_env_var *tmp;
+
+//     while (env_list)
+//     {
+//         tmp = env_list;
+//         env_list = env_list->next;
+//         free(tmp->key);
+//         free(tmp->value);
+//         free(tmp);
+//     }
+// }
+
+// Function to free the command list
+void free_command2(t_command *cmd)
+{
+    t_command *tmp;
+
+    while (cmd)
+    {
+        tmp = cmd;
+        cmd = cmd->next;
+        ft_free_split(tmp->argv);
+        if (tmp->input)
+        {
+            free(tmp->input->file);
+            free(tmp->input);
+        }
+        if (tmp->output)
+        {
+            free(tmp->output->file);
+            free(tmp->output);
+        }
+        free(tmp);
     }
 }

@@ -1,6 +1,8 @@
 
 #include "../includes/executor.h"
 #include "../includes/builtins.h"
+#include "../includes/parser.h"
+#include "../includes/lexer.h"
 #include <stdio.h>
 
 // extern int rl_replace_line(const char *text, int clear_undo);
@@ -216,25 +218,29 @@ void print_command_details(t_command *cmds)
 void	ft_exit(t_shell *shell)
 {
 	free_env_vars(shell->env_list);
-	free(shell->input);
+	// free(shell->input);
 	exit(shell->exit_code);
+}
+void	ft_init_shell(t_shell *shell, char *env[])
+{
+	shell->env_list = NULL;
+	copy_env_vars(shell, env);
+	shell->exit_code = 0;
 }
 
 int main(int argc, char **argv, char **env)
 {
-    //char        *input;
-    t_token     *tokens;
-    t_shell     shell;
+	//char	*input;
+	t_token	*tokens;
+	t_shell	shell;
 
-	ft_bzero(&shell, sizeof shell);
-    shell.env_list = NULL;
-    copy_env_vars(&shell, env);
-    shell.exit_code = 0;
+	// ft_bzero(&shell, sizeof shell);
+	ft_init_shell(&shell, env);
 
     while (1)
     {
         shell.cmds = NULL;
-        tokens = NULL;
+        shell.tokens = NULL;
 
         if (isatty(fileno(stdin)))
             shell.input = readline("minishell> ");
@@ -258,14 +264,14 @@ int main(int argc, char **argv, char **env)
             break ;
         }
 
-        ft_lexer(shell.input, &tokens);
-        ft_parser(&shell, &tokens);
+        ft_lexer(shell.input, &shell.tokens);
+        ft_parser(&shell, &shell.tokens);
 		// PRINTING SHELL STRUCT!!!
 		// print_command_details(shell.cmds);
         if (shell.error_present == true)
         {
             free_command(shell.cmds);
-            free_token_list(tokens);
+            free_token_list(shell.tokens);
             free(shell.input);
             continue ;
         }
@@ -304,13 +310,14 @@ int main(int argc, char **argv, char **env)
         // }
 
         free_command(shell.cmds);
-        free_token_list(tokens);
+        free_token_list(shell.tokens);
         free(shell.input);
 		shell.input = NULL;
     }
     free_env_vars(shell.env_list);
     return shell.exit_code;
 }
+
 
 
 // int main(int argc, char **argv, char **env)
