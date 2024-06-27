@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redir.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:38:09 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/27 14:08:28 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/27 15:37:40 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	ft_handle_input(t_token *tokens, t_shell *shell, t_redirection *input)
 		input->file = tokens->next->token;
 		if (access(input->file, F_OK) != -0)
 		{
-			printf(stderr, "no such file or directory: %s\n", input->file);
+			fprintf(stderr, "no such file or directory: %s\n", input->file);
 			shell->exit_code = 1;
 			return ;
 		}
