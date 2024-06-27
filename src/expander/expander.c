@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:51:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/27 14:57:42 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/27 15:55:11 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*ft_extract_dq(char *input, int *i, t_shell *shell)
 			exp_var = ft_extract_var(input, i);
 			if (exp_var)
 			{
-				exp_var = ft_expand_var(shell, exp_var);
+				exp_var = ft_expand_var_dq(shell, exp_var);
 				if (exp_var)
 					segment = ft_join_input(segment, exp_var);
 				free(exp_var);
