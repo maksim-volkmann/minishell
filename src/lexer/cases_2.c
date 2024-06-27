@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 15:05:33 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/26 19:20:08 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/06/27 11:06:19 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ t_token	*ft_if_do_quot(const char *line, int *i)
 		(*i)++;
 		temp = ft_extract_str((char *)line, start, end + 1);
 		token = ft_strtrim(temp, "\"");
-		if (ft_strcmp(token, "") == 0)
-			return (NULL);
+		// if (ft_strcmp(token, "") == 0)
+		// 	return (NULL);
 		new_token = ft_new_token(token, DQUOTE);
 		free(temp);
 	}

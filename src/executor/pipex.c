@@ -177,14 +177,19 @@ void execute_cd(char **argv)
 // Function to handle the exit command
 int execute_exit(char **argv, t_shell *shell)
 {
-    int count = 0;
-	//bool	first_is_numeric = true;
+	int count = 0;
 	bool	has_sign = false;
 
-    while (argv[count])
-        count++;
+	while (argv[count])
+		count++;
 	if (count == 1)
 		ft_exit(shell);
+	if (strcmp(argv[1], "") == 0)
+	{
+		shell->exit_code = 255;
+		fprintf(stderr, "exit\nminishell: exit: %s: numeric argument required\n", argv[1]);
+		ft_exit(shell);
+	}
 	int i = 0;
 	while (argv[1][i])
 	{
@@ -219,36 +224,6 @@ int execute_exit(char **argv, t_shell *shell)
 	fprintf(stderr, "exit\nminishell: exit: too many arguments\n");
 	shell->exit_code = 1;
 	return 1;
-    // if (argv[1])
-    // {
-    //     char *endptr;
-    //     errno = 0;
-    //     exit_code = strtol(argv[1], &endptr, 10);
-
-    //     if (errno != 0 || *endptr != '\0' || argv[1][0] == '\0')
-    //     {
-    //         fprintf(stderr, "exit\nminishell: exit: %s: numeric argument required\n", argv[1]);
-    //         exit_code = 255;
-    //         shell->exit_code = (unsigned char)exit_code;
-	// 		exit(255);
-    //         return shell->exit_code;
-    //     }
-    // }
-
-    // if (count > 2)
-    // {
-    //     fprintf(stderr, "exit\nminishell: exit: too many arguments\n");
-    //     shell->exit_code = 1;
-    //     return shell->exit_code;
-    // }
-
-    // if (argv[1])
-    // {
-    //     exit_code = strtol(argv[1], NULL, 10);
-    // }
-
-    // shell->exit_code = (unsigned char)exit_code;
-    // return shell->exit_code;
 }
 
 

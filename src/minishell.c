@@ -298,10 +298,10 @@ int main(int argc, char **argv, char **env)
             else
                 execute_commands(shell.cmds, &shell);
         }
-        else
-        {
-            execute_commands(shell.cmds, &shell);
-        }
+        // else
+        // {
+        //     execute_commands(shell.cmds, &shell);
+        // }
 
         free_command(shell.cmds);
         free_token_list(tokens);
