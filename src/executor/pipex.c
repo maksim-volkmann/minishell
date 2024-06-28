@@ -65,9 +65,6 @@ char *find_correct_path(char *cmd, t_env_var *env_list)
     return NULL;
 }
 
-// Create a full path for the command
-
-
 // Setup input redirection
 void setup_input_redirection(t_redirection *input)
 {
@@ -99,38 +96,28 @@ void setup_output_redirection(t_redirection *output)
             fd = open(output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         else if (output->type == REDIR_APPEND)
             fd = open(output->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		printf("empty!!!!!2 \n");
         if (fd == -1)
         {
             perror("open output redirection file");
             exit(EXIT_FAILURE);
         }
+				printf("empty!!!!!3 \n");
         if (dup2(fd, STDOUT_FILENO) == -1)
         {
             perror("dup2 output redirection file");
             exit(EXIT_FAILURE);
         }
+						printf("empty!!!!!4 \n");
         close(fd);
     }
 }
-
-// Function to print environment variables
-// void print_env_vars(t_env_var *env_list)
-// {
-//     t_env_var *current = env_list;
-//     while (current)
-//     {
-//         printf("%s=%s\n", current->key, current->value);
-//         current = current->next;
-//     }
-// }
 
 // Function to handle the echo command
 void execute_echo(char **argv)
 {
     int i = 1;
     int newline = 1;
-
-	// printf("echo pip1\n");
 
     while (argv[i] && ft_strcmp(argv[i], "-n") == 0)
     {
@@ -150,137 +137,91 @@ void execute_echo(char **argv)
         printf("\n");
 }
 
-
-// Function to handle the pwd command
-void execute_pwd(void)
-{
-    char cwd[1024];
-    if (getcwd(cwd, sizeof(cwd)) != NULL)
-    {
-        printf("%s\n", cwd);
-    }
-    else
-    {
-        perror("getcwd");
-        exit(1);
-    }
-}
-
-// Function to handle the cd command
-void execute_cd(char **argv)
-{
-    if (argv[1] == NULL)
-    {
-        fprintf(stderr, "cd: missing argument\n");
-        return;
-    }
-    if (chdir(argv[1]) != 0)
-    {
-        perror("cd");
-    }
-}
-
 // Function to handle the exit command
 int execute_exit(char **argv, t_shell *shell)
 {
-	int count = 0;
-	bool	has_sign = false;
+    int count = 0;
+    bool has_sign = false;
 
-	// printf("ping1\n");
-	while (argv[count])
-		count++;
-	if (count == 1)
-		ft_exit(shell);
-	if (strcmp(argv[1], "") == 0)
-	{
-		shell->exit_code = 255;
-		fprintf(stderr, "exit\nminishell: exit: %s: numeric argument required\n", argv[1]);
-		ft_exit(shell);
-	}
-	int i = 0;
-	while (argv[1][i])
-	{
-
-		if ((!ft_isdigit(argv[1][i]) && argv[1][i] != '-' && argv[1][i] != '+')
-			|| (has_sign && (argv[1][i] == '-' || argv[1][i] == '+')))
-		{
-			//first_is_numeric = false;
-			shell->exit_code = 255;
-			if (count == 2)
-			{
-				fprintf(stderr, "exit\nminishell: exit: %s: numeric argument required\n", argv[1]);
-				ft_exit(shell);
-			}
-			else
-			{
-				fprintf(stderr, "exit\nminishell: exit: too many arguments\n");
-				ft_exit(shell);
-			}
-		}
-		if (argv[1][i] == '-' || argv[1][i] == '+')
-		{
-			has_sign = true;
-		}
-		i++;
-	}
-	if (count == 2)
-	{
-		shell->exit_code = ft_atoi(argv[1]);
-		ft_exit(shell);
-	}
-	fprintf(stderr, "exit\nminishell: exit: too many arguments\n");
-	shell->exit_code = 1;
-	return 1;
+    while (argv[count])
+        count++;
+    if (count == 1)
+        ft_exit(shell);
+    if (strcmp(argv[1], "") == 0)
+    {
+        shell->exit_code = 255;
+        fprintf(stderr, "exit\nminishell: exit: %s: numeric argument required\n", argv[1]);
+        ft_exit(shell);
+    }
+    int i = 0;
+    while (argv[1][i])
+    {
+        if ((!ft_isdigit(argv[1][i]) && argv[1][i] != '-' && argv[1][i] != '+')
+            || (has_sign && (argv[1][i] == '-' || argv[1][i] == '+')))
+        {
+            shell->exit_code = 255;
+            if (count == 2)
+            {
+                fprintf(stderr, "exit\nminishell: exit: %s: numeric argument required\n", argv[1]);
+                ft_exit(shell);
+            }
+            else
+            {
+                fprintf(stderr, "exit\nminishell: exit: too many arguments\n");
+                ft_exit(shell);
+            }
+        }
+        if (argv[1][i] == '-' || argv[1][i] == '+')
+        {
+            has_sign = true;
+        }
+        i++;
+    }
+    if (count == 2)
+    {
+        shell->exit_code = ft_atoi(argv[1]);
+        ft_exit(shell);
+    }
+    fprintf(stderr, "exit\nminishell: exit: too many arguments\n");
+    shell->exit_code = 1;
+    return 1;
 }
-
-
 
 // Function to handle built-in commands
 int handle_builtin(t_command *cmd, t_shell *shell)
 {
-    // if (ft_strcmp(cmd->argv[0], "env") == 0)
+    // Setup redirections if needed
+    if (cmd->input)
+        setup_input_redirection(cmd->input);
+    if (cmd->output)
+        setup_output_redirection(cmd->output);
+
+    // if (ft_strcmp(cmd->argv[0], "echo") == 0)
     // {
-    //     print_env_vars(shell->env_list);
-    //     return 1;
+    //     execute_echo(cmd->argv);
+    //     return 0; // Indicate that the built-in was handled successfully
     // }
-
-    if (ft_strcmp(cmd->argv[0], "echo") == 0)
-    {
-        execute_echo(cmd->argv);
-        return 1;
-    }
-
-    // if (ft_strcmp(cmd->argv[0], "pwd") == 0)
-    // {
-    //     execute_pwd();
-    //     return 1;
-    // }
-
-    // if (ft_strcmp(cmd->argv[0], "cd") == 0)
-    // {
-    //     execute_cd(cmd->argv);
-    //     return 1;
-    // }
-
     if (ft_strcmp(cmd->argv[0], "exit") == 0)
     {
         shell->exit_code = execute_exit(cmd->argv, shell);
-        return (shell->exit_code);
+        return 0; // Indicate that the built-in was handled successfully
     }
-
     return -1; // Not a built-in command
 }
+
+
+
 
 // Execute a command
 void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell)
 {
-	char *executable_path;
+    char *executable_path;
 
-	if (handle_builtin(cmd, shell))
-	{
-		// Built-in command was handled
-		return;
-	}
+    if (handle_builtin(cmd, shell) != -1)
+    {
+        // Built-in command was handled, so return
+        return;
+    }
 
     if (ft_strchr(cmd->argv[0], '/') != NULL)
     {
@@ -364,69 +305,90 @@ void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int out
         setup_input_redirection(cmd->input);
         setup_output_redirection(cmd->output);
 
-        // Execute the command
-        execute_command(cmd, env_list, shell);
+        // Check if there's an actual command to execute
+        if (cmd->argv && cmd->argv[0])
+        {
+            // Execute the command
+            if (handle_builtin(cmd, shell) == -1)
+                execute_command(cmd, env_list, shell);
+            exit(shell->exit_code); // Ensure child process exits after execution
+        }
+        else
+        {
+            // No actual command, just handle the redirections
+            exit(0);
+        }
     }
     else
     {
         if (input_fd != -1)
             close(input_fd);
+
         if (output_fd != -1)
             close(output_fd);
     }
 }
 
-// Execute the list of commands with piping
-void execute_commands(t_command *commands, t_shell *shell)
-{
-    int pipe_fd[2];
-    int input_fd = -1;
-    t_command *cmd = commands;
-    pid_t pid;
-    int status;
 
+
+// Execute the list of commands with piping
+void exec_start(t_command *commands, t_shell *shell)
+{
+    int pipe_fd[2];       // Array to hold file descriptors for the pipe
+    int input_fd = -1;    // File descriptor for input redirection
+    t_command *cmd = commands; // Pointer to the current command
+    pid_t pid;            // Process ID for forked processes
+    int status;           // Status variable for wait
+
+    // Handle multiple commands or non-built-in commands
     while (cmd)
     {
+        // If there's another command after this one, set up a pipe
         if (cmd->next != NULL)
         {
             if (pipe(pipe_fd) == -1)
             {
+                // If pipe creation fails, print an error and exit
                 perror("pipe");
                 exit(EXIT_FAILURE);
             }
         }
         else
         {
+            // No next command, so no need to set up a pipe
             pipe_fd[0] = -1;
             pipe_fd[1] = -1;
         }
 
-        // if (handle_builtin(cmd, shell))
-        // {
-        //     cmd = cmd->next;
-        //     continue;
-        // }
-
+        // Call fork_and_execute to handle the command execution
         fork_and_execute(cmd, shell->env_list, input_fd, pipe_fd[1], shell);
 
+        // Close the input file descriptor if it's not the initial -1
         if (input_fd != -1)
             close(input_fd);
 
+        // Close the write end of the pipe in the parent process
         if (pipe_fd[1] != -1)
             close(pipe_fd[1]);
 
+        // Save the read end of the pipe for the next command's input
         input_fd = pipe_fd[0];
+
+        // Move to the next command in the list
         cmd = cmd->next;
     }
 
+    // Wait for all child processes to complete
     while ((pid = wait(&status)) > 0)
     {
         if (WIFEXITED(status))
         {
+            // If the process exited normally, get its exit status
             shell->exit_code = WEXITSTATUS(status);
         }
         else if (WIFSIGNALED(status))
         {
+            // If the process was terminated by a signal, get the signal number
             shell->exit_code = WTERMSIG(status) + 128;
         }
     }

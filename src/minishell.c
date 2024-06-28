@@ -3,6 +3,7 @@
 #include "../includes/builtins.h"
 #include "../includes/parser.h"
 #include "../includes/lexer.h"
+#include "../includes/minishell.h"
 #include <stdio.h>
 
 // extern int rl_replace_line(const char *text, int clear_undo);
@@ -180,13 +181,13 @@ void print_command_details(t_command *cmds)
     while (current_cmd)
     {
         printf("Command:\n");
+
         // Print all arguments
-		int i = 0;
-        for (; current_cmd->argv[i]; i++)
+        for (i = 0; current_cmd->argv[i]; i++)
         {
             printf("  Arg[%d]: %s\n", i, current_cmd->argv[i]);
         }
-		//printf("arg count: %d\n", i);
+
         // Print input redirection details if present
         if (current_cmd->input)
         {
@@ -211,9 +212,24 @@ void print_command_details(t_command *cmds)
             printf("  Output Redirection: None\n");
         }
 
+        // Print next command details if present
+        if (current_cmd->next)
+        {
+            printf("  Next Command:\n");
+            for (int j = 0; current_cmd->next->argv[j]; j++)
+            {
+                printf("    Next Arg[%d]: %s\n", j, current_cmd->next->argv[j]);
+            }
+        }
+        else
+        {
+            printf("  Next Command: None\n");
+        }
+
         current_cmd = current_cmd->next;
     }
 }
+
 
 void	ft_exit(t_shell *shell)
 {
@@ -230,77 +246,106 @@ void	ft_init_shell(t_shell *shell, char *env[])
 
 int main(int argc, char **argv, char **env)
 {
-	//char	*input;
-	t_token	*tokens;
-	t_shell	shell;
+    //char *input;
+    t_token *tokens;
+    t_shell shell;
 
-	// ft_bzero(&shell, sizeof shell);
-	ft_init_shell(&shell, env);
+    // ft_bzero(&shell, sizeof shell);
+    ft_init_shell(&shell, env);
 
-	while (1)
-	{
-		shell.cmds = NULL;
-		shell.tokens = NULL;
+    while (1)
+    {
+        shell.cmds = NULL;
+        shell.tokens = NULL;
 
-		if (isatty(fileno(stdin)))
-			shell.input = readline("minishell> ");
-		else
-		{
-			char *line;
-			line = get_next_line(fileno(stdin));
-			shell.input = ft_strtrim(line, "\n");
-			free(line);
-		}
-
-		if (!shell.input)
-			ft_exit(&shell);
-
-		add_history(shell.input);
-		shell.input = ft_expander(shell.input, &shell);
-
-		if (ft_strcmp(shell.input, "") == 0)
-		{
-			free(shell.input);
-			break ;
-		}
-
-		ft_lexer(shell.input, &shell.tokens);
-		ft_parser(&shell, &shell.tokens);
-		// PRINTING SHELL STRUCT!!!
-		// print_command_details(shell.cmds);
-		// PRINT ENV VARIABLES
-		// print_env_vars(shell.env_list);
-        if (shell.error_present == true)
+        if (isatty(fileno(stdin)))
+            shell.input = readline("minishell> ");
+        else
         {
-            free_command(shell.cmds);
-            free_token_list(shell.tokens);
-            free(shell.input);
-            continue ;
+            char *line;
+            line = get_next_line(fileno(stdin));
+            shell.input = ft_strtrim(line, "\n");
+            free(line);
         }
-        else if (shell.cmds->argv[0] && shell.cmds->next == NULL)
+
+        if (!shell.input)
+            ft_exit(&shell);
+
+        add_history(shell.input);
+        shell.input = ft_expander(shell.input, &shell);
+
+        if (ft_strcmp(shell.input, "") == 0)
         {
-			if(handle_builtin(shell.cmds, &shell) == -1)
-			{
-				continue ;
-			}
+            free(shell.input);
+            break;
+        }
+
+        ft_lexer(shell.input, &shell.tokens);
+        ft_parser(&shell, &shell.tokens);
+
+			if (shell.cmds->argv && shell.cmds->argv[0])
+				printf("argv is not empty\n");
 			else
-			{
-				execute_commands(shell.cmds, &shell);
-			}
-		}
-		else
-		{
-			execute_commands(shell.cmds, &shell);
-		}
+				printf("argv is empty\n");
+
+        // Handle no command but redirection
+        // if (shell.cmds && shell.cmds->argv[0] == NULL && (shell.cmds->input || shell.cmds->output))
+        // {
+        //     if (shell.cmds->output)
+        //         setup_output_redirection(shell.cmds->output);
+        //     if (shell.cmds->input)
+        //         setup_input_redirection(shell.cmds->input);
+        //     // Nothing to execute, just setup redirection
+        //     free_command(shell.cmds);
+        //     free_token_list(shell.tokens);
+        //     free(shell.input);
+        //     shell.input = NULL;
+        //     continue;
+        // }
+
+			print_command_details(shell.cmds);
+        // Check for built-in commands
+        if (shell.cmds && shell.cmds->next == NULL)
+        {
+			printf("Error check\n");
+
+
+
+
+
+
+
+            if (ft_strcmp(shell.cmds->argv[0], "exit") == 0)
+            {
+                shell.exit_code = execute_exit(shell.cmds->argv, &shell);
+            }
+
+            else if (handle_builtin(shell.cmds, &shell) != -1)
+            {
+                // Built-in command was handled
+                continue;
+            }
+            else
+            {
+                exec_start(shell.cmds, &shell);
+            }
+        }
+        else
+        {
+            exec_start(shell.cmds, &shell);
+        }
 
         free_command(shell.cmds);
         free_token_list(shell.tokens);
         free(shell.input);
-		shell.input = NULL;
-	}
-	free_env_vars(shell.env_list);
-	return shell.exit_code;
+        shell.input = NULL;
+    }
+    free_env_vars(shell.env_list);
+    return shell.exit_code;
 }
+
+
+
 
 
 
@@ -342,7 +387,7 @@ int main(int argc, char **argv, char **env)
 // 			continue ;
 // 		}
 // 		//command execv
-// 		execute_commands(shell.cmds, &shell);
+// 		exec_start(shell.cmds, &shell);
 // 		free_command(shell.cmds);
 // 		free_token_list(tokens);
 // 		free(input);

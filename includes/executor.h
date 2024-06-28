@@ -13,7 +13,7 @@
 // #include <fcntl.h>
 
 // // Function declarations
-// void execute_commands(t_command *commands, t_shell *shell);
+// void exec_start(t_command *commands, t_shell *shell);
 // int is_builtin(char *cmd);
 // int execute_builtin(t_command *cmd, t_shell *shell, int output_fd);
 
@@ -50,12 +50,12 @@ void setup_input_redirection(t_redirection *input);
 void setup_output_redirection(t_redirection *output);
 void print_env_vars(t_env_var *env_list);
 void execute_echo(char **argv);
-void execute_pwd(void);
+// void execute_pwd(void);
 int execute_exit(char **argv, t_shell *shell);
 int handle_builtin(t_command *cmd, t_shell *shell);
 void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell);
 void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd, t_shell *shell);
-void execute_commands(t_command *commands, t_shell *shell);
+void exec_start(t_command *commands, t_shell *shell);
 void free_command2(t_command *cmd);
 
 #endif
