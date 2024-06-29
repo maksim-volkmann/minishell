@@ -96,19 +96,16 @@ void setup_output_redirection(t_redirection *output)
             fd = open(output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         else if (output->type == REDIR_APPEND)
             fd = open(output->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		printf("empty!!!!!2 \n");
         if (fd == -1)
         {
             perror("open output redirection file");
             exit(EXIT_FAILURE);
         }
-				printf("empty!!!!!3 \n");
         if (dup2(fd, STDOUT_FILENO) == -1)
         {
             perror("dup2 output redirection file");
             exit(EXIT_FAILURE);
         }
-						printf("empty!!!!!4 \n");
         close(fd);
     }
 }
@@ -334,47 +331,50 @@ void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int out
 // Execute the list of commands with piping
 void exec_start(t_command *commands, t_shell *shell)
 {
-    int pipe_fd[2];       // Array to hold file descriptors for the pipe
-    int input_fd = -1;    // File descriptor for input redirection
-    t_command *cmd = commands; // Pointer to the current command
-    pid_t pid;            // Process ID for forked processes
-    int status;           // Status variable for wait
+    int pipe_fd[2];
+    int input_fd = -1;
+    t_command *cmd = commands;
+    pid_t pid;
+    int status;
 
-    // Handle multiple commands or non-built-in commands
     while (cmd)
     {
-        // If there's another command after this one, set up a pipe
         if (cmd->next != NULL)
         {
             if (pipe(pipe_fd) == -1)
             {
-                // If pipe creation fails, print an error and exit
                 perror("pipe");
                 exit(EXIT_FAILURE);
             }
         }
         else
         {
-            // No next command, so no need to set up a pipe
             pipe_fd[0] = -1;
             pipe_fd[1] = -1;
         }
 
-        // Call fork_and_execute to handle the command execution
-        fork_and_execute(cmd, shell->env_list, input_fd, pipe_fd[1], shell);
+        // Check if the command is a built-in and should not be forked
+        if (handle_builtin(cmd, shell) != -1)
+        {
+            // Built-in command was handled in the main process
+            // No forking needed; handle redirections and continue
+            if (cmd->next)
+            {
+                setup_output_redirection(cmd->output);
+                setup_input_redirection(cmd->input);
+            }
+        }
+        else
+        {
+            fork_and_execute(cmd, shell->env_list, input_fd, pipe_fd[1], shell);
+        }
 
-        // Close the input file descriptor if it's not the initial -1
         if (input_fd != -1)
             close(input_fd);
-
-        // Close the write end of the pipe in the parent process
         if (pipe_fd[1] != -1)
             close(pipe_fd[1]);
 
-        // Save the read end of the pipe for the next command's input
         input_fd = pipe_fd[0];
-
-        // Move to the next command in the list
         cmd = cmd->next;
     }
 
@@ -383,16 +383,15 @@ void exec_start(t_command *commands, t_shell *shell)
     {
         if (WIFEXITED(status))
         {
-            // If the process exited normally, get its exit status
             shell->exit_code = WEXITSTATUS(status);
         }
         else if (WIFSIGNALED(status))
         {
-            // If the process was terminated by a signal, get the signal number
             shell->exit_code = WTERMSIG(status) + 128;
         }
     }
 }
+
 
 // Function to free the command list
 void free_command2(t_command *cmd)
