@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 12:02:48 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/27 12:29:27 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/06/29 13:04:24 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,5 +79,6 @@ typedef struct s_shell
 }	t_shell;
 
 int		ft_strcmp(const char *s1, const char *s2);
+int	is_builtin(char *command);
 
 #endif

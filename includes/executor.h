@@ -57,5 +57,6 @@ void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell);
 void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd, t_shell *shell);
 void exec_start(t_command *commands, t_shell *shell);
 void free_command2(t_command *cmd);
+// int is_builtin(t_command *cmd);
 
 #endif

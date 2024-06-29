@@ -185,29 +185,54 @@ int execute_exit(char **argv, t_shell *shell)
 }
 
 // Function to handle built-in commands
-int handle_builtin(t_command *cmd, t_shell *shell)
+int	handle_builtin(t_command *cmd, t_shell *shell)
 {
-    // Setup redirections if needed
-    if (cmd->input)
-        setup_input_redirection(cmd->input);
-    if (cmd->output)
-        setup_output_redirection(cmd->output);
+	int	saved_stdout = -1;
 
-    // if (ft_strcmp(cmd->argv[0], "echo") == 0)
-    // {
-    //     execute_echo(cmd->argv);
-    //     return 0; // Indicate that the built-in was handled successfully
-    // }
-    if (ft_strcmp(cmd->argv[0], "exit") == 0)
-    {
-        shell->exit_code = execute_exit(cmd->argv, shell);
-        return 0; // Indicate that the built-in was handled successfully
-    }
-    return -1; // Not a built-in command
+	if (cmd->output)
+	{
+		saved_stdout = dup(STDOUT_FILENO);
+		setup_output_redirection(cmd->output);
+	}
+
+	if (cmd->argv[0] == NULL)
+	{
+		// No command, just handle redirection
+		if (cmd->output)
+		{
+			dup2(saved_stdout, STDOUT_FILENO);
+			close(saved_stdout);
+		}
+		return 0;
+	}
+
+	if (ft_strcmp(cmd->argv[0], "echo") == 0)
+	{
+		execute_echo(cmd->argv);
+		if (cmd->output)
+		{
+			dup2(saved_stdout, STDOUT_FILENO);
+			close(saved_stdout);
+		}
+		return 0;
+	}
+
+	if (ft_strcmp(cmd->argv[0], "exit") == 0)
+	{
+		shell->exit_code = execute_exit(cmd->argv, shell);
+		if (cmd->output)
+			close(saved_stdout);
+		return 0;
+	}
+
+	if (cmd->output)
+	{
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdout);
+	}
+
+	return -1;
 }
-
-
-
 
 // Execute a command
 void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell)
@@ -265,133 +290,80 @@ void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell)
     exit(EXIT_FAILURE);
 }
 
-// Fork and execute the command with proper redirections
-void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd, t_shell *shell)
+void	fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd, t_shell *shell)
 {
-    pid_t pid = fork();
-    if (pid == -1)
-    {
-        perror("fork");
-        exit(EXIT_FAILURE);
-    }
-    else if (pid == 0)  // Child process
-    {
-        // Setup input redirection from a pipe or file
-        if (input_fd != -1)
-        {
-            if (dup2(input_fd, STDIN_FILENO) == -1)
-            {
-                perror("dup2 input_fd");
-                exit(EXIT_FAILURE);
-            }
-            close(input_fd);
-        }
+	pid_t	pid;
 
-        // Setup output redirection to a pipe or file
-        if (output_fd != -1)
-        {
-            if (dup2(output_fd, STDOUT_FILENO) == -1)
-            {
-                perror("dup2 output_fd");
-                exit(EXIT_FAILURE);
-            }
-            close(output_fd);
-        }
-
-        // Setup additional input/output redirections if specified in the command
-        setup_input_redirection(cmd->input);
-        setup_output_redirection(cmd->output);
-
-        // Check if there's an actual command to execute
-        if (cmd->argv && cmd->argv[0])
-        {
-            // Execute the command
-            if (handle_builtin(cmd, shell) == -1)
-                execute_command(cmd, env_list, shell);
-            exit(shell->exit_code); // Ensure child process exits after execution
-        }
-        else
-        {
-            // No actual command, just handle the redirections
-            exit(0);
-        }
-    }
-    else
-    {
-        if (input_fd != -1)
-            close(input_fd);
-
-        if (output_fd != -1)
-            close(output_fd);
-    }
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	else if (pid == 0)
+	{
+		if (input_fd != -1)
+		{
+			dup2(input_fd, STDIN_FILENO);
+			close(input_fd);
+		}
+		if (output_fd != -1)
+		{
+			dup2(output_fd, STDOUT_FILENO);
+			close(output_fd);
+		}
+		setup_input_redirection(cmd->input);
+		setup_output_redirection(cmd->output);
+		execute_command(cmd, env_list, shell);
+		exit(shell->exit_code);
+	}
 }
 
-
-
-// Execute the list of commands with piping
-void exec_start(t_command *commands, t_shell *shell)
+void	exec_start(t_command *commands, t_shell *shell)
 {
-    int pipe_fd[2];
-    int input_fd = -1;
-    t_command *cmd = commands;
-    pid_t pid;
-    int status;
+	int			pipe_fd[2];
+	int			input_fd;
+	int			output_fd;
+	t_command	*cmd;
+	pid_t		pid;
+	int			status;
 
-    while (cmd)
-    {
-        if (cmd->next != NULL)
-        {
-            if (pipe(pipe_fd) == -1)
-            {
-                perror("pipe");
-                exit(EXIT_FAILURE);
-            }
-        }
-        else
-        {
-            pipe_fd[0] = -1;
-            pipe_fd[1] = -1;
-        }
-
-        // Check if the command is a built-in and should not be forked
-        if (handle_builtin(cmd, shell) != -1)
-        {
-            // Built-in command was handled in the main process
-            // No forking needed; handle redirections and continue
-            if (cmd->next)
-            {
-                setup_output_redirection(cmd->output);
-                setup_input_redirection(cmd->input);
-            }
-        }
-        else
-        {
-            fork_and_execute(cmd, shell->env_list, input_fd, pipe_fd[1], shell);
-        }
-
-        if (input_fd != -1)
-            close(input_fd);
-        if (pipe_fd[1] != -1)
-            close(pipe_fd[1]);
-
-        input_fd = pipe_fd[0];
-        cmd = cmd->next;
-    }
-
-    // Wait for all child processes to complete
-    while ((pid = wait(&status)) > 0)
-    {
-        if (WIFEXITED(status))
-        {
-            shell->exit_code = WEXITSTATUS(status);
-        }
-        else if (WIFSIGNALED(status))
-        {
-            shell->exit_code = WTERMSIG(status) + 128;
-        }
-    }
+	input_fd = -1;
+	cmd = commands;
+	while (cmd)
+	{
+		if (cmd->next != NULL)
+		{
+			if (pipe(pipe_fd) == -1)
+			{
+				perror("pipe");
+				exit(EXIT_FAILURE);
+			}
+			output_fd = pipe_fd[1];
+		}
+		else
+		{
+			output_fd = -1;
+		}
+		fork_and_execute(cmd, shell->env_list, input_fd, output_fd, shell);
+		if (input_fd != -1)
+			close(input_fd);
+		if (cmd->next != NULL)
+			close(pipe_fd[1]);
+		if (cmd->next != NULL)
+			input_fd = pipe_fd[0];
+		else
+			input_fd = -1;
+		cmd = cmd->next;
+	}
+	while ((pid = wait(&status)) > 0)
+	{
+		if (WIFEXITED(status))
+			shell->exit_code = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			shell->exit_code = WTERMSIG(status) + 128;
+	}
 }
-
 
 // Function to free the command list
 void free_command2(t_command *cmd)

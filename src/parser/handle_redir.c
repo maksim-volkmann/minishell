@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:38:09 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/27 15:37:40 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/06/29 15:45:43 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ void	ft_handle_output(t_token *tokens, t_shell *shell, t_redirection *output)
 {
 	int	fd;
 
-	if (ft_check_filepath(tokens->next->token) == 0)
-	{
-		shell->exit_code = 1;
-		ft_putstr_fd("No such Directory\n", 2);
-		return ;
-	}
+	// if (ft_check_filepath(tokens->next->token) == 0)
+	// {
+	// 	shell->exit_code = 1;
+	// 	ft_putstr_fd("No such Directory\n", 2);
+	// 	return ;
+	// }
 	output->file = tokens->next->token;
 	if (tokens->type == GREAT)
 	{
@@ -38,12 +38,12 @@ void	ft_handle_output(t_token *tokens, t_shell *shell, t_redirection *output)
 		fd = open(output->file, O_WRONLY
 				| O_CREAT | O_APPEND, 0644);
 	}
-	if (fd < 0)
-	{
-		ft_putstr_fd(output->file, 2);
-		ft_putstr_fd(": Error creating file\n", 2);
-		shell->error_present = true;
-	}
+	// if (fd < 0)
+	// {
+	// 	ft_putstr_fd(output->file, 2);
+	// 	ft_putstr_fd(": Error creating file\n", 2);
+	// 	shell->error_present = true;
+	// }
 	close(fd);
 }
 
@@ -53,12 +53,12 @@ void	ft_handle_input(t_token *tokens, t_shell *shell, t_redirection *input)
 	{
 		input->type = REDIR_INPUT;
 		input->file = tokens->next->token;
-		if (access(input->file, F_OK) != -0)
-		{
-			fprintf(stderr, "no such file or directory: %s\n", input->file);
-			shell->exit_code = 1;
-			return ;
-		}
+		// if (access(input->file, F_OK) != -0)
+		// {
+		// 	fprintf(stderr, "no such file or directory: %s\n", input->file);
+		// 	shell->exit_code = 1;
+		// 	return ;
+		// }
 	}
 	else if (tokens->type == DLESS)
 	{
