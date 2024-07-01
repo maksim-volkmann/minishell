@@ -112,30 +112,48 @@ void print_command(t_command *cmd) {
 // Function to add an environment variable to the list
 void add_env_var(t_env_var **env_list, const char *key, const char *value)
 {
-    t_env_var *new_var = malloc(sizeof(t_env_var));
+    t_env_var *new_var;
     t_env_var *current;
+    t_env_var *prev = NULL;
 
+    new_var = malloc(sizeof(t_env_var));
     if (!new_var)
-        return;
-
+    {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
     new_var->key = ft_strdup(key);
-    new_var->value = ft_strdup(value);
+    if (value)
+    {
+        new_var->value = ft_strdup(value);
+    }
+    else
+    {
+        new_var->value = NULL;
+    }
     new_var->next = NULL;
 
-    if (!*env_list)
+    if (*env_list == NULL || ft_strcmp((*env_list)->key, key) > 0)
     {
+        new_var->next = *env_list;
         *env_list = new_var;
     }
     else
     {
         current = *env_list;
-        while (current->next)
+        while (current != NULL && ft_strcmp(current->key, key) < 0)
         {
+            prev = current;
             current = current->next;
         }
-        current->next = new_var;
+        new_var->next = current;
+        if (prev)
+        {
+            prev->next = new_var;
+        }
     }
 }
+
 
 void copy_env_vars(t_shell *shell, char **env)
 {
@@ -164,14 +182,17 @@ void copy_env_vars(t_shell *shell, char **env)
 
 void print_env_vars(t_env_var *env_list)
 {
-    t_env_var *current = env_list;
-
-    while (current)
-    {
-        printf("%s=%s\n", current->key, current->value);
-        current = current->next;
-    }
+	t_env_var *current = env_list;
+	while (current)
+	{
+		if (current->value)
+		{
+			printf("%s=%s\n", current->key, current->value);
+		}
+		current = current->next;
+	}
 }
+
 
 void print_command_details(t_command *cmds)
 {
@@ -336,7 +357,6 @@ int	main(int argc, char **argv, char **env)
 
 		ft_lexer(shell.input, &shell.tokens);
 		ft_parser(&shell, &shell.tokens);
-
 		// print_command_details(shell.cmds);
 		if (shell.cmds && shell.cmds->next == NULL)
 			execute_single_command(shell.cmds, &shell);
@@ -352,86 +372,6 @@ int	main(int argc, char **argv, char **env)
 	free_env_vars(shell.env_list);
 	return (shell.exit_code);
 }
-
-
-
-
-
-
-
-
-
-// int main(int argc, char **argv, char **env)
-// {
-// 	char	*input;
-// 	t_token	*tokens;
-// 	t_shell	shell;
-
-// 	shell.env_list = NULL;
-// 	copy_env_vars(&shell, env);
-// 	shell.exit_code = 0;
-
-// 	while (1)
-// 	{
-// 		shell.cmds = NULL;
-// 		tokens = NULL;
-// 		shell.error_present = false;
-
-// 		input = readline("minishell> ");
-// 		if (!input)
-// 			exit(0);
-// 		add_history(input);
-// 		input = ft_expander(input, &shell);
-
-// 		if (ft_strcmp(input, "") == 0)
-// 		{
-// 			free(input);
-// 			break ;
-// 		}
-
-// 		ft_lexer(input, &tokens);
-// 		ft_parser(&shell, &tokens);
-// 		if (shell.error_present == true)
-// 		{
-// 			free_command(shell.cmds);
-// 			free_token_list(tokens);
-// 			free(input);
-// 			continue ;
-// 		}
-// 		//command execv
-// 		exec_start(shell.cmds, &shell);
-// 		free_command(shell.cmds);
-// 		free_token_list(tokens);
-// 		free(input);
-// 	}
-// 	free_env_vars(shell.env_list);
-// 	return (0);
-// }
-
-// #define TESTER 1
-
-
-// TO DO
-// no expandir variables que se encuentren adentro de Q, quizas con un flag o algo
-
-// unir tokens que con WORD DQ y Q que esten consecutivos
-
-// checkear >">"
-
-
-	// print_env_vars(shell.env_list);
-// void handle_sigint(int sig)
-// {
-// 	printf("\n");
-// 	rl_on_new_line();
-// 	rl_replace_line("", 0);
-// 	rl_redisplay();
-// }
-
-// void	handle_sigquit(int sig)
-// {
-
-// }
 
 
 
