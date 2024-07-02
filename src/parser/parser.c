@@ -6,22 +6,12 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/05 17:11:52 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/26 14:43:27 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/06/28 13:34:02 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 #include <stdlib.h>
-
-// int	get_size(char **src)
-// {
-// 	int	size;
-
-// 	size = 0;
-// 	while (src[size] != NULL)
-// 		size++;
-// 	return (size);
-// }
 
 void	assign_to_darray(char **src, char **darray, int *i, int *j)
 {
@@ -53,3 +43,5 @@ void	ft_parser(t_shell *shell, t_token **tokens)
 // revisar que el file despues de un redir op no sea |
 
 // echo hola >> text1.txt >> text2.txt | echo telo > text3.txt
+
+// new->argv = NULL

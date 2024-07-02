@@ -1,18 +1,6 @@
 # minishell
 
-
 //TODO: check for 'EOF' and "EOF" and EOF. It saves with quotation marks.
-```
-bash-3.2$ cat << 'EOF'
-> aaa
-> "EOF"
-> 'EOF'
-> EOF
-aaa
-"EOF"
-'EOF'
-bash-3.2$
-```
 
 To Do:
 
@@ -39,67 +27,14 @@ To install the script, copy and run following command:
 ## TODO:
 
 1. Need to modify my own env to be able to use in execve.
-// TEST: echo -- -n "Hello, world!"
-
-[A-Z][a-z][_]
-
-bash-3.2$ /bin/echo "$123123"
-23123
-
-----------------------
-
-mvolkman$USERtext oui oui oui oui mvolkman oui mvolkman
-mvolkman$USERtext oui oui oui oui mvolkman oui mvolkman [SPACE HERE]
-
-there should a space at the end.
-
-minishell> echo '' ""
-
-minishell>
-bash-3.2$ echo '' ""
-[SPACE HERE]
-bash-3.2$
-bash-3.2$ /bin/echo $USER$TESTNOTFOUND$HOME$
-adrherna/Users/adrherna$
-
-This should not be interpreted as redirection:
-minishell> ">>" asd          <- this is done
-
-
-
-this segfault happens when redirecting with no existing command.
-also like this:
-minishell> >> efe
-
-------
-
 
  ctrl + \ . - interrupting running processes
 
 
-#REDIRECTIONS seg faults
-24
+#REDIRECTIONS
 
+---------->this runs only the second command:
+/bin/echo hi >./outfiles/outfile01 | /bin/echo bye
 
-echo
-Echo
-ECho
-ECHo
-ECHO
-eCHO
-ecHO
-echO
-EchO
-eCHo
-
-pwd
-PWD
-Pwd
-PWd
-pWD
-
-env
-ENV
-Env
-ENv
-eVN
+----------> this doesnt run at all:
+ls >./outfiles/outfile01
