@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   darray.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:46:42 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/03 12:55:00 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/03 15:19:42 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,10 +78,15 @@ char **ft_get_darray(t_token **tokens, t_shell **shell, t_redirection *input, t_
 			ft_handle_redir((*tokens), (*shell), input, output);
 			//check when no file is given:
 			if ((*tokens)->next == NULL)
+			{
 				(*tokens) = (*tokens)->next;
+				continue ;
+			}
 			else
-			(*tokens) = (*tokens)->next->next;
-			continue ;
+			{
+				(*tokens) = (*tokens)->next->next;
+				continue ;
+			}
 		}
 		darray[i] = (*tokens)->token;
 		i++;

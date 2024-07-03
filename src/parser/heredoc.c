@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 12:17:44 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/03 12:22:21 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/03 15:34:15 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ char	*ft_heredoc_join(char *s1, char *s2)
 		constr[i] = s1[i];
 		i++;
 	}
-	constr[i++] = '\n';
+	if (ft_strlen(s1) != 0)
+		constr[i++] = '\n';
 	x = 0;
 	while (s2[x] != '\0')
 		constr[i++] = s2[x++];
@@ -115,10 +116,14 @@ void	ft_heredoc_loop(t_shell *shell)
 	char	*content;
 	char	*line;
 	int		i;
+
 	delimiters = ft_extract_delimiters(shell->tokens);
 	del_count = ft_count_delimiters(shell->tokens);
 	content = ft_strdup("");
 	i = 0;
+
+	if (ft_count_delimiters(shell->tokens) == 0)
+		return ;
 	while (del_count != 0)
 	{
 		line = readline("> ");

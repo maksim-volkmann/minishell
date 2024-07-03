@@ -33,7 +33,7 @@ int	ft_manage_input(t_shell *shell)
 	if (!shell->input)
 		ft_exit(shell);
 	add_history(shell->input);
-	ft_heredoc_check(shell);
+	// ft_heredoc_check(shell);
 	shell->input = ft_expander(shell->input, shell);
 	if (ft_strcmp(shell->input, "") == 0)
 	{
@@ -104,16 +104,6 @@ void	execute_single_command(t_command *cmd, t_shell *shell)
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
 int	main(int argc, char **argv, char **env)
 {
 	t_shell	shell;
@@ -136,8 +126,8 @@ int	main(int argc, char **argv, char **env)
 
 		if (!shell.input)
 			ft_exit(&shell);
-
 		add_history(shell.input);
+		ft_heredoc_check(&shell);
 		shell.input = ft_expander(shell.input, &shell);
 
 		if (ft_strcmp(shell.input, "") == 0)
@@ -148,7 +138,7 @@ int	main(int argc, char **argv, char **env)
 
 		ft_lexer(shell.input, &shell.tokens);
 		ft_parser(&shell, &shell.tokens);
-		print_command_details(shell.cmds);
+		// print_command_details(shell.cmds);
 		if (shell.cmds && shell.cmds->next == NULL)
 			execute_single_command(shell.cmds, &shell);
 		else

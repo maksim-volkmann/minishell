@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:48:41 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/03 12:20:19 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/03 15:33:16 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ int	ft_check_filepath(char *filepath)
 int ft_open_file(char *filename, char *content, t_shell *shell)
 {
 	int	fd;
-
 	ssize_t bytes_written;
+
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
