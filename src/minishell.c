@@ -71,7 +71,7 @@ int	ft_manage_errors(t_shell *shell)
 // 		ft_parser(&shell, &shell.tokens);
 // 		if (ft_manage_errors(&shell) == 1)
 // 			continue ;
-// 		else if (shell.cmds->argv[0] && shell.cmds->next == NULL)
+// 		if (shell.cmds->argv[0] && shell.cmds->next == NULL)
 // 		{
 // 			if (ft_strcmp(shell.cmds->argv[0], "exit") == 0)
 // 			{
