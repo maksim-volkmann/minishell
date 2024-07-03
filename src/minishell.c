@@ -171,7 +171,7 @@ int	main(int argc, char **argv, char **env)
 
 		ft_lexer(shell.input, &shell.tokens);
 		ft_parser(&shell, &shell.tokens);
-		print_command_details(shell.cmds);
+		// print_command_details(shell.cmds);
 		if (shell.cmds && shell.cmds->next == NULL)
 			execute_single_command(shell.cmds, &shell);
 		else
