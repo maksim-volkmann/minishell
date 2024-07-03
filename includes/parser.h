@@ -51,5 +51,6 @@ char		*ft_sq_heredoc(char *input, int *i);
 
 // heredoc.c
 void		ft_heredoc_loop(t_shell *shell);
+char	*ft_append_newline(char *str);
 // char		*ft_heredoc_join(char *s1, char *s2);
 #endif
