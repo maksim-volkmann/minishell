@@ -82,7 +82,7 @@ void print_redirection(t_redirection *redir);
 void print_command(t_command *cmd);
 void add_env_var(t_env_var **env_list, const char *key, const char *value);
 void copy_env_vars(t_shell *shell, char **env);
-void print_env_vars(t_env_var *env_list);
 void print_command_details(t_command *cmds);
+void print_env_vars(t_env_var *env_list);
 
 #endif

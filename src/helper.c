@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 11:48:49 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/02 11:52:14 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/03 10:35:41 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,13 +191,13 @@ void print_command_details(t_command *cmds)
     while (current_cmd)
     {
         printf("Command:\n");
+
         // Print all arguments
-		int i = 0;
-        for (; current_cmd->argv[i]; i++)
+        for (i = 0; current_cmd->argv[i]; i++)
         {
             printf("  Arg[%d]: %s\n", i, current_cmd->argv[i]);
         }
-		//printf("arg count: %d\n", i);
+
         // Print input redirection details if present
         if (current_cmd->input)
         {
@@ -220,6 +220,20 @@ void print_command_details(t_command *cmds)
         else
         {
             printf("  Output Redirection: None\n");
+        }
+
+        // Print next command details if present
+        if (current_cmd->next)
+        {
+            printf("  Next Command:\n");
+            for (int j = 0; current_cmd->next->argv[j]; j++)
+            {
+                printf("    Next Arg[%d]: %s\n", j, current_cmd->next->argv[j]);
+            }
+        }
+        else
+        {
+            printf("  Next Command: None\n");
         }
 
         current_cmd = current_cmd->next;
