@@ -129,7 +129,7 @@ int	main(int argc, char **argv, char **env)
 		add_history(shell.input);
 		ft_heredoc_check(&shell);
 		shell.input = ft_expander(shell.input, &shell);
-
+		printf("%s\n", shell.input);
 		if (ft_strcmp(shell.input, "") == 0)
 		{
 			free(shell.input);
@@ -138,7 +138,7 @@ int	main(int argc, char **argv, char **env)
 
 		ft_lexer(shell.input, &shell.tokens);
 		ft_parser(&shell, &shell.tokens);
-		// print_command_details(shell.cmds);
+		print_command_details(shell.cmds);
 		if (shell.cmds && shell.cmds->next == NULL)
 			execute_single_command(shell.cmds, &shell);
 		else

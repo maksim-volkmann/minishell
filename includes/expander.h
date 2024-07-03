@@ -20,5 +20,6 @@ char	*ft_join_input(char *s1, char *s2);
 char	*ft_extract_segment_dq(char *input, int *i);
 char	*ft_segment_helper(char *input, int *i);
 char	*ft_quote_string(char *input);
+char	*ft_strdup_dq(const char *s);
 char	*ft_expand_var_dq(t_shell *shell, char *var);
 #endif

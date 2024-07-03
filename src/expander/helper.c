@@ -83,7 +83,7 @@ char	*ft_expand_var(t_shell *shell, char *var)
 		{
 			exp_var = current->value;
 			free(var);
-			return (ft_strdup(current->value));
+			return (ft_strdup_dq(current->value));
 		}
 
 		current = current->next;

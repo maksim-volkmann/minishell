@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:38:09 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/03 15:30:53 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/03 16:27:05 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,21 +57,6 @@ void	ft_handle_input(t_token *tokens, t_shell *shell, t_redirection *input)
 
 void	ft_handle_redir(t_token *tokens, t_shell *shell, t_redirection *input, t_redirection *output)
 {
-	if (tokens->next == NULL)
-	{
-		fprintf(stderr, "Non existing file out or in file\n");
-		shell->exit_code = 2;
-		shell->error_present = true;
-		return ;
-	}
-	if (tokens->next->type == PIPE)
-	{
-		shell->exit_code = 1;
-		ft_putstr_fd("syntax error near unexpected token ", 2);
-		ft_putstr_fd("'|'\n", 2);
-		shell->error_present = true;
-		return ;
-	}
 	if (tokens->type == GREAT || tokens->type == DGREAT)
 	{
 		ft_handle_output(tokens, shell, output);
