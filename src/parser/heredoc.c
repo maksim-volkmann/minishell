@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 12:17:44 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/02 11:46:38 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/03 12:22:21 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/_types/_null.h>
+
+char	*ft_append_newline(char *str)
+{
+	size_t	len;
+	char	*new_str;
+	if (!str)
+		return (NULL);
+	len = ft_strlen(str);
+	new_str = malloc(len + 2);
+	if (!new_str)
+	{
+		free(str);
+		return (NULL);
+	}
+	ft_strlcpy(new_str, str, len + 1);
+	new_str[len] = '\n';
+	new_str[len + 1] = '\0';
+	return (new_str);
+}
+
 
 char	*ft_heredoc_join(char *s1, char *s2)
 {
@@ -90,12 +110,11 @@ char	**ft_extract_delimiters(t_token *tokens)
 
 void	ft_heredoc_loop(t_shell *shell)
 {
-	char		**delimiters;
-	int			del_count;
-	char		*content;
-	char		*line;
-	int			i;
-
+	char	**delimiters;
+	int		del_count;
+	char	*content;
+	char	*line;
+	int		i;
 	delimiters = ft_extract_delimiters(shell->tokens);
 	del_count = ft_count_delimiters(shell->tokens);
 	content = ft_strdup("");
@@ -110,10 +129,12 @@ void	ft_heredoc_loop(t_shell *shell)
 			del_count -= 1;
 			i++;
 		}
-		else if (i >= del_count)
-			content = ft_heredoc_join(line, content);
+		else if (ft_count_delimiters(shell->tokens) > 1 && i >= del_count - 1)
+			content = ft_heredoc_join(content, line);
+		else if (i >= del_count - 1)
+			content = ft_heredoc_join(content, line);
 	}
-	ft_open_file("./tmp/heredoc", content, shell);
+	ft_open_file("./tmp/heredoc.txt", content, shell);
 	ft_free_heredoc(content, delimiters);
 }
 
@@ -196,3 +217,4 @@ void	ft_heredoc_loop(t_shell *shell)
 // 		shell->error_present = true;
 // 	return (filename);
 // }
+
