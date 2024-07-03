@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/27 12:02:48 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/02 11:52:29 by adrherna         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -81,6 +69,7 @@ typedef struct s_shell
 }	t_shell;
 
 int		ft_strcmp(const char *s1, const char *s2);
+int	is_builtin(char *command);
 
 // helper.c
 

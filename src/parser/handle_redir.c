@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redir.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:38:09 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/02 10:26:18 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/03 10:10:29 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,12 @@ void	ft_handle_output(t_token *tokens, t_shell *shell, t_redirection *output)
 {
 	int	fd;
 
-	if (ft_check_filepath(tokens->next->token) == 0)
-	{
-		shell->exit_code = 1;
-		ft_putstr_fd("No such Directory\n", 2);
-		shell->error_present = true;
-		return ;
-	}
+	// if (ft_check_filepath(tokens->next->token) == 0)
+	// {
+	// 	shell->exit_code = 1;
+	// 	ft_putstr_fd("No such Directory\n", 2);
+	// 	return ;
+	// }
 	output->file = tokens->next->token;
 	if (tokens->type == GREAT)
 	{
@@ -35,12 +34,12 @@ void	ft_handle_output(t_token *tokens, t_shell *shell, t_redirection *output)
 	{
 		output->type = REDIR_APPEND;
 	}
-	if (fd < 0)
-	{
-		ft_putstr_fd(output->file, 2);
-		ft_putstr_fd(": Error creating file\n", 2);
-		shell->error_present = true;
-	}
+	// if (fd < 0)
+	// {
+	// 	ft_putstr_fd(output->file, 2);
+	// 	ft_putstr_fd(": Error creating file\n", 2);
+	// 	shell->error_present = true;
+	// }
 	close(fd);
 }
 
@@ -50,6 +49,17 @@ void	ft_handle_input(t_token *tokens, t_shell *shell, t_redirection *input)
 	{
 		input->type = REDIR_INPUT;
 		input->file = tokens->next->token;
+		// if (access(input->file, F_OK) != -0)
+		// {
+		// 	fprintf(stderr, "no such file or directory: %s\n", input->file);
+		// 	shell->exit_code = 1;
+		// 	return ;
+		// }
+	}
+	else if (tokens->type == DLESS)
+	{
+		input->type = REDIR_HEREDOC;
+		input->file = ft_heredoc(tokens->next->token, shell);
 	}
 }
 

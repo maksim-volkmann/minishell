@@ -3,6 +3,7 @@
 #include "../includes/builtins.h"
 #include "../includes/parser.h"
 #include "../includes/lexer.h"
+#include "../includes/minishell.h"
 #include <stdio.h>
 
 void	ft_exit(t_shell *shell)
@@ -54,58 +55,147 @@ int	ft_manage_errors(t_shell *shell)
 	return (0);
 }
 
-// int main(int argc, char **argv, char **env)
-// {
-// 	t_token	*tokens;
-// 	t_shell	shell;
-
-// 	ft_init_shell(&shell, env);
-// 	while (1)
-// 	{
-// 		shell.cmds = NULL;
-// 		shell.tokens = NULL;
-// 		shell.input = readline("minishell> ");
-// 		if (ft_manage_input(&shell) == 1)
-// 			continue ;
-// 		ft_lexer(shell.input, &shell.tokens);
-// 		ft_parser(&shell, &shell.tokens);
-// 		if (ft_manage_errors(&shell) == 1)
-// 			continue ;
-// 		if (shell.cmds->argv[0] && shell.cmds->next == NULL)
-// 		{
-// 			if (ft_strcmp(shell.cmds->argv[0], "exit") == 0)
-// 			{
-// 				shell.exit_code = execute_exit(shell.cmds->argv, &shell);
-// 			}
-// 			if (ft_strcmp(shell.cmds->argv[0], "echo") == 0)
-// 				execute_echo(shell.cmds->argv);
-// 			else
-// 				execute_commands(shell.cmds, &shell);
-// 		}
-// 		else
-// 		{
-// 			execute_commands(shell.cmds, &shell);
-// 		}
-// 		free_command(shell.cmds);
-// 		free_token_list(shell.tokens);
-// 		free(shell.input);
-// 		shell.input = NULL;
-// 	}
-// 	free_env_vars(shell.env_list);
-// 	return (shell.exit_code);
-// }
-
-		// print_command_details(shell.cmds);
-        // print_token_list(shell.tokens);
-		// print_env_vars(shell.env_list);
-
-int main(int argc, char **argv, char **env)
+void print_env_vars(t_env_var *env_list)
 {
-	//char	*input;
-	t_token	*tokens;
+	t_env_var *current = env_list;
+	while (current)
+	{
+		if (current->value)
+		{
+			printf("%s=%s\n", current->key, current->value);
+		}
+		current = current->next;
+	}
+}
+
+
+void print_command_details(t_command *cmds)
+{
+    t_command *current_cmd = cmds;
+    int i;
+
+    while (current_cmd)
+    {
+        printf("Command:\n");
+
+        // Print all arguments
+        for (i = 0; current_cmd->argv[i]; i++)
+        {
+            printf("  Arg[%d]: %s\n", i, current_cmd->argv[i]);
+        }
+
+        // Print input redirection details if present
+        if (current_cmd->input)
+        {
+            printf("  Input Redirection:\n");
+            printf("    Type: %d\n", current_cmd->input->type);
+            printf("    File: %s\n", current_cmd->input->file);
+        }
+        else
+        {
+            printf("  Input Redirection: None\n");
+        }
+
+        // Print output redirection details if present
+        if (current_cmd->output)
+        {
+            printf("  Output Redirection:\n");
+            printf("    Type: %d\n", current_cmd->output->type);
+            printf("    File: %s\n", current_cmd->output->file);
+        }
+        else
+        {
+            printf("  Output Redirection: None\n");
+        }
+
+        // Print next command details if present
+        if (current_cmd->next)
+        {
+            printf("  Next Command:\n");
+            for (int j = 0; current_cmd->next->argv[j]; j++)
+            {
+                printf("    Next Arg[%d]: %s\n", j, current_cmd->next->argv[j]);
+            }
+        }
+        else
+        {
+            printf("  Next Command: None\n");
+        }
+
+        current_cmd = current_cmd->next;
+    }
+}
+
+
+void	ft_init_shell(t_shell *shell, char *env[])
+{
+	shell->env_list = NULL;
+	copy_env_vars(shell, env);
+	shell->exit_code = 0;
+}
+
+void	handle_redirection(t_command *cmd)
+{
+	if (cmd->input)
+		setup_input_redirection(cmd->input);
+	if (cmd->output)
+		setup_output_redirection(cmd->output);
+}
+
+int	is_builtin(char *command)
+{
+	return (ft_strcmp(command, "echo") == 0 || ft_strcmp(command, "exit") == 0);
+}
+void	execute_single_command(t_command *cmd, t_shell *shell)
+{
+	if (cmd->argv[0] == NULL)
+	{
+		if (cmd->input && cmd->input->file)
+		{
+			if (access(cmd->input->file, F_OK) != 0)
+			{
+				fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->input->file);
+				shell->exit_code = 1;
+				return;
+			}
+		}
+		if (cmd->output && cmd->output->file)
+		{
+			int fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (fd == -1)
+			{
+				fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->output->file);
+				shell->exit_code = 1;
+				return;
+			}
+			close(fd);
+		}
+		return;
+	}
+	if (is_builtin(cmd->argv[0]))
+	{
+		handle_builtin(cmd, shell);
+	}
+	else
+	{
+		exec_start(cmd, shell);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+int	main(int argc, char **argv, char **env)
+{
 	t_shell	shell;
 
-	// ft_bzero(&shell, sizeof shell);
 	ft_init_shell(&shell, env);
 
 	while (1)
@@ -117,8 +207,7 @@ int main(int argc, char **argv, char **env)
 			shell.input = readline("minishell> ");
 		else
 		{
-			char *line;
-			line = get_next_line(fileno(stdin));
+			char *line = get_next_line(fileno(stdin));
 			shell.input = ft_strtrim(line, "\n");
 			free(line);
 		}
@@ -132,65 +221,25 @@ int main(int argc, char **argv, char **env)
 		if (ft_strcmp(shell.input, "") == 0)
 		{
 			free(shell.input);
-			break ;
+			continue;
 		}
 
 		ft_lexer(shell.input, &shell.tokens);
 		ft_parser(&shell, &shell.tokens);
-		// PRINTING SHELL STRUCT!!!
 		// print_command_details(shell.cmds);
-		// PRINT ENV VARIABLES
-		// print_env_vars(shell.env_list);
-		if (shell.error_present == true)
-		{
-			free_command(shell.cmds);
-			free_token_list(shell.tokens);
-			free(shell.input);
-			continue ;
-		}
-		else if (shell.cmds && shell.cmds->next == NULL)
-		{
-				// printf("ping2\n");
-			// Check for built-in commands
-			if (ft_strcmp(shell.cmds->argv[0], "exit") == 0)
-			{
-				shell.exit_code = execute_exit(shell.cmds->argv, &shell);
-				// printf("ping3\n");
-				// free(input);
-				// free_command(shell.cmds);
-				// free_token_list(tokens);
-				// break;
-			}
-			// char buffer[1025];
-			// if (ft_strcmp(shell.cmds->argv[0], "pwd") == 0)
-			// 	printf("%s\n", getcwd(buffer, sizeof(buffer)));
-			if (ft_strcmp(shell.cmds->argv[0], "echo") == 0)
-				execute_echo(shell.cmds->argv);
-			else
-				execute_commands(shell.cmds, &shell);
-			// else if (ft_strcmp(shell.cmds->argv[0], "cd") == 0)
-			//  execute_cd(shell.cmds->argv);
-			// else if (ft_strcmp(shell.cmds->argv[0], "pwd") == 0)
-			//  execute_pwd();
-			// else if (ft_strcmp(shell.cmds->argv[0], "export") == 0)
-			//  execute_export(shell.cmds->argv, shell.env_list);
-			// else if (ft_strcmp(shell.cmds->argv[0], "unset") == 0)
-			//  execute_unset(shell.cmds->argv, shell.env_list);
-			// else if (ft_strcmp(shell.cmds->argv[0], "env") == 0)
-			//  print_env_vars(shell.env_list);
-		}
+		if (shell.cmds && shell.cmds->next == NULL)
+			execute_single_command(shell.cmds, &shell);
 		else
-		{
-			execute_commands(shell.cmds, &shell);
-		}
+			exec_start(shell.cmds, &shell);
 
-        free_command(shell.cmds);
-        free_token_list(shell.tokens);
-        free(shell.input);
+		free_command(shell.cmds);
+		free_token_list(shell.tokens);
+		free(shell.input);
 		shell.input = NULL;
 	}
+
 	free_env_vars(shell.env_list);
-	return shell.exit_code;
+	return (shell.exit_code);
 }
 
 // #define TESTER 1
