@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 11:48:49 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/03 10:35:41 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/03 11:03:32 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,28 +122,45 @@ void print_command(t_command *cmd)
 // Function to add an environment variable to the list
 void add_env_var(t_env_var **env_list, const char *key, const char *value)
 {
-    t_env_var *new_var = malloc(sizeof(t_env_var));
+    t_env_var *new_var;
     t_env_var *current;
+    t_env_var *prev = NULL;
 
+    new_var = malloc(sizeof(t_env_var));
     if (!new_var)
-        return;
-
+    {
+        perror("malloc");
+        exit(EXIT_FAILURE);
+    }
     new_var->key = ft_strdup(key);
-    new_var->value = ft_strdup(value);
+    if (value)
+    {
+        new_var->value = ft_strdup(value);
+    }
+    else
+    {
+        new_var->value = NULL;
+    }
     new_var->next = NULL;
 
-    if (!*env_list)
+    if (*env_list == NULL || ft_strcmp((*env_list)->key, key) > 0)
     {
+        new_var->next = *env_list;
         *env_list = new_var;
     }
     else
     {
         current = *env_list;
-        while (current->next)
+        while (current != NULL && ft_strcmp(current->key, key) < 0)
         {
+            prev = current;
             current = current->next;
         }
-        current->next = new_var;
+        new_var->next = current;
+        if (prev)
+        {
+            prev->next = new_var;
+        }
     }
 }
 
@@ -174,13 +191,15 @@ void copy_env_vars(t_shell *shell, char **env)
 
 void print_env_vars(t_env_var *env_list)
 {
-    t_env_var *current = env_list;
-
-    while (current)
-    {
-        printf("%s=%s\n", current->key, current->value);
-        current = current->next;
-    }
+	t_env_var *current = env_list;
+	while (current)
+	{
+		if (current->value)
+		{
+			printf("%s=%s\n", current->key, current->value);
+		}
+		current = current->next;
+	}
 }
 
 void print_command_details(t_command *cmds)
