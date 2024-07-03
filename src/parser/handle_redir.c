@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:38:09 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/03 10:10:29 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/03 10:33:40 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,6 @@ void	ft_handle_input(t_token *tokens, t_shell *shell, t_redirection *input)
 		// 	shell->exit_code = 1;
 		// 	return ;
 		// }
-	}
-	else if (tokens->type == DLESS)
-	{
-		input->type = REDIR_HEREDOC;
-		input->file = ft_heredoc(tokens->next->token, shell);
 	}
 }
 

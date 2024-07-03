@@ -48,7 +48,6 @@ char *create_cmd_path(char *dir, char *cmd);
 char *find_correct_path(char *cmd, t_env_var *env_list);
 void setup_input_redirection(t_redirection *input);
 void setup_output_redirection(t_redirection *output);
-void print_env_vars(t_env_var *env_list);
 void execute_echo(char **argv);
 // void execute_pwd(void);
 int execute_exit(char **argv, t_shell *shell);
