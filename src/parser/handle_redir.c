@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:38:09 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/03 11:06:58 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/03 12:59:24 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ void	ft_handle_redir(t_token *tokens, t_shell *shell, t_redirection *input, t_re
 {
 	if (tokens->next == NULL)
 	{
-		printf("Non existing file out or in file\n");
-		shell->exit_code = 1;
+		fprintf(stderr, "Non existing file out or in file\n");
+		shell->exit_code = 2;
 		shell->error_present = true;
 		return ;
 	}

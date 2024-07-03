@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:46:42 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/01 15:21:41 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/03 12:55:00 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,9 @@ char **ft_get_darray(t_token **tokens, t_shell **shell, t_redirection *input, t_
 		{
 			ft_handle_redir((*tokens), (*shell), input, output);
 			//check when no file is given:
-			// if ((*tokens)->next == NULL)
-				// (*tokens) = (*tokens)->next;
-			// else
+			if ((*tokens)->next == NULL)
+				(*tokens) = (*tokens)->next;
+			else
 			(*tokens) = (*tokens)->next->next;
 			continue ;
 		}
