@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_redir.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:38:09 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/03 15:30:53 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/03 15:50:31 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	ft_handle_input(t_token *tokens, t_shell *shell, t_redirection *input)
 		input->type = REDIR_HEREDOC;
 		input->file = ft_strdup("./tmp/heredoc.txt");
 	}
+
 }
 
 void	ft_handle_redir(t_token *tokens, t_shell *shell, t_redirection *input, t_redirection *output)

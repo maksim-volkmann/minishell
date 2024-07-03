@@ -604,11 +604,11 @@ void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell)
 {
     char *executable_path;
 
-    if (handle_builtin(cmd, shell) != -1)
-    {
-        // Built-in command was handled, so return
-        return;
-    }
+    // if (handle_builtin(cmd, shell) != -1)
+    // {
+    //     // Built-in command was handled, so return
+    //     return;
+    // }
 
     if (ft_strchr(cmd->argv[0], '/') != NULL)
     {
@@ -655,34 +655,47 @@ void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell)
     exit(EXIT_FAILURE);
 }
 
-void	fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd, t_shell *shell)
+void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd, t_shell *shell)
 {
-	pid_t	pid;
+    pid_t pid;
 
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	else if (pid == 0)
-	{
-		if (input_fd != -1)
-		{
-			dup2(input_fd, STDIN_FILENO);
-			close(input_fd);
-		}
-		if (output_fd != -1)
-		{
-			dup2(output_fd, STDOUT_FILENO);
-			close(output_fd);
-		}
-		setup_input_redirection(cmd->input);
-		setup_output_redirection(cmd->output);
-		execute_command(cmd, env_list, shell);
-		exit(shell->exit_code);
-	}
+    pid = fork();
+    if (pid == -1)
+    {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
+    else if (pid == 0)
+    {
+        if (input_fd != -1)
+        {
+            dup2(input_fd, STDIN_FILENO);
+            close(input_fd);
+        }
+        if (output_fd != -1)
+        {
+            dup2(output_fd, STDOUT_FILENO);
+            close(output_fd);
+        }
+        setup_input_redirection(cmd->input);
+        setup_output_redirection(cmd->output);
+        execute_command(cmd, env_list, shell);
+        exit(shell->exit_code);
+    }
+    else
+    {
+        waitpid(pid, &shell->exit_code, 0);
+        if (WIFEXITED(shell->exit_code))
+        {
+            shell->exit_code = WEXITSTATUS(shell->exit_code);
+        }
+        else if (WIFSIGNALED(shell->exit_code))
+        {
+            shell->exit_code = WTERMSIG(shell->exit_code) + 128;
+        }
+    }
 }
+
 
 void exec_start(t_command *commands, t_shell *shell)
 {
@@ -694,6 +707,22 @@ void exec_start(t_command *commands, t_shell *shell)
 
 	while (cmd)
 	{
+
+		 // Check input files before executing any command
+		// if (cmd->input)
+		// {
+		// 	printf("ping1\n");
+		// 	int fd = open(cmd->input->file, O_RDONLY);
+		// 	if (fd == -1)
+		// 	{
+		// 		perror(cmd->input->file);
+		// 		printf("ping2\n");
+		// 		shell->exit_code = 1;
+		// 		cmd = cmd->next;
+		// 		continue;
+		// 	}
+		// 	close(fd);
+		// }
 		if (cmd->next != NULL)
 		{
 			if (pipe(pipe_fd) == -1)
