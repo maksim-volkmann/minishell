@@ -6,178 +6,53 @@
 #include "../includes/minishell.h"
 #include <stdio.h>
 
-// extern int rl_replace_line(const char *text, int clear_undo);
-
-void	leaks(void)
+void	ft_exit(t_shell *shell)
 {
-	system("leaks minishell");
+	free_env_vars(shell->env_list);
+	// free(shell->input);
+	exit(shell->exit_code);
 }
 
-void free_env_vars(t_env_var *env_list)
+void	ft_init_shell(t_shell *shell, char *env[])
 {
-    t_env_var *current;
-    t_env_var *next;
-
-    current = env_list;
-    while (current != NULL) {
-        next = current->next;
-        free(current->key);
-        free(current->value);
-        free(current);
-        current = next;
-    }
+	shell->env_list = NULL;
+	copy_env_vars(shell, env);
+	shell->exit_code = 0;
 }
 
-const char* get_token_type_string(t_token_type type) {
-    switch (type) {
-        case LESS:    return "LESS";
-        case GREAT:   return "GREAT";
-        case PIPE:    return "PIPE";
-        case LPAR:    return "LPAR";
-        case RPAR:    return "RPAR";
-        case WORD:    return "WORD";
-        case QUOTE:   return "QUOTE";
-        case DQUOTE:  return "DQUOTE";
-        case DLESS:   return "DLESS";
-        case DGREAT:  return "DGREAT";
-        case AND:     return "AND";
-        case DAND:    return "DAND";
-        case NUM:     return "NUM";
-        case SPACES:  return "SPACES";
-        default:      return "UNKNOWN";
-    }
-}
-
-// Function to print the linked list
-void print_token_list(t_token *head) {
-    t_token *current = head;
-
-    while (current != NULL) {
-        printf("Token: |%s|, Type: %s\n", current->token, get_token_type_string(current->type));
-        current = current->next;
-    }
-}
-
-const char* redir_type_to_string(t_redir_type type) {
-    switch (type) {
-        case REDIR_NONE: return "REDIR_NONE";
-        case REDIR_INPUT: return "REDIR_INPUT";
-        case REDIR_OUTPUT: return "REDIR_OUTPUT";
-        case REDIR_APPEND: return "REDIR_APPEND";
-        case REDIR_HEREDOC: return "REDIR_HEREDOC";
-        default: return "UNKNOWN";
-    }
-}
-
-void print_redirection(t_redirection *redir) {
-    if (redir != NULL) {
-        printf("  Redirection Type: %s\n", redir_type_to_string(redir->type));
-        if (redir->file != NULL) {
-            printf("  Redirection File: %s\n", redir->file);
-        } else {
-            printf("  Redirection File: NULL\n");
-        }
-    } else {
-        printf("  Redirection: NULL\n");
-    }
-}
-
-void print_command(t_command *cmd) {
-    int i;
-    while (cmd != NULL) {
-        printf("Command:\n");
-
-        if (cmd->argv != NULL) {
-            printf("  Arguments: ");
-            for (i = 0; cmd->argv[i] != NULL; i++) {
-                printf("|%s|", cmd->argv[i]);
-            }
-            printf("\n");
-        } else {
-            printf("  Arguments: NULL\n");
-        }
-
-        printf("Input:\n");
-        print_redirection(cmd->input);
-
-        printf("Output:\n");
-        print_redirection(cmd->output);
-
-        cmd = cmd->next;
-
-        printf("\n");
-    }
-}
-
-// Function to add an environment variable to the list
-void add_env_var(t_env_var **env_list, const char *key, const char *value)
+void	ft_heredoc_check(t_shell *shell)
 {
-    t_env_var *new_var;
-    t_env_var *current;
-    t_env_var *prev = NULL;
-
-    new_var = malloc(sizeof(t_env_var));
-    if (!new_var)
-    {
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
-    new_var->key = ft_strdup(key);
-    if (value)
-    {
-        new_var->value = ft_strdup(value);
-    }
-    else
-    {
-        new_var->value = NULL;
-    }
-    new_var->next = NULL;
-
-    if (*env_list == NULL || ft_strcmp((*env_list)->key, key) > 0)
-    {
-        new_var->next = *env_list;
-        *env_list = new_var;
-    }
-    else
-    {
-        current = *env_list;
-        while (current != NULL && ft_strcmp(current->key, key) < 0)
-        {
-            prev = current;
-            current = current->next;
-        }
-        new_var->next = current;
-        if (prev)
-        {
-            prev->next = new_var;
-        }
-    }
+	ft_lexer(shell->input, &shell->tokens);
+	ft_heredoc_loop(shell);
+	free_token_list(shell->tokens);
+	shell->tokens = NULL;
 }
 
-
-void copy_env_vars(t_shell *shell, char **env)
+int	ft_manage_input(t_shell *shell)
 {
-    int        i;
-    char    *key;
-    char    *value;
-    char    *sep;
+	if (!shell->input)
+		ft_exit(shell);
+	add_history(shell->input);
+	ft_heredoc_check(shell);
+	shell->input = ft_expander(shell->input, shell);
+	if (ft_strcmp(shell->input, "") == 0)
+	{
+		free(shell->input);
+		return (1);
+	}
+	return (0);
+}
 
-    i = 0;
-    while (env[i])
-    {
-        sep = ft_strchr(env[i], '=');
-        if (!sep)
-        {
-            i++;
-            continue;
-        }
-        key = ft_substr(env[i], 0, sep - env[i]);
-        value = ft_strdup(sep + 1);
-        add_env_var(&shell->env_list, key, value);
-        free(key);
-        free(value);
-        i++;
-    }
+int	ft_manage_errors(t_shell *shell)
+{
+	if (shell->error_present == true)
+	{
+		free_command(shell->cmds);
+		free_token_list(shell->tokens);
+		free(shell->input);
+		return (1);
+	}
+	return (0);
 }
 
 void print_env_vars(t_env_var *env_list)
@@ -252,12 +127,6 @@ void print_command_details(t_command *cmds)
 }
 
 
-void	ft_exit(t_shell *shell)
-{
-	free_env_vars(shell->env_list);
-	// free(shell->input);
-	exit(shell->exit_code);
-}
 void	ft_init_shell(t_shell *shell, char *env[])
 {
 	shell->env_list = NULL;
@@ -372,6 +241,31 @@ int	main(int argc, char **argv, char **env)
 	free_env_vars(shell.env_list);
 	return (shell.exit_code);
 }
+
+// #define TESTER 1
+
+
+// TO DO
+// no expandir variables que se encuentren adentro de Q, quizas con un flag o algo
+
+// unir tokens que con WORD DQ y Q que esten consecutivos
+
+// checkear >">"
+
+
+	// print_env_vars(shell.env_list);
+// void handle_sigint(int sig)
+// {
+// 	printf("\n");
+// 	rl_on_new_line();
+// 	rl_replace_line("", 0);
+// 	rl_redisplay();
+// }
+
+// void	handle_sigquit(int sig)
+// {
+
+// }
 
 
 

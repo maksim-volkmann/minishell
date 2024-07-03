@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:40:22 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/06 14:42:22 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/02 11:43:45 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,10 @@ void	free_command(t_command *cmd)
 		free(current);
 		current = next;
 	}
+}
+
+void	ft_free_heredoc(char *content, char **delimiters)
+{
+	free(content);
+	free(delimiters);
 }

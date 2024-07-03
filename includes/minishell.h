@@ -3,15 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 12:02:48 by adrherna          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/07/01 14:46:48 by mvolkman         ###   ########.fr       */
+=======
+/*   Updated: 2024/07/02 11:52:29 by adrherna         ###   ########.fr       */
+>>>>>>> 27ca365a837972f80b8fd7f1cde9e35a1b80c385
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# include <stdbool.h>
 
 typedef enum e_token_type
 {
@@ -80,5 +86,19 @@ typedef struct s_shell
 
 int		ft_strcmp(const char *s1, const char *s2);
 int	is_builtin(char *command);
+
+// helper.c
+
+void	leaks(void);
+void free_env_vars(t_env_var *env_list);
+const char* get_token_type_string(t_token_type type);
+void print_token_list(t_token *head);
+const char* redir_type_to_string(t_redir_type type);
+void print_redirection(t_redirection *redir);
+void print_command(t_command *cmd);
 void add_env_var(t_env_var **env_list, const char *key, const char *value);
+void copy_env_vars(t_shell *shell, char **env);
+void print_env_vars(t_env_var *env_list);
+void print_command_details(t_command *cmds);
+
 #endif

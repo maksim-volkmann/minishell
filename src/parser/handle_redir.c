@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:38:09 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/29 15:45:43 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/03 10:10:29 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,10 @@ void	ft_handle_output(t_token *tokens, t_shell *shell, t_redirection *output)
 	if (tokens->type == GREAT)
 	{
 		output->type = REDIR_OUTPUT;
-		fd = open(output->file, O_WRONLY
-				| O_CREAT | O_TRUNC, 0644);
 	}
 	else if (tokens->type == DGREAT)
 	{
 		output->type = REDIR_APPEND;
-		fd = open(output->file, O_WRONLY
-				| O_CREAT | O_APPEND, 0644);
 	}
 	// if (fd < 0)
 	// {
@@ -67,7 +63,8 @@ void	ft_handle_input(t_token *tokens, t_shell *shell, t_redirection *input)
 	}
 }
 
-void	ft_handle_redir(t_token *tokens, t_shell *shell, t_redirection *input, t_redirection *output)
+void	ft_handle_redir(t_token *tokens, t_shell *shell
+		, t_redirection *input, t_redirection *output)
 {
 	if (tokens->next == NULL)
 	{

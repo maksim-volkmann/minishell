@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:31:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/27 15:35:06 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/01 12:24:43 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	ft_lexer(const char *line, t_token **tokens)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		// printf("helo\n");
 		if (ft_isspace(line[i]))
 			ft_lst_add_token(tokens, ft_if_space(line, &i));
 		else if (line[i] == '<' || line[i] == '>')

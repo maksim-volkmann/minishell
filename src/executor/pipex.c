@@ -74,7 +74,7 @@ void setup_input_redirection(t_redirection *input)
         fd = open(input->file, O_RDONLY);
         if (fd == -1)
         {
-            perror("open input redirection file");
+            // perror("open input redirection file");
             exit(EXIT_FAILURE);
         }
         if (dup2(fd, STDIN_FILENO) == -1)
