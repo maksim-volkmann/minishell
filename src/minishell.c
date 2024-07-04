@@ -80,7 +80,7 @@ void execute_single_command(t_command *cmd, t_shell *shell)
         {
             if (access(cmd->input->file, F_OK) != 0)
             {
-                fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->input->file);
+                fprintf(stderr, "minishell: %s: No such file or directory-1\n", cmd->input->file);
                 shell->exit_code = 1;
                 return;
             }
@@ -91,7 +91,7 @@ void execute_single_command(t_command *cmd, t_shell *shell)
             fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
             if (fd == -1)
             {
-                fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->output->file);
+                fprintf(stderr, "minishell: %s: No such file or directory-2\n", cmd->output->file);
                 shell->exit_code = 1;
                 return;
             }
@@ -105,7 +105,7 @@ void execute_single_command(t_command *cmd, t_shell *shell)
     {
         if (access(cmd->input->file, F_OK) != 0)
         {
-            fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->input->file);
+            fprintf(stderr, "minishell: %s: No such file or directory-3\n", cmd->input->file);
             shell->exit_code = 1;
             return;
         }
@@ -115,7 +115,7 @@ void execute_single_command(t_command *cmd, t_shell *shell)
         fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         if (fd == -1)
         {
-            fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->output->file);
+            fprintf(stderr, "minishell: %s: No such file or directory-4\n", cmd->output->file);
             shell->exit_code = 1;
             return;
         }

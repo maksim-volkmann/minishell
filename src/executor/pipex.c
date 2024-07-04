@@ -280,18 +280,22 @@ int execute_cd(char **args, t_env_var **env_list)
     char *old_pwd;
     int status;
 
-    if (!args[1]) // If no argument is provided
-    {
-        ft_putendl_fd("minishell: cd: missing argument", STDERR_FILENO);
-        return 1;
-    }
-
     // Get the current working directory
     old_pwd = getcwd(buffer, sizeof(buffer));
     if (!old_pwd)
     {
         perror("getcwd");
         return 1;
+    }
+
+    // If no argument is provided, change to home directory
+    if (!args[1])
+    {
+        if (change_to_home(env_list) != 0)
+            return 1;
+        // Update PWD and OLDPWD environment variables
+        status = update_pwd(env_list, old_pwd);
+        return status;
     }
 
     // Change directory to the given path
@@ -308,6 +312,7 @@ int execute_cd(char **args, t_env_var **env_list)
 
     return status;
 }
+
 
 
 
