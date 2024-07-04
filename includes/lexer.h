@@ -17,6 +17,7 @@
 void	ft_lexer(const char *line, t_token **tokens);
 void	free_token_list(t_token *head);
 void	print_linked_list(t_token *head);
+int		ft_syntax_checker(t_token *tokens);
 
 // cases.c
 

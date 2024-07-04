@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   cases.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:29:48 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/27 15:36:55 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/04 09:50:46 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
+#include <stdio.h>
 
 t_token	*ft_if_redi_op(const char *line, int *i)
 {
@@ -34,7 +35,7 @@ t_token	*ft_if_redi_op(const char *line, int *i)
 		new_token = ft_new_token(token, DLESS);
 	else
 	{
-		printf("Error Redirector\n");
+		fprintf(stderr, "syntax errorr\n");
 		return (NULL);
 	}
 	return (new_token);

@@ -1,3 +1,4 @@
-$USER
-$NOVAR
-$HOME
+dasd
+asdas
+dsad
+as

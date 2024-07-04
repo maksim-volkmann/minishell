@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 12:17:44 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/03 15:34:15 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/04 09:53:10 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,7 +219,6 @@ void	ft_heredoc_loop(t_shell *shell)
 // 		content = ft_heredoc_join(line, content);
 // 	}
 // 	if (ft_open_file(filename, content) == -1)
-// 		shell->error_present = true;
 // 	return (filename);
 // }
 

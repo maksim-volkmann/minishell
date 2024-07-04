@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:48:41 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/03 15:33:16 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/04 09:53:04 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,12 @@ int ft_open_file(char *filename, char *content, t_shell *shell)
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
 	{
-		shell->error_present = true;
 		exit(EXIT_FAILURE);
 	}
 	content = ft_append_newline(content);
 	bytes_written = write(fd, content, ft_strlen(content));
 	if (bytes_written == -1)
 	{
-		shell->error_present = true;
 		close(fd);
 		return (-1);
 	}

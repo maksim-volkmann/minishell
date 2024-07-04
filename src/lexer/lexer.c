@@ -6,12 +6,37 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:31:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/01 12:24:43 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/04 09:34:53 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
 #include <stdio.h>
+
+int	ft_syntax_checker(t_token *tokens)
+{
+	t_token	*current;
+
+	current = tokens;
+	while (current != NULL)
+	{
+		if (current->type == LESS || current->type == DLESS
+			|| current->type == GREAT || current->type == DGREAT)
+		{
+			if (current->next == NULL
+				|| current->next->type == LESS
+				|| current->next->type == DLESS
+				|| current->next->type == GREAT
+				|| current->next->type == DGREAT
+				|| current->next->type == PIPE)
+			{
+				return (1);
+			}
+		}
+		current = current->next;
+	}
+	return (0);
+}
 
 void	ft_lexer(const char *line, t_token **tokens)
 {

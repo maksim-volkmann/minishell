@@ -33,35 +33,8 @@ To install the script, copy and run following command:
 
 #REDIRECTIONS
 
----------->this runs only the second command:
-/bin/echo hi >./outfiles/outfile01 | /bin/echo bye
-
-#REDIRECTIONS seg faults
-24
-
-
-echo
-Echo
-ECho
-ECHo
-ECHO
-eCHO
-ecHO
-echO
-EchO
-eCHo
-
-pwd
-PWD
-Pwd
-PWd
-pWD
-
-env
-ENV
-Env
-ENv
-eVN
+-> Expandir adentro de heredoc
+-> error message cuando redir file no existe
 
 
 -----

@@ -20,12 +20,19 @@ void	ft_init_shell(t_shell *shell, char *env[])
 	shell->exit_code = 0;
 }
 
-void	ft_heredoc_check(t_shell *shell)
+int	ft_heredoc_check(t_shell *shell)
 {
 	ft_lexer(shell->input, &shell->tokens);
+	if (ft_syntax_checker(shell->tokens) == 1)
+	{
+		fprintf(stderr, "syntax error\n");
+		shell->exit_code = 2;
+		return (1);
+	}
 	ft_heredoc_loop(shell);
 	free_token_list(shell->tokens);
 	shell->tokens = NULL;
+	return (0);
 }
 
 int	ft_manage_input(t_shell *shell)
@@ -42,19 +49,6 @@ int	ft_manage_input(t_shell *shell)
 	}
 	return (0);
 }
-
-int	ft_manage_errors(t_shell *shell)
-{
-	if (shell->error_present == true)
-	{
-		free_command(shell->cmds);
-		free_token_list(shell->tokens);
-		free(shell->input);
-		return (1);
-	}
-	return (0);
-}
-
 
 void	handle_redirection(t_command *cmd)
 {
@@ -127,15 +121,14 @@ int	main(int argc, char **argv, char **env)
 		if (!shell.input)
 			ft_exit(&shell);
 		add_history(shell.input);
-		ft_heredoc_check(&shell);
+		if (ft_heredoc_check(&shell) == 1)
+			continue ;
 		shell.input = ft_expander(shell.input, &shell);
-		// printf("%s\n", shell.input);
 		if (ft_strcmp(shell.input, "") == 0)
 		{
 			free(shell.input);
-			continue;
+			continue ;
 		}
-
 		ft_lexer(shell.input, &shell.tokens);
 		ft_parser(&shell, &shell.tokens);
 		// print_command_details(shell.cmds);
