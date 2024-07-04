@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:48:41 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/04 09:53:04 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/04 12:33:07 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int ft_open_file(char *filename, char *content, t_shell *shell)
 		exit(EXIT_FAILURE);
 	}
 	content = ft_append_newline(content);
+	content = ft_expander(content, shell);
 	bytes_written = write(fd, content, ft_strlen(content));
 	if (bytes_written == -1)
 	{

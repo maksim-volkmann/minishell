@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:21:13 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/20 16:20:12 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/04 10:25:25 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	remove_current_token(t_token **head, t_token **current,
 	t_token	*temp;
 
 	temp = *current;
-
 	if (*previous == NULL)
 		*head = (*current)->next;
 	else

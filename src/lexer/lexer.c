@@ -6,39 +6,15 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:31:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/04 09:34:53 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/04 10:25:15 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
+#include <stdbool.h>
 #include <stdio.h>
 
-int	ft_syntax_checker(t_token *tokens)
-{
-	t_token	*current;
-
-	current = tokens;
-	while (current != NULL)
-	{
-		if (current->type == LESS || current->type == DLESS
-			|| current->type == GREAT || current->type == DGREAT)
-		{
-			if (current->next == NULL
-				|| current->next->type == LESS
-				|| current->next->type == DLESS
-				|| current->next->type == GREAT
-				|| current->next->type == DGREAT
-				|| current->next->type == PIPE)
-			{
-				return (1);
-			}
-		}
-		current = current->next;
-	}
-	return (0);
-}
-
-void	ft_lexer(const char *line, t_token **tokens)
+void	ft_lexer(const char *line, t_shell *shell)
 {
 	int	i;
 
@@ -46,24 +22,24 @@ void	ft_lexer(const char *line, t_token **tokens)
 	while (line[i] != '\0')
 	{
 		if (ft_isspace(line[i]))
-			ft_lst_add_token(tokens, ft_if_space(line, &i));
+			ft_lst_add_token(&shell->tokens, ft_if_space(line, &i));
 		else if (line[i] == '<' || line[i] == '>')
-			ft_lst_add_token(tokens, ft_if_redi_op(line, &i));
+			ft_lst_add_token(&shell->tokens, ft_if_redi_op(line, &i, shell));
 		else if (line[i] == '|')
-			ft_lst_add_token(tokens, ft_if_pipe(line, &i));
+			ft_lst_add_token(&shell->tokens, ft_if_pipe(line, &i, shell));
 		else if (line[i] == '(' || line[i] == ')')
-			ft_lst_add_token(tokens, ft_if_par(line, &i));
+			ft_lst_add_token(&shell->tokens, ft_if_par(line, &i));
 		else if (line[i] == '\'')
-			ft_lst_add_token(tokens, ft_if_quot(line, &i));
+			ft_lst_add_token(&shell->tokens, ft_if_quot(line, &i));
 		else if (line[i] == '\"')
-			ft_lst_add_token(tokens, ft_if_do_quot(line, &i));
-		else if (line[i] == '&')
-			ft_lst_add_token(tokens, ft_if_and(line, &i));
+			ft_lst_add_token(&shell->tokens, ft_if_do_quot(line, &i));
 		else
-			ft_lst_add_token(tokens, ft_if_word(line, &i));
+			ft_lst_add_token(&shell->tokens, ft_if_word(line, &i));
+		if (shell->syn_err_present == true)
+			break ;
 	}
-	merge_tokens(tokens);
-	remove_spaces(tokens);
+	merge_tokens(&shell->tokens);
+	remove_spaces(&shell->tokens);
 }
 
 void	free_token_list(t_token *head)

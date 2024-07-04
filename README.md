@@ -33,9 +33,7 @@ To install the script, copy and run following command:
 
 #REDIRECTIONS
 
--> Expandir adentro de heredoc
--> error message cuando redir file no existe
-
+-> Fix Expander inside heredoc
 
 -----
 
