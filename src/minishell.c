@@ -66,41 +66,109 @@ int	is_builtin(char *command)
 {
 	return (ft_strcmp(command, "echo") == 0 || ft_strcmp(command, "exit") == 0);
 }
+// void	execute_single_command(t_command *cmd, t_shell *shell)
+// {
+// 	if (cmd->argv[0] == NULL)
+// 	{
+// 		if (cmd->input && cmd->input->file)
+// 		{
+// 			if (access(cmd->input->file, F_OK) != 0)
+// 			{
+// 				fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->input->file);
+// 				shell->exit_code = 1;
+// 				return;
+// 			}
+// 		}
+// 		if (cmd->output && cmd->output->file)
+// 		{
+// 			int fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+// 			if (fd == -1)
+// 			{
+// 				fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->output->file);
+// 				shell->exit_code = 1;
+// 				return;
+// 			}
+// 			close(fd);
+// 		}
+// 		return;
+// 	}
+// 	if (is_builtin(cmd->argv[0]))
+// 	{
+// 		handle_builtin(cmd, shell);
+// 	}
+// 	else
+// 	{
+// 		exec_start(cmd, shell);
+// 	}
+// }
+
 void	execute_single_command(t_command *cmd, t_shell *shell)
 {
-	if (cmd->argv[0] == NULL)
-	{
-		if (cmd->input && cmd->input->file)
-		{
-			if (access(cmd->input->file, F_OK) != 0)
-			{
-				fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->input->file);
-				shell->exit_code = 1;
-				return;
-			}
-		}
-		if (cmd->output && cmd->output->file)
-		{
-			int fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (fd == -1)
-			{
-				fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->output->file);
-				shell->exit_code = 1;
-				return;
-			}
-			close(fd);
-		}
-		return;
-	}
-	if (is_builtin(cmd->argv[0]))
-	{
-		handle_builtin(cmd, shell);
-	}
-	else
-	{
-		exec_start(cmd, shell);
-	}
+    int fd;
+
+    // Check if there is no command (argv[0] is NULL)
+    if (cmd->argv[0] == NULL)
+    {
+        // Check input file existence
+        if (cmd->input && cmd->input->file)
+        {
+            if (access(cmd->input->file, F_OK) != 0)
+            {
+                fprintf(stderr, "minishell: %s: No such file or directory-1\n", cmd->input->file);
+                shell->exit_code = 1;
+                return;
+            }
+        }
+        // Check output file creation
+        if (cmd->output && cmd->output->file)
+        {
+            fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+            if (fd == -1)
+            {
+                fprintf(stderr, "minishell: %s: No such file or directory-2\n", cmd->output->file);
+                shell->exit_code = 1;
+                return;
+            }
+            close(fd);
+        }
+        return;
+    }
+
+    // Check if there is a command (argv[0] is not NULL)
+    if (cmd->input && cmd->input->file)
+    {
+        if (access(cmd->input->file, F_OK) != 0)
+        {
+            fprintf(stderr, "minishell: %s: No such file or directory-3\n", cmd->input->file);
+            shell->exit_code = 1;
+            return;
+        }
+    }
+    if (cmd->output && cmd->output->file)
+    {
+        fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if (fd == -1)
+        {
+            fprintf(stderr, "minishell: %s: No such file or directory-4\n", cmd->output->file);
+            shell->exit_code = 1;
+            return;
+        }
+        close(fd);
+    }
+
+    // Check if the command is a built-in
+    if (is_builtin(cmd->argv[0]))
+    {
+        handle_builtin(cmd, shell);
+    }
+    else
+    {
+        exec_start(cmd, shell);
+    }
 }
+
+
+
 
 int	main(int argc, char **argv, char **env)
 {
@@ -129,7 +197,7 @@ int	main(int argc, char **argv, char **env)
 		if (ft_heredoc_check(&shell) == 1)
 			continue ;
 		shell.input = ft_expander(shell.input, &shell);
-		printf("%s\n", shell.input);
+		// printf("%s\n", shell.input);
 		if (ft_strcmp(shell.input, "") == 0)
 		{
 			free(shell.input);
