@@ -129,6 +129,7 @@ int	main(int argc, char **argv, char **env)
 		if (ft_heredoc_check(&shell) == 1)
 			continue ;
 		shell.input = ft_expander(shell.input, &shell);
+		printf("%s\n", shell.input);
 		if (ft_strcmp(shell.input, "") == 0)
 		{
 			free(shell.input);

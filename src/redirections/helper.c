@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:48:41 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/04 12:33:07 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/05 10:00:32 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,33 +15,33 @@
 #include <stdio.h>
 #include <sys/fcntl.h>
 
-int	ft_check_filepath(char *filepath)
-{
-	char	*dir_path;
-	char	*last_slash;
+// int	ft_check_filepath(char *filepath)
+// {
+// 	char	*dir_path;
+// 	char	*last_slash;
 
-	dir_path = ft_strdup(filepath);
-	last_slash = strrchr(dir_path, '/');
-	if (last_slash != NULL)
-	{
-		*last_slash = '\0';
-	}
-	else
-	{
-		free(dir_path);
-		return (1);
-	}
-	if (access(dir_path, W_OK) == 0)
-	{
-		free(dir_path);
-		return (1);
-	}
-	else
-	{
-		free(dir_path);
-		return (0);
-	}
-}
+// 	dir_path = ft_strdup(filepath);
+// 	last_slash = strrchr(dir_path, '/');
+// 	if (last_slash != NULL)
+// 	{
+// 		*last_slash = '\0';
+// 	}
+// 	else
+// 	{
+// 		free(dir_path);
+// 		return (1);
+// 	}
+// 	if (access(dir_path, W_OK) == 0)
+// 	{
+// 		free(dir_path);
+// 		return (1);
+// 	}
+// 	else
+// 	{
+// 		free(dir_path);
+// 		return (0);
+// 	}
+// }
 
 int ft_open_file(char *filename, char *content, t_shell *shell)
 {

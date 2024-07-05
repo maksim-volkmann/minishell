@@ -31,11 +31,15 @@ To install the script, copy and run following command:
  ctrl + \ . - interrupting running processes
 
 
-#REDIRECTIONS
+# REDIRECTIONS
 
 -> Fix Expander inside heredoc
 
------
+-> write to std err when redir file not found
+
+# Export:
+
+-> Apparently export trims whitespaces at the beggining and end of the variable
 
 
 ALL ERROR CODES.
