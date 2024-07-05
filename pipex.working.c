@@ -3,8 +3,6 @@
 #include <unistd.h>
 #include <limits.h>
 #include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
 
 // Function to free a split array
 void ft_free_split(char **arr)
@@ -711,108 +709,139 @@ void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell)
     exit(EXIT_FAILURE);
 }
 
-// Updated fork_and_execute function
-void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd, t_shell *shell) {
-    pid_t pid = fork();
+void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd, t_shell *shell)
+{
+    pid_t pid;
 
-    if (pid == -1) {
+    pid = fork();
+    if (pid == -1)
+    {
         perror("fork");
         exit(EXIT_FAILURE);
-    } else if (pid == 0) {
-        if (input_fd != -1) {
+    }
+    else if (pid == 0)
+    {
+        if (input_fd != -1)
+        {
             dup2(input_fd, STDIN_FILENO);
             close(input_fd);
         }
-        if (output_fd != -1) {
+        if (output_fd != -1)
+        {
             dup2(output_fd, STDOUT_FILENO);
             close(output_fd);
         }
-        if (input_fd != -1) close(input_fd);
-        if (output_fd != -1) close(output_fd);
         setup_input_redirection(cmd->input);
         setup_output_redirection(cmd->output);
         execute_command(cmd, env_list, shell);
         exit(shell->exit_code);
-    } else {
-        if (input_fd != -1) close(input_fd);
-        if (output_fd != -1) close(output_fd);
+    }
+    else
+    {
         waitpid(pid, &shell->exit_code, 0);
-        if (WIFEXITED(shell->exit_code)) {
+        if (WIFEXITED(shell->exit_code))
+        {
             shell->exit_code = WEXITSTATUS(shell->exit_code);
-        } else if (WIFSIGNALED(shell->exit_code)) {
+        }
+        else if (WIFSIGNALED(shell->exit_code))
+        {
             shell->exit_code = WTERMSIG(shell->exit_code) + 128;
         }
     }
 }
 
-// Updated exec_start function
-void exec_start(t_command *commands, t_shell *shell) {
-    int pipe_fd[2];
-    int input_fd = -1;
-    t_command *cmd = commands;
-    pid_t last_pid = -1;
 
-    while (cmd) {
-        if (cmd->input && cmd->input->file) {
-            int fd = open(cmd->input->file, O_RDONLY);
-            if (fd == -1) {
-                perror(cmd->input->file);
-                shell->exit_code = 1;
-                cmd = cmd->next;
-                continue;
-            }
-            close(fd);
-        }
+void exec_start(t_command *commands, t_shell *shell)
+{
+	int pipe_fd[2];
+	int input_fd = -1;
+	t_command *cmd = commands;
+	pid_t pid;
+	int status;
+	int fd;
 
-        if (cmd->next != NULL) {
-            if (pipe(pipe_fd) == -1) {
-                perror("pipe");
-                exit(EXIT_FAILURE);
-            }
-        } else {
-            pipe_fd[0] = -1;
-            pipe_fd[1] = -1;
-        }
+	while (cmd)
+	{
+		// Check input files before executing any command
+		if (cmd->input && cmd->input->file)
+		{
+			fd = open(cmd->input->file, O_RDONLY);
+			if (fd == -1)
+			{
+				perror(cmd->input->file);
+				shell->exit_code = 1;
+				cmd = cmd->next;
+				continue ;
 
-        last_pid = fork();
-        if (last_pid == -1) {
-            perror("fork");
-            exit(EXIT_FAILURE);
-        } else if (last_pid == 0) {
-            if (input_fd != -1) {
-                dup2(input_fd, STDIN_FILENO);
-                close(input_fd);
-            }
-            if (pipe_fd[1] != -1) {
-                dup2(pipe_fd[1], STDOUT_FILENO);
-                close(pipe_fd[1]);
-            }
-            if (pipe_fd[0] != -1) close(pipe_fd[0]);
+			}
+			close(fd);
+		}
 
-            if (handle_builtin(cmd, shell) == -1) {
-                execute_command(cmd, shell->env_list, shell);
-            }
-            exit(shell->exit_code);
-        } else {
-            if (input_fd != -1) close(input_fd);
-            if (pipe_fd[1] != -1) close(pipe_fd[1]);
-            input_fd = pipe_fd[0];
-        }
+		if (cmd->next != NULL)
+		{
+			if (pipe(pipe_fd) == -1)
+			{
+				perror("pipe");
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			pipe_fd[0] = -1;
+			pipe_fd[1] = -1;
+		}
+
+		// Always fork for non-built-in commands or for built-ins if there are multiple commands
+		if (cmd->next != NULL || handle_builtin(cmd, shell) == -1)
+		{
+			fork_and_execute(cmd, shell->env_list, input_fd, pipe_fd[1], shell);
+		}
+
+		if (input_fd != -1)
+			close(input_fd);
+		if (pipe_fd[1] != -1)
+			close(pipe_fd[1]);
+
+		input_fd = pipe_fd[0];
+		cmd = cmd->next;
+	}
+
+	// Wait for all child processes to complete
+	while ((pid = wait(&status)) > 0)
+	{
+		if (WIFEXITED(status))
+		{
+			shell->exit_code = WEXITSTATUS(status);
+		}
+		else if (WIFSIGNALED(status))
+		{
+			shell->exit_code = WTERMSIG(status) + 128;
+		}
+	}
+}
+
+
+
+// Function to free the command list
+void free_command2(t_command *cmd)
+{
+    t_command *tmp;
+
+    while (cmd)
+    {
+        tmp = cmd;
         cmd = cmd->next;
-    }
-
-    if (input_fd != -1) {
-        close(input_fd);
-    }
-
-    int status;
-    waitpid(last_pid, &status, 0);
-
-    while (wait(NULL) > 0) {
-        if (WIFEXITED(status)) {
-            shell->exit_code = WEXITSTATUS(status);
-        } else if (WIFSIGNALED(status)) {
-            shell->exit_code = WTERMSIG(status) + 128;
+        ft_free_split(tmp->argv);
+        if (tmp->input)
+        {
+            free(tmp->input->file);
+            free(tmp->input);
         }
+        if (tmp->output)
+        {
+            free(tmp->output->file);
+            free(tmp->output);
+        }
+        free(tmp);
     }
 }
