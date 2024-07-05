@@ -64,7 +64,7 @@ typedef struct s_shell
 	t_env_var	*env_list;
 	t_token		*tokens;
 	int			exit_code;
-	bool		error_present;
+	bool		syn_err_present;
 	char		*input;
 }	t_shell;
 

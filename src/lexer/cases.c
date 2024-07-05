@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   cases.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:29:48 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/27 15:36:55 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/04 10:37:30 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
+#include <stdbool.h>
+#include <stdio.h>
 
-t_token	*ft_if_redi_op(const char *line, int *i)
+t_token	*ft_if_redi_op(const char *line, int *i, t_shell *shell)
 {
 	t_token	*new_token;
 	char	*token;
@@ -34,13 +36,13 @@ t_token	*ft_if_redi_op(const char *line, int *i)
 		new_token = ft_new_token(token, DLESS);
 	else
 	{
-		printf("Error Redirector\n");
+		shell->syn_err_present = true;
 		return (NULL);
 	}
 	return (new_token);
 }
 
-t_token	*ft_if_pipe(const char *line, int *i)
+t_token	*ft_if_pipe(const char *line, int *i, t_shell *shell)
 {
 	t_token	*new_token;
 	char	*token;
@@ -56,8 +58,8 @@ t_token	*ft_if_pipe(const char *line, int *i)
 		new_token = ft_new_token(token, PIPE);
 	else
 	{
-		printf("Error Pipe\n");
-		return (NULL);
+		shell->syn_err_present = true;
+		return (new_token);
 	}
 	return (new_token);
 }

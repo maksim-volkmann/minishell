@@ -6,12 +6,33 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/20 09:49:08 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/27 15:53:17 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/03 16:06:28 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/expander.h"
 #include <sys/_types/_null.h>
+
+char	*ft_strdup_dq(const char *s)
+{
+	size_t	len;
+	char	*str;
+
+	if (!s)
+		return (NULL);
+
+	len = strlen(s);
+	str = (char *)malloc(len + 3);
+	if (!str)
+		return (NULL);
+
+	str[0] = '"';
+	ft_strlcpy(str + 1, s, len + 1);
+	str[len + 1] = '"';
+	str[len + 2] = '\0';
+
+	return (str);
+}
 
 char	*ft_quote_string(char *input)
 {
@@ -94,7 +115,7 @@ char	*ft_expand_var_dq(t_shell *shell, char *var)
 		{
 			exp_var = current->value;
 			free(var);
-			return (ft_strdup(current->value));
+			return (ft_strdup_dq(current->value));
 		}
 
 		current = current->next;
