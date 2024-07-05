@@ -44,7 +44,7 @@ int	ft_manage_input(t_shell *shell)
 	if (!shell->input)
 		ft_exit(shell);
 	add_history(shell->input);
-	// ft_heredoc_check(shell);
+	ft_heredoc_check(shell);
 	shell->input = ft_expander(shell->input, shell);
 	if (ft_strcmp(shell->input, "") == 0)
 	{
@@ -193,6 +193,7 @@ int	main(int argc, char **argv, char **env)
 
 		if (!shell.input)
 			ft_exit(&shell);
+
 		add_history(shell.input);
 		if (ft_heredoc_check(&shell) == 1)
 			continue ;
