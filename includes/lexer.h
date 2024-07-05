@@ -14,14 +14,16 @@
 
 // lexer.c
 
-void	ft_lexer(const char *line, t_token **tokens);
+void	ft_lexer(const char *line, t_shell *shell);
 void	free_token_list(t_token *head);
 void	print_linked_list(t_token *head);
+int		ft_syntax_checker(t_token *tokens);
+int		ft_syntax_checker_2(t_token *tokens);
 
 // cases.c
 
-t_token	*ft_if_redi_op(const char *line, int *i);
-t_token	*ft_if_pipe(const char *line, int *i);
+t_token	*ft_if_redi_op(const char *line, int *i, t_shell *shell);
+t_token	*ft_if_pipe(const char *line, int *i, t_shell *shell);
 t_token	*ft_if_par(const char *line, int *i);
 t_token	*ft_if_quot(const char *line, int *i);
 

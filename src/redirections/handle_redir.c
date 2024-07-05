@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 12:38:09 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/03 16:27:05 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/04 09:52:55 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	ft_handle_output(t_token *tokens, t_shell *shell, t_redirection *output)
 	// {
 	// 	ft_putstr_fd(output->file, 2);
 	// 	ft_putstr_fd(": Error creating file\n", 2);
-	// 	shell->error_present = true;
 	// }
 	close(fd);
 }

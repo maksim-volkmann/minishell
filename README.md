@@ -31,40 +31,15 @@ To install the script, copy and run following command:
  ctrl + \ . - interrupting running processes
 
 
-#REDIRECTIONS
+# REDIRECTIONS
 
----------->this runs only the second command:
-/bin/echo hi >./outfiles/outfile01 | /bin/echo bye
+-> Fix Expander inside heredoc
 
-#REDIRECTIONS seg faults
-24
+-> write to std err when redir file not found
 
+# Export:
 
-echo
-Echo
-ECho
-ECHo
-ECHO
-eCHO
-ecHO
-echO
-EchO
-eCHo
-
-pwd
-PWD
-Pwd
-PWd
-pWD
-
-env
-ENV
-Env
-ENv
-eVN
-
-
------
+-> Apparently export trims whitespaces at the beggining and end of the variable
 
 
 ALL ERROR CODES.
