@@ -37,10 +37,12 @@ To install the script, copy and run following command:
 
 -> write to std err when redir file not found
 
-# Export:
-
+# EXPORT:
 -> Apparently export trims whitespaces at the beggining and end of the variable
 
+# GENERAL:
+-> how to treat parenthesis
+-> check for unclosed quotations
 
 ALL ERROR CODES.
 FORBIDDEN FUNCTIONS.

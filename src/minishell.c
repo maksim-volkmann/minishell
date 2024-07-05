@@ -4,6 +4,7 @@
 #include "../includes/parser.h"
 #include "../includes/lexer.h"
 #include "../includes/minishell.h"
+#include "../includes/redirections.h"
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -45,7 +46,7 @@ int	ft_manage_input(t_shell *shell)
 		ft_exit(shell);
 	add_history(shell->input);
 	// ft_heredoc_check(shell);
-	shell->input = ft_expander(shell->input, shell);
+	shell->input = ft_expander_heredoc(shell->input, shell);
 	if (ft_strcmp(shell->input, "") == 0)
 	{
 		free(shell->input);
@@ -129,7 +130,7 @@ int	main(int argc, char **argv, char **env)
 		if (ft_heredoc_check(&shell) == 1)
 			continue ;
 		shell.input = ft_expander(shell.input, &shell);
-		printf("%s\n", shell.input);
+		// printf("%s\n", shell.input);
 		if (ft_strcmp(shell.input, "") == 0)
 		{
 			free(shell.input);

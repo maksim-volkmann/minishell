@@ -6,12 +6,13 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:48:41 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/05 10:00:32 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/05 13:05:38 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 #include "../../includes/expander.h"
+#include "../../includes/redirections.h"
 #include <stdio.h>
 #include <sys/fcntl.h>
 
@@ -54,7 +55,7 @@ int ft_open_file(char *filename, char *content, t_shell *shell)
 		exit(EXIT_FAILURE);
 	}
 	content = ft_append_newline(content);
-	content = ft_expander(content, shell);
+	content = ft_expander_heredoc(content, shell);
 	bytes_written = write(fd, content, ft_strlen(content));
 	if (bytes_written == -1)
 	{

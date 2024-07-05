@@ -23,8 +23,8 @@ void	ft_parser(t_shell *shell, t_token **tokens)
 			current = current->next;
 		new = ft_new_node();
 		new->argv = ft_get_darray(&current, &shell, new->input, new->output);
-		// If no arguments, new->argv is already NULL
 		add_or_init_node(&shell->cmds, new);
+		// If no arguments, new->argv is already NULL
 		// print_command(new);
 	}
 }
