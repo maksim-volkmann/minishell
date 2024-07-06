@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 11:48:49 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/03 11:03:32 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/06 09:56:50 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,10 @@ void add_env_var(t_env_var **env_list, const char *key, const char *value)
     }
 }
 
+
+
+
+
 void copy_env_vars(t_shell *shell, char **env)
 {
     int        i;
@@ -189,6 +193,9 @@ void copy_env_vars(t_shell *shell, char **env)
     }
 }
 
+
+
+
 void print_env_vars(t_env_var *env_list)
 {
 	t_env_var *current = env_list;
@@ -201,6 +208,9 @@ void print_env_vars(t_env_var *env_list)
 		current = current->next;
 	}
 }
+
+
+
 
 void print_command_details(t_command *cmds)
 {

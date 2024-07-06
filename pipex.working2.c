@@ -94,7 +94,7 @@ void setup_input_redirection(t_redirection *input, t_shell *shell)
 // Setup output redirection
 void setup_output_redirection(t_redirection *output, t_shell *shell)
 {
-    int fd = -1;
+    int fd;
     if (output && output->file)
     {
         if (output->type == REDIR_OUTPUT)
@@ -665,7 +665,7 @@ int handle_builtin(t_command *cmd, t_shell *shell)
 }
 
 // Execute a command
-void execute_command(t_command *cmd, t_env_var *env_list)
+void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell)
 {
     char *executable_path;
 
@@ -714,7 +714,6 @@ void execute_command(t_command *cmd, t_env_var *env_list)
     exit(EXIT_FAILURE);
 }
 
-
 // Updated fork_and_execute function
 void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd, t_shell *shell) {
     pid_t pid = fork();
@@ -724,37 +723,21 @@ void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int out
         shell->exit_code = 1;
         exit(shell->exit_code);
     } else if (pid == 0) {
-        // Child process
-
-        // Setup input redirection if needed
         if (input_fd != -1) {
-            if (dup2(input_fd, STDIN_FILENO) == -1) {
-                perror("dup2 input_fd");
-                shell->exit_code = 1;
-                exit(shell->exit_code);
-            }
+            dup2(input_fd, STDIN_FILENO);
             close(input_fd);
         }
-
-        // Setup output redirection if needed
         if (output_fd != -1) {
-            if (dup2(output_fd, STDOUT_FILENO) == -1) {
-                perror("dup2 output_fd");
-                shell->exit_code = 1;
-                exit(shell->exit_code);
-            }
+            dup2(output_fd, STDOUT_FILENO);
             close(output_fd);
         }
-
-        // Setup redirections specified in the command
+        if (input_fd != -1) close(input_fd);
+        if (output_fd != -1) close(output_fd);
         setup_input_redirection(cmd->input, shell);
         setup_output_redirection(cmd->output, shell);
-
-        // Execute the command
-        execute_command(cmd, env_list);
+        execute_command(cmd, env_list, shell);
         exit(shell->exit_code);
     } else {
-        // Parent process
         if (input_fd != -1) close(input_fd);
         if (output_fd != -1) close(output_fd);
         waitpid(pid, &shell->exit_code, 0);
@@ -766,7 +749,7 @@ void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int out
     }
 }
 
-
+// Updated exec_start function
 void exec_start(t_command *commands, t_shell *shell) {
     int pipe_fd[2];
     int input_fd = -1;
@@ -774,6 +757,7 @@ void exec_start(t_command *commands, t_shell *shell) {
     pid_t last_pid = -1;
     int status;
 
+		printf("exec_start\n");
     while (cmd) {
         if (cmd->input && cmd->input->file) {
             int fd = open(cmd->input->file, O_RDONLY);
@@ -801,39 +785,21 @@ void exec_start(t_command *commands, t_shell *shell) {
             perror("fork");
             exit(EXIT_FAILURE);
         } else if (last_pid == 0) {
-            // Child process
-
             if (input_fd != -1) {
-                if (dup2(input_fd, STDIN_FILENO) == -1) {
-                    perror("dup2 input_fd");
-                    shell->exit_code = 1;
-                    exit(shell->exit_code);
-                }
+                dup2(input_fd, STDIN_FILENO);
                 close(input_fd);
             }
-
             if (pipe_fd[1] != -1) {
-                if (dup2(pipe_fd[1], STDOUT_FILENO) == -1) {
-                    perror("dup2 pipe_fd[1]");
-                    shell->exit_code = 1;
-                    exit(shell->exit_code);
-                }
+                dup2(pipe_fd[1], STDOUT_FILENO);
                 close(pipe_fd[1]);
             }
-
-            // Close unused pipe ends in the child process
             if (pipe_fd[0] != -1) close(pipe_fd[0]);
 
-            // Setup redirections specified in the command
-            setup_input_redirection(cmd->input, shell);
-            setup_output_redirection(cmd->output, shell);
-
             if (handle_builtin(cmd, shell) == -1) {
-                execute_command(cmd, shell->env_list);
+                execute_command(cmd, shell->env_list, shell);
             }
             exit(shell->exit_code);
         } else {
-            // Parent process
             if (input_fd != -1) close(input_fd);
             if (pipe_fd[1] != -1) close(pipe_fd[1]);
             input_fd = pipe_fd[0];
@@ -841,7 +807,9 @@ void exec_start(t_command *commands, t_shell *shell) {
         cmd = cmd->next;
     }
 
-    if (input_fd != -1) close(input_fd);
+    if (input_fd != -1) {
+        close(input_fd);
+    }
 
     // Wait for the last process to get the correct exit code
     waitpid(last_pid, &status, 0);

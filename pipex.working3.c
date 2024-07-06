@@ -94,7 +94,7 @@ void setup_input_redirection(t_redirection *input, t_shell *shell)
 // Setup output redirection
 void setup_output_redirection(t_redirection *output, t_shell *shell)
 {
-    int fd = -1;
+    int fd;
     if (output && output->file)
     {
         if (output->type == REDIR_OUTPUT)
@@ -665,7 +665,7 @@ int handle_builtin(t_command *cmd, t_shell *shell)
 }
 
 // Execute a command
-void execute_command(t_command *cmd, t_env_var *env_list)
+void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell)
 {
     char *executable_path;
 
@@ -751,7 +751,7 @@ void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int out
         setup_output_redirection(cmd->output, shell);
 
         // Execute the command
-        execute_command(cmd, env_list);
+        execute_command(cmd, env_list, shell);
         exit(shell->exit_code);
     } else {
         // Parent process
@@ -829,7 +829,7 @@ void exec_start(t_command *commands, t_shell *shell) {
             setup_output_redirection(cmd->output, shell);
 
             if (handle_builtin(cmd, shell) == -1) {
-                execute_command(cmd, shell->env_list);
+                execute_command(cmd, shell->env_list, shell);
             }
             exit(shell->exit_code);
         } else {

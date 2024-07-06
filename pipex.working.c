@@ -760,8 +760,10 @@ void exec_start(t_command *commands, t_shell *shell)
 	int status;
 	int fd;
 
+
 	while (cmd)
 	{
+
 		// Check input files before executing any command
 		if (cmd->input && cmd->input->file)
 		{

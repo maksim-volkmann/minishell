@@ -54,53 +54,20 @@ int	ft_manage_input(t_shell *shell)
 	return (0);
 }
 
-void	handle_redirection(t_command *cmd)
+void	handle_redirection(t_command *cmd, t_shell *shell)
 {
 	if (cmd->input)
-		setup_input_redirection(cmd->input);
+		setup_input_redirection(cmd->input, shell);
 	if (cmd->output)
-		setup_output_redirection(cmd->output);
+		setup_output_redirection(cmd->output, shell);
 }
 
 int	is_builtin(char *command)
 {
-	return (ft_strcmp(command, "echo") == 0 || ft_strcmp(command, "exit") == 0);
+	return (ft_strcmp(command, "echo") == 0 || ft_strcmp(command, "exit") == 0 || ft_strcmp(command, "cd") == 0
+		|| ft_strcmp(command, "pwd") == 0 || ft_strcmp(command, "export") == 0 || ft_strcmp(command, "unset") == 0
+		|| ft_strcmp(command, "env") == 0);
 }
-// void	execute_single_command(t_command *cmd, t_shell *shell)
-// {
-// 	if (cmd->argv[0] == NULL)
-// 	{
-// 		if (cmd->input && cmd->input->file)
-// 		{
-// 			if (access(cmd->input->file, F_OK) != 0)
-// 			{
-// 				fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->input->file);
-// 				shell->exit_code = 1;
-// 				return;
-// 			}
-// 		}
-// 		if (cmd->output && cmd->output->file)
-// 		{
-// 			int fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 			if (fd == -1)
-// 			{
-// 				fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->output->file);
-// 				shell->exit_code = 1;
-// 				return;
-// 			}
-// 			close(fd);
-// 		}
-// 		return;
-// 	}
-// 	if (is_builtin(cmd->argv[0]))
-// 	{
-// 		handle_builtin(cmd, shell);
-// 	}
-// 	else
-// 	{
-// 		exec_start(cmd, shell);
-// 	}
-// }
 
 void	execute_single_command(t_command *cmd, t_shell *shell)
 {
@@ -159,10 +126,12 @@ void	execute_single_command(t_command *cmd, t_shell *shell)
     // Check if the command is a built-in
     if (is_builtin(cmd->argv[0]))
     {
+		// printf("buildin\n");
         handle_builtin(cmd, shell);
     }
     else
     {
+		// printf("non-buildin\n");
         exec_start(cmd, shell);
     }
 }
@@ -222,54 +191,3 @@ int	main(int argc, char **argv, char **env)
 	return (shell.exit_code);
 }
 
-// #define TESTER 1
-
-
-// TO DO
-// no expandir variables que se encuentren adentro de Q, quizas con un flag o algo
-
-// unir tokens que con WORD DQ y Q que esten consecutivos
-
-// checkear >">"
-
-
-	// print_env_vars(shell.env_list);
-// void handle_sigint(int sig)
-// {
-// 	printf("\n");
-// 	rl_on_new_line();
-// 	rl_replace_line("", 0);
-// 	rl_redisplay();
-// }
-
-// void	handle_sigquit(int sig)
-// {
-
-// }
-
-
-
-
-		// print_command(shell.cmds);
-// To do
-
-// limpiar argv despues de conseguir input y output files
-
-		// print_cmd_list(cmds);
-		// print_linked_list(tokens);
-
-// ver si puedo implementar una history
-// ver que es expand
-
-// 3.1.2.3 Double Quotes
-// Enclosing characters in double quotes
-// (‘"’) preserves the literal value of all characters
-//  within the quotes, with the exception of ‘$’, ‘`’, ‘\’
-
-// Tilde Expansion:
-
-// Expands the tilde character (~) to the value of the home directory. For example, ~ expands to /home/username.
-// Parameter and Variable Expansion:
-
-// Replaces variables with their values. For example, $HOME expands to /home/username.
-// Can also include modifiers, such as ${VAR:-default}, which provides a default value if the variable is unset.
