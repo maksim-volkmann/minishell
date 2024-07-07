@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:48:41 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/05 13:05:38 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/07 15:14:02 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,6 @@ char	*ft_seg_heredoc(char *input, int *i)
 	int		start;
 	int		end;
 
-	if (!segment)
-		return (NULL);
 	start = (*i);
 	while (input[*i] != '\0' && input[*i] != '\"' && input[*i] != '\'')
 	{
@@ -90,8 +88,6 @@ char	*ft_dq_heredoc(char *input, int *i)
 	int		start;
 	int		end;
 
-	if (!segment)
-		return (NULL);
 	i++;
 	start = (*i);
 	while (input[*i] != '\0' && input[*i] != '\"')
@@ -109,8 +105,6 @@ char	*ft_sq_heredoc(char *input, int *i)
 	int		start;
 	int		end;
 
-	if (!segment)
-		return (NULL);
 	i++;
 	start = (*i);
 	while (input[*i] != '\0' && input[*i] != '\'')

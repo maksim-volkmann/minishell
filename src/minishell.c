@@ -7,6 +7,7 @@
 #include "../includes/redirections.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include <sys/_types/_null.h>
 
 void	ft_exit(t_shell *shell)
 {
@@ -55,53 +56,53 @@ int	ft_manage_input(t_shell *shell)
 	return (0);
 }
 
-void	handle_redirection(t_command *cmd)
-{
-	if (cmd->input)
-		setup_input_redirection(cmd->input);
-	if (cmd->output)
-		setup_output_redirection(cmd->output);
-}
+// void	handle_redirection(t_command *cmd)
+// {
+// 	if (cmd->input)
+// 		setup_input_redirection(cmd->input);
+// 	if (cmd->output)
+// 		setup_output_redirection(cmd->output);
+// }
 
-int	is_builtin(char *command)
-{
-	return (ft_strcmp(command, "echo") == 0 || ft_strcmp(command, "exit") == 0);
-}
-void	execute_single_command(t_command *cmd, t_shell *shell)
-{
-	if (cmd->argv[0] == NULL)
-	{
-		if (cmd->input && cmd->input->file)
-		{
-			if (access(cmd->input->file, F_OK) != 0)
-			{
-				fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->input->file);
-				shell->exit_code = 1;
-				return;
-			}
-		}
-		if (cmd->output && cmd->output->file)
-		{
-			int fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (fd == -1)
-			{
-				fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->output->file);
-				shell->exit_code = 1;
-				return;
-			}
-			close(fd);
-		}
-		return;
-	}
-	if (is_builtin(cmd->argv[0]))
-	{
-		handle_builtin(cmd, shell);
-	}
-	else
-	{
-		exec_start(cmd, shell);
-	}
-}
+// int	is_builtin(char *command)
+// {
+// 	return (ft_strcmp(command, "echo") == 0 || ft_strcmp(command, "exit") == 0);
+// }
+// void	execute_single_command(t_command *cmd, t_shell *shell)
+// {
+// 	if (cmd->argv[0] == NULL)
+// 	{
+// 		if (cmd->input && cmd->input->file)
+// 		{
+// 			if (access(cmd->input->file, F_OK) != 0)
+// 			{
+// 				fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->input->file);
+// 				shell->exit_code = 1;
+// 				return;
+// 			}
+// 		}
+// 		if (cmd->output && cmd->output->file)
+// 		{
+// 			int fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+// 			if (fd == -1)
+// 			{
+// 				fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->output->file);
+// 				shell->exit_code = 1;
+// 				return;
+// 			}
+// 			close(fd);
+// 		}
+// 		return;
+// 	}
+// 	if (is_builtin(cmd->argv[0]))
+// 	{
+// 		handle_builtin(cmd, shell);
+// 	}
+// 	else
+// 	{
+// 		exec_start(cmd, shell);
+// 	}
+// }
 
 int	main(int argc, char **argv, char **env)
 {
@@ -109,6 +110,8 @@ int	main(int argc, char **argv, char **env)
 
 	ft_init_shell(&shell, env);
 
+	if (argc > 1 || argv[0] == NULL)
+		return (0);
 	while (1)
 	{
 		shell.cmds = NULL;
@@ -130,7 +133,6 @@ int	main(int argc, char **argv, char **env)
 		if (ft_heredoc_check(&shell) == 1)
 			continue ;
 		shell.input = ft_expander(shell.input, &shell);
-		// printf("%s\n", shell.input);
 		if (ft_strcmp(shell.input, "") == 0)
 		{
 			free(shell.input);
@@ -139,10 +141,10 @@ int	main(int argc, char **argv, char **env)
 		ft_lexer(shell.input, &shell);
 		ft_parser(&shell, &shell.tokens);
 		// print_command_details(shell.cmds);
-		if (shell.cmds && shell.cmds->next == NULL)
-			execute_single_command(shell.cmds, &shell);
-		else
-			exec_start(shell.cmds, &shell);
+		// if (shell.cmds && shell.cmds->next == NULL)
+		// 	// execute_single_command(shell.cmds, &shell);
+		// else
+		// 	exec_start(shell.cmds, &shell);
 
 		free_command(shell.cmds);
 		free_token_list(shell.tokens);
