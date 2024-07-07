@@ -6,12 +6,13 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:48:41 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/05 10:00:32 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/07 15:14:02 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 #include "../../includes/expander.h"
+#include "../../includes/redirections.h"
 #include <stdio.h>
 #include <sys/fcntl.h>
 
@@ -54,7 +55,7 @@ int ft_open_file(char *filename, char *content, t_shell *shell)
 		exit(EXIT_FAILURE);
 	}
 	content = ft_append_newline(content);
-	content = ft_expander(content, shell);
+	content = ft_expander_heredoc(content, shell);
 	bytes_written = write(fd, content, ft_strlen(content));
 	if (bytes_written == -1)
 	{
@@ -71,8 +72,6 @@ char	*ft_seg_heredoc(char *input, int *i)
 	int		start;
 	int		end;
 
-	if (!segment)
-		return (NULL);
 	start = (*i);
 	while (input[*i] != '\0' && input[*i] != '\"' && input[*i] != '\'')
 	{
@@ -89,8 +88,6 @@ char	*ft_dq_heredoc(char *input, int *i)
 	int		start;
 	int		end;
 
-	if (!segment)
-		return (NULL);
 	i++;
 	start = (*i);
 	while (input[*i] != '\0' && input[*i] != '\"')
@@ -108,8 +105,6 @@ char	*ft_sq_heredoc(char *input, int *i)
 	int		start;
 	int		end;
 
-	if (!segment)
-		return (NULL);
 	i++;
 	start = (*i);
 	while (input[*i] != '\0' && input[*i] != '\'')

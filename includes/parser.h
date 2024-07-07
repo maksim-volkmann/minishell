@@ -26,16 +26,14 @@ void		add_or_init_node(t_command **cmds, t_command *new_n);
 
 // darray.c
 int			ft_darray_size(t_token	*tokens);
-char		**ft_get_darray(t_token **tokens, t_shell **shell,
+char		**ft_get_darray(t_token **tokens,
 				t_redirection *input, t_redirection *output);
 
 // handle_redir.c
-void		ft_handle_redir(t_token *tokens, t_shell *shell,
-				t_redirection *input, t_redirection *output);
-void		ft_handle_input(t_token *tokens, t_shell *shell,
-				t_redirection *input);
-void		ft_handle_output(t_token *tokens, t_shell *shell,
+void		ft_handle_redir(t_token *tokens, t_redirection *input,
 				t_redirection *output);
+void		ft_handle_input(t_token *tokens, t_redirection *input);
+void		ft_handle_output(t_token *tokens, t_redirection *output);
 
 // free.c
 void		free_redirection(t_redirection *redir);

@@ -4,8 +4,10 @@
 #include "../includes/parser.h"
 #include "../includes/lexer.h"
 #include "../includes/minishell.h"
+#include "../includes/redirections.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include <sys/_types/_null.h>
 
 void	ft_exit(t_shell *shell)
 {
@@ -44,8 +46,8 @@ int	ft_manage_input(t_shell *shell)
 	if (!shell->input)
 		ft_exit(shell);
 	add_history(shell->input);
-	ft_heredoc_check(shell);
-	shell->input = ft_expander(shell->input, shell);
+	// ft_heredoc_check(shell);
+	shell->input = ft_expander_heredoc(shell->input, shell);
 	if (ft_strcmp(shell->input, "") == 0)
 	{
 		free(shell->input);
@@ -176,6 +178,8 @@ int	main(int argc, char **argv, char **env)
 
 	ft_init_shell(&shell, env);
 
+	if (argc > 1 || argv[0] == NULL)
+		return (0);
 	while (1)
 	{
 		shell.cmds = NULL;
@@ -198,7 +202,6 @@ int	main(int argc, char **argv, char **env)
 		if (ft_heredoc_check(&shell) == 1)
 			continue ;
 		shell.input = ft_expander(shell.input, &shell);
-		// printf("%s\n", shell.input);
 		if (ft_strcmp(shell.input, "") == 0)
 		{
 			free(shell.input);

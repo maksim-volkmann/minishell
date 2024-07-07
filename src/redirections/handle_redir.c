@@ -3,10 +3,11 @@
 #include <stdio.h>
 #include <unistd.h>
 
-void	ft_handle_output(t_token *tokens, t_shell *shell, t_redirection *output)
+void	ft_handle_output(t_token *tokens, t_redirection *output)
 {
 	int	fd;
 
+	fd = 0;
 	output->file = tokens->next->token;
 	if (tokens->type == GREAT)
 	{
@@ -20,15 +21,15 @@ void	ft_handle_output(t_token *tokens, t_shell *shell, t_redirection *output)
 		fd = open(output->file, O_WRONLY
 				| O_CREAT | O_APPEND, 0644);
 	}
-	// if (fd < 0)
-	// {
-	// 	ft_putstr_fd(output->file, 2);
-	// 	ft_putstr_fd(": Error creating file\n", 2);
-	// }
+	if (fd < 0)
+	{
+		ft_putstr_fd(output->file, 2);
+		ft_putstr_fd(": Error creating file\n", 2);
+	}
 	close(fd);
 }
 
-void	ft_handle_input(t_token *tokens, t_shell *shell, t_redirection *input)
+void	ft_handle_input(t_token *tokens, t_redirection *input)
 {
 	if (tokens->type == LESS)
 	{
@@ -43,14 +44,15 @@ void	ft_handle_input(t_token *tokens, t_shell *shell, t_redirection *input)
 
 }
 
-void	ft_handle_redir(t_token *tokens, t_shell *shell, t_redirection *input, t_redirection *output)
+void	ft_handle_redir(t_token *tokens, t_redirection *input,
+							t_redirection *output)
 {
 	if (tokens->type == GREAT || tokens->type == DGREAT)
 	{
-		ft_handle_output(tokens, shell, output);
+		ft_handle_output(tokens, output);
 	}
 	if (tokens->type == LESS || tokens->type == DLESS)
 	{
-		ft_handle_input(tokens, shell, input);
+		ft_handle_input(tokens, input);
 	}
 }

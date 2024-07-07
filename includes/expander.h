@@ -7,6 +7,7 @@
 // expander.c
 char	*ft_expander(char *input, t_shell *shell);
 char	*ft_extract_segment(char *input, int *i, t_shell *shell);
+char	*ft_extract_sq(char *input, int *i);
 
 // helper.c
 char	*ft_expand_var(t_shell *shell, char *var);
