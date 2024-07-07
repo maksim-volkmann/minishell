@@ -3,10 +3,7 @@
 #include <unistd.h>
 #include <limits.h>
 #include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
 
-// Function to free a split array
 // Function to free a split array
 void ft_free_split(char **arr)
 {
@@ -69,7 +66,7 @@ char *find_correct_path(char *cmd, t_env_var *env_list)
 }
 
 // Setup input redirection
-void setup_input_redirection(t_redirection *input, t_shell *shell)
+void setup_input_redirection(t_redirection *input)
 {
     int fd;
     if (input && input->file)
@@ -77,24 +74,22 @@ void setup_input_redirection(t_redirection *input, t_shell *shell)
         fd = open(input->file, O_RDONLY);
         if (fd == -1)
         {
-            perror(input->file);
-            shell->exit_code = 1;
-            exit(shell->exit_code);
+            // perror("open input redirection file");
+            exit(EXIT_FAILURE);
         }
         if (dup2(fd, STDIN_FILENO) == -1)
         {
             perror("dup2 input redirection file");
-            shell->exit_code = 1;
-            exit(shell->exit_code);
+            exit(EXIT_FAILURE);
         }
         close(fd);
     }
 }
 
 // Setup output redirection
-void setup_output_redirection(t_redirection *output, t_shell *shell)
+void setup_output_redirection(t_redirection *output)
 {
-    int fd = -1;
+    int fd;
     if (output && output->file)
     {
         if (output->type == REDIR_OUTPUT)
@@ -103,15 +98,13 @@ void setup_output_redirection(t_redirection *output, t_shell *shell)
             fd = open(output->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
         if (fd == -1)
         {
-            perror(output->file);
-            shell->exit_code = 1;
-            exit(shell->exit_code);
+            perror("open output redirection file");
+            exit(EXIT_FAILURE);
         }
         if (dup2(fd, STDOUT_FILENO) == -1)
         {
             perror("dup2 output redirection file");
-            shell->exit_code = 1;
-            exit(shell->exit_code);
+            exit(EXIT_FAILURE);
         }
         close(fd);
     }
@@ -123,6 +116,7 @@ void execute_echo(char **argv)
     int i = 1;
     int newline = 1;
 
+	// printf("ECHO BUILDIN\n");
     // Check for -n flag
     while (argv[i] && ft_strncmp(argv[i], "-n", 2) == 0)
     {
@@ -155,6 +149,7 @@ void execute_echo(char **argv)
     if (newline)
         printf("\n");
 }
+
 
 // Function to handle the exit command
 int execute_exit(char **argv, t_shell *shell)
@@ -223,6 +218,7 @@ void execute_pwd()
     }
 }
 
+
 void update_env_var(t_env_var **env_list, const char *key, const char *value)
 {
     t_env_var *current = *env_list;
@@ -238,6 +234,8 @@ void update_env_var(t_env_var **env_list, const char *key, const char *value)
     }
     add_env_var(env_list, key, value);
 }
+
+
 
 int update_pwd(t_env_var **env_list, char *old_pwd)
 {
@@ -316,6 +314,9 @@ int execute_cd(char **args, t_env_var **env_list)
     return status;
 }
 
+
+
+
 int execute_env(char **args, t_env_var *env_list)
 {
     if (args[1] != NULL) // Check if there are arguments
@@ -331,6 +332,8 @@ int execute_env(char **args, t_env_var *env_list)
         return 0; // Success exit code
     }
 }
+
+
 
 // EXPORT:
 
@@ -349,67 +352,67 @@ void print_export_vars(t_env_var *env_list)
     }
 }
 
+
 void reduce_white_space(char *str)
 {
-    char *dst = str;
-    char *src = str;
-    int in_word = 0;
+	char *dst = str;
+	char *src = str;
+	int in_word = 0;
 
-    // Skip leading whitespace
-    while (ft_isspace((unsigned char)*src))
-        src++;
+	// Skip leading whitespace
+	while (ft_isspace((unsigned char)*src))
+		src++;
 
-    // Process the string
-    while (*src)
-    {
-        if (ft_isspace((unsigned char)*src))
-        {
-            if (in_word)
-            {
-                *dst++ = ' ';
-                in_word = 0;
-            }
-        }
-        else
-        {
-            *dst++ = *src;
-            in_word = 1;
-        }
-        src++;
-    }
+	// Process the string
+	while (*src)
+	{
+		if (ft_isspace((unsigned char)*src))
+		{
+			if (in_word)
+			{
+				*dst++ = ' ';
+				in_word = 0;
+			}
+		}
+		else
+		{
+			*dst++ = *src;
+			in_word = 1;
+		}
+		src++;
+	}
 
-    // Remove trailing space if any
-    if (dst > str && ft_isspace((unsigned char)*(dst - 1)))
-        dst--;
+	// Remove trailing space if any
+	if (dst > str && ft_isspace((unsigned char)*(dst - 1)))
+		dst--;
 
-    *dst = '\0';
+	*dst = '\0';
 }
+
+
 
 int is_valid_var_name(const char *name)
 {
-    int i;
+	int i;
 
-    if (!name || (!ft_isalpha(name[0]) && name[0] != '_'))
-        return 0;
+	if (!name || (!ft_isalpha(name[0]) && name[0] != '_'))
+		return 0;
 
-    i = 1;
-    while (name[i] != '\0')
-    {
-        if (!ft_isalnum(name[i]) && name[i] != '_')
-            return 0;
-        i++;
-    }
-    return 1;
+	i = 1;
+	while (name[i] != '\0')
+	{
+		if (!ft_isalnum(name[i]) && name[i] != '_')
+			return 0;
+		i++;
+	}
+	return 1;
 }
 
-char *find_plus_equal(const char *str)
-{
-    return ft_strnstr(str, "+=", ft_strlen(str));
-}
+
 
 void execute_export(char **args, t_env_var **env_list, t_shell *shell)
 {
-    int i = 1;
+    int i;
     char *key;
     char *value;
     int invalid_identifier = 0;
@@ -420,82 +423,50 @@ void execute_export(char **args, t_env_var **env_list, t_shell *shell)
         return;
     }
 
+    i = 1;
     while (args[i])
     {
-        char *plus_equal_sign = find_plus_equal(args[i]);
+        char *equal_sign = ft_strchr(args[i], '=');
 
-        if (plus_equal_sign != NULL)
+        if (equal_sign != NULL)
         {
-            *plus_equal_sign = '\0';  // Temporarily split the string
+            *equal_sign = '\0';  // Temporarily split the string
             key = args[i];
-            value = plus_equal_sign + 2;  // Get the value after +=
+            value = equal_sign + 1;
+
+            // Normalize whitespace in value
+            reduce_white_space(value);
 
             if (is_valid_var_name(key))
             {
-                t_env_var *current = *env_list;
-                while (current)
-                {
-                    if (ft_strcmp(current->key, key) == 0)
-                    {
-                        char *new_value = ft_strjoin(current->value, value);
-                        free(current->value);
-                        current->value = new_value;
-                        break;
-                    }
-                    current = current->next;
-                }
-                if (current == NULL)
-                {
-                    add_env_var(env_list, key, value);
-                }
+                update_env_var(env_list, key, value);
             }
             else
             {
-                *plus_equal_sign = '+';  // Restore the original argument for the error message
-                ft_putstr_fd("export: ", STDERR_FILENO);
+                // Restore the original argument for the error message
+                *equal_sign = '=';
+                ft_putstr_fd("export: `", STDERR_FILENO);
                 ft_putstr_fd(args[i], STDERR_FILENO);
                 ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
                 invalid_identifier = 1;
+                // Split the argument again for future processing
+                *equal_sign = '\0';
             }
         }
         else
         {
-            char *equal_sign = ft_strchr(args[i], '=');
+            key = args[i];
 
-            if (equal_sign != NULL)
+            if (is_valid_var_name(key))
             {
-                *equal_sign = '\0';  // Temporarily split the string
-                key = args[i];
-                value = equal_sign + 1;
-
-                if (is_valid_var_name(key))
-                {
-                    update_env_var(env_list, key, value);
-                }
-                else
-                {
-                    *equal_sign = '=';
-                    ft_putstr_fd("export: ", STDERR_FILENO);
-                    ft_putstr_fd(args[i], STDERR_FILENO);
-                    ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
-                    invalid_identifier = 1;
-                }
+                update_env_var(env_list, key, NULL);
             }
             else
             {
-                key = args[i];
-
-                if (is_valid_var_name(key))
-                {
-                    update_env_var(env_list, key, NULL);
-                }
-                else
-                {
-                    ft_putstr_fd("export: ", STDERR_FILENO);
-                    ft_putstr_fd(args[i], STDERR_FILENO);
-                    ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
-                    invalid_identifier = 1;
-                }
+                ft_putstr_fd("export: `", STDERR_FILENO);
+                ft_putstr_fd(args[i], STDERR_FILENO);
+                ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
+                invalid_identifier = 1;
             }
         }
         i++;
@@ -506,6 +477,12 @@ void execute_export(char **args, t_env_var **env_list, t_shell *shell)
     else
         shell->exit_code = 0; // Set exit code to 0 for success
 }
+
+
+
+
+
+
 
 void remove_env_var(t_env_var **env_list, const char *key)
 {
@@ -540,7 +517,7 @@ void execute_unset(char **args, t_env_var **env_list, t_shell *shell)
     {
         if (!is_valid_var_name(args[i]))
         {
-            ft_putstr_fd("unset: ", STDERR_FILENO);
+            ft_putstr_fd("unset: `", STDERR_FILENO);
             ft_putstr_fd(args[i], STDERR_FILENO);
             ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
             invalid_identifier = 1;
@@ -558,6 +535,11 @@ void execute_unset(char **args, t_env_var **env_list, t_shell *shell)
         shell->exit_code = 0; // Set exit code to 0 for success
 }
 
+
+
+
+
+
 // Function to handle built-in commands
 int handle_builtin(t_command *cmd, t_shell *shell)
 {
@@ -566,7 +548,7 @@ int handle_builtin(t_command *cmd, t_shell *shell)
     if (cmd->output)
     {
         saved_stdout = dup(STDOUT_FILENO);
-        setup_output_redirection(cmd->output, shell);
+        setup_output_redirection(cmd->output);
     }
 
     if (cmd->argv[0] == NULL)
@@ -583,6 +565,7 @@ int handle_builtin(t_command *cmd, t_shell *shell)
     {
         execute_echo(cmd->argv);
         shell->exit_code = 0;
+		//TODO: check if this if is even necessary.
         if (cmd->output)
         {
             dup2(saved_stdout, STDOUT_FILENO);
@@ -636,16 +619,16 @@ int handle_builtin(t_command *cmd, t_shell *shell)
         return 0;
     }
 
-    if (ft_strcmp(cmd->argv[0], "unset") == 0)
-    {
-        execute_unset(cmd->argv, &shell->env_list, shell);
-        if (cmd->output)
-        {
-            dup2(saved_stdout, STDOUT_FILENO);
-            close(saved_stdout);
-        }
-        return 0;
-    }
+	if (ft_strcmp(cmd->argv[0], "unset") == 0)
+	{
+		execute_unset(cmd->argv, &shell->env_list, shell);
+		if (cmd->output)
+		{
+			dup2(saved_stdout, STDOUT_FILENO);
+			close(saved_stdout);
+		}
+		return 0;
+	}
 
     if (ft_strcmp(cmd->argv[0], "exit") == 0)
     {
@@ -664,10 +647,22 @@ int handle_builtin(t_command *cmd, t_shell *shell)
     return -1;
 }
 
+
+
+
+
+
+
 // Execute a command
-void execute_command(t_command *cmd, t_env_var *env_list)
+void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell)
 {
     char *executable_path;
+
+    // if (handle_builtin(cmd, shell) != -1)
+    // {
+    //     // Built-in command was handled, so return
+    //     return;
+    // }
 
     if (ft_strchr(cmd->argv[0], '/') != NULL)
     {
@@ -714,145 +709,141 @@ void execute_command(t_command *cmd, t_env_var *env_list)
     exit(EXIT_FAILURE);
 }
 
+void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd, t_shell *shell)
+{
+    pid_t pid;
 
-// Updated fork_and_execute function
-void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd, t_shell *shell) {
-    pid_t pid = fork();
-
-    if (pid == -1) {
+    pid = fork();
+    if (pid == -1)
+    {
         perror("fork");
-        shell->exit_code = 1;
-        exit(shell->exit_code);
-    } else if (pid == 0) {
-        // Child process
-
-        // Setup input redirection if needed
-        if (input_fd != -1) {
-            if (dup2(input_fd, STDIN_FILENO) == -1) {
-                perror("dup2 input_fd");
-                shell->exit_code = 1;
-                exit(shell->exit_code);
-            }
+        exit(EXIT_FAILURE);
+    }
+    else if (pid == 0)
+    {
+        if (input_fd != -1)
+        {
+            dup2(input_fd, STDIN_FILENO);
             close(input_fd);
         }
-
-        // Setup output redirection if needed
-        if (output_fd != -1) {
-            if (dup2(output_fd, STDOUT_FILENO) == -1) {
-                perror("dup2 output_fd");
-                shell->exit_code = 1;
-                exit(shell->exit_code);
-            }
+        if (output_fd != -1)
+        {
+            dup2(output_fd, STDOUT_FILENO);
             close(output_fd);
         }
-
-        // Setup redirections specified in the command
-        setup_input_redirection(cmd->input, shell);
-        setup_output_redirection(cmd->output, shell);
-
-        // Execute the command
-        execute_command(cmd, env_list);
+        setup_input_redirection(cmd->input);
+        setup_output_redirection(cmd->output);
+        execute_command(cmd, env_list, shell);
         exit(shell->exit_code);
-    } else {
-        // Parent process
-        if (input_fd != -1) close(input_fd);
-        if (output_fd != -1) close(output_fd);
+    }
+    else
+    {
         waitpid(pid, &shell->exit_code, 0);
-        if (WIFEXITED(shell->exit_code)) {
+        if (WIFEXITED(shell->exit_code))
+        {
             shell->exit_code = WEXITSTATUS(shell->exit_code);
-        } else if (WIFSIGNALED(shell->exit_code)) {
+        }
+        else if (WIFSIGNALED(shell->exit_code))
+        {
             shell->exit_code = WTERMSIG(shell->exit_code) + 128;
         }
     }
 }
 
 
-void exec_start(t_command *commands, t_shell *shell) {
-    int pipe_fd[2];
-    int input_fd = -1;
-    t_command *cmd = commands;
-    pid_t last_pid = -1;
-    int status;
+void exec_start(t_command *commands, t_shell *shell)
+{
+	int pipe_fd[2];
+	int input_fd = -1;
+	t_command *cmd = commands;
+	pid_t pid;
+	int status;
+	int fd;
 
-    while (cmd) {
-        if (cmd->input && cmd->input->file) {
-            int fd = open(cmd->input->file, O_RDONLY);
-            if (fd == -1) {
-                perror(cmd->input->file);
-                shell->exit_code = 1;
-                cmd = cmd->next;
-                continue;
-            }
-            close(fd);
-        }
 
-        if (cmd->next != NULL) {
-            if (pipe(pipe_fd) == -1) {
-                perror("pipe");
-                exit(EXIT_FAILURE);
-            }
-        } else {
-            pipe_fd[0] = -1;
-            pipe_fd[1] = -1;
-        }
+	while (cmd)
+	{
 
-        last_pid = fork();
-        if (last_pid == -1) {
-            perror("fork");
-            exit(EXIT_FAILURE);
-        } else if (last_pid == 0) {
-            // Child process
+		// Check input files before executing any command
+		if (cmd->input && cmd->input->file)
+		{
+			fd = open(cmd->input->file, O_RDONLY);
+			if (fd == -1)
+			{
+				perror(cmd->input->file);
+				shell->exit_code = 1;
+				cmd = cmd->next;
+				continue ;
 
-            if (input_fd != -1) {
-                if (dup2(input_fd, STDIN_FILENO) == -1) {
-                    perror("dup2 input_fd");
-                    shell->exit_code = 1;
-                    exit(shell->exit_code);
-                }
-                close(input_fd);
-            }
+			}
+			close(fd);
+		}
 
-            if (pipe_fd[1] != -1) {
-                if (dup2(pipe_fd[1], STDOUT_FILENO) == -1) {
-                    perror("dup2 pipe_fd[1]");
-                    shell->exit_code = 1;
-                    exit(shell->exit_code);
-                }
-                close(pipe_fd[1]);
-            }
+		if (cmd->next != NULL)
+		{
+			if (pipe(pipe_fd) == -1)
+			{
+				perror("pipe");
+				exit(EXIT_FAILURE);
+			}
+		}
+		else
+		{
+			pipe_fd[0] = -1;
+			pipe_fd[1] = -1;
+		}
 
-            // Close unused pipe ends in the child process
-            if (pipe_fd[0] != -1) close(pipe_fd[0]);
+		// Always fork for non-built-in commands or for built-ins if there are multiple commands
+		if (cmd->next != NULL || handle_builtin(cmd, shell) == -1)
+		{
+			fork_and_execute(cmd, shell->env_list, input_fd, pipe_fd[1], shell);
+		}
 
-            // Setup redirections specified in the command
-            setup_input_redirection(cmd->input, shell);
-            setup_output_redirection(cmd->output, shell);
+		if (input_fd != -1)
+			close(input_fd);
+		if (pipe_fd[1] != -1)
+			close(pipe_fd[1]);
 
-            if (handle_builtin(cmd, shell) == -1) {
-                execute_command(cmd, shell->env_list);
-            }
-            exit(shell->exit_code);
-        } else {
-            // Parent process
-            if (input_fd != -1) close(input_fd);
-            if (pipe_fd[1] != -1) close(pipe_fd[1]);
-            input_fd = pipe_fd[0];
-        }
+		input_fd = pipe_fd[0];
+		cmd = cmd->next;
+	}
+
+	// Wait for all child processes to complete
+	while ((pid = wait(&status)) > 0)
+	{
+		if (WIFEXITED(status))
+		{
+			shell->exit_code = WEXITSTATUS(status);
+		}
+		else if (WIFSIGNALED(status))
+		{
+			shell->exit_code = WTERMSIG(status) + 128;
+		}
+	}
+}
+
+
+
+// Function to free the command list
+void free_command2(t_command *cmd)
+{
+    t_command *tmp;
+
+    while (cmd)
+    {
+        tmp = cmd;
         cmd = cmd->next;
-    }
-
-    if (input_fd != -1) close(input_fd);
-
-    // Wait for the last process to get the correct exit code
-    waitpid(last_pid, &status, 0);
-    if (WIFEXITED(status)) {
-        shell->exit_code = WEXITSTATUS(status);
-    } else if (WIFSIGNALED(status)) {
-        shell->exit_code = WTERMSIG(status) + 128;
-    }
-
-    // Wait for all remaining processes in the pipeline
-    while (wait(NULL) > 0) {
-        // No need to set exit code here as we only care about the last process
+        ft_free_split(tmp->argv);
+        if (tmp->input)
+        {
+            free(tmp->input->file);
+            free(tmp->input);
+        }
+        if (tmp->output)
+        {
+            free(tmp->output->file);
+            free(tmp->output);
+        }
+        free(tmp);
     }
 }

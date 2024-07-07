@@ -46,16 +46,17 @@ void ft_free_split(char **arr);
 char *get_env_value(t_env_var *env_list, const char *key);
 char *create_cmd_path(char *dir, char *cmd);
 char *find_correct_path(char *cmd, t_env_var *env_list);
-void setup_input_redirection(t_redirection *input);
-void setup_output_redirection(t_redirection *output);
+void setup_input_redirection(t_redirection *input, t_shell *shell);
+void setup_output_redirection(t_redirection *output, t_shell *shell);
 void execute_echo(char **argv);
 // void execute_pwd(void);
 int execute_exit(char **argv, t_shell *shell);
 int handle_builtin(t_command *cmd, t_shell *shell);
-void execute_command(t_command *cmd, t_env_var *env_list, t_shell *shell);
+void execute_command(t_command *cmd, t_env_var *env_list);
 void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd, t_shell *shell);
 void exec_start(t_command *commands, t_shell *shell);
 void free_command2(t_command *cmd);
+char *find_plus_equal(const char *str);
 // int is_builtin(t_command *cmd);
 
 #endif

@@ -7,7 +7,58 @@
 #include "../includes/redirections.h"
 #include <stdbool.h>
 #include <stdio.h>
-#include <sys/_types/_null.h>
+#include <signal.h>
+#include <termios.h>
+
+volatile int g_exit_status = 0;
+
+// Function to save and restore terminal settings using a static variable
+void ft_terminal_settings(int mode) {
+    static struct termios original_attributes;
+
+    if (mode == 0) {
+        // Save current terminal settings
+        tcgetattr(STDIN_FILENO, &original_attributes);
+    } else {
+        // Restore original terminal settings
+        tcsetattr(STDIN_FILENO, TCSANOW, &original_attributes);
+    }
+}
+
+// Function to configure the terminal settings
+void configure_terminal_settings(void) {
+    struct termios attributes;
+    tcgetattr(STDIN_FILENO, &attributes);
+    attributes.c_lflag &= ~ECHOCTL; // Disable echo for control characters
+    tcsetattr(STDIN_FILENO, TCSANOW, &attributes);
+}
+
+// Signal handler function
+void signal_handler(int sig) {
+    if (sig == SIGINT) {
+        g_exit_status = 130;
+        write(1, "\n", 1);     // Print a newline
+        rl_replace_line("", 0); // Clear the current input line
+        rl_on_new_line();       // Inform readline that the cursor is on a new line
+        rl_redisplay();         // Redisplay the prompt
+    }
+    // No need to handle SIGQUIT as it will be ignored
+}
+
+// Function to set up signal handlers
+void setup_signal_handlers(void) {
+    struct sigaction sa;
+
+    sa.sa_handler = signal_handler;
+    sa.sa_flags = SA_RESTART;  // Restart interrupted system calls
+    sigemptyset(&sa.sa_mask);
+
+    sigaction(SIGINT, &sa, NULL);
+
+    // Setup to ignore SIGQUIT
+    sa.sa_handler = SIG_IGN;
+    sigaction(SIGQUIT, &sa, NULL);
+}
 
 void	ft_exit(t_shell *shell)
 {
@@ -56,53 +107,20 @@ int	ft_manage_input(t_shell *shell)
 	return (0);
 }
 
-void	handle_redirection(t_command *cmd)
+void	handle_redirection(t_command *cmd, t_shell *shell)
 {
 	if (cmd->input)
-		setup_input_redirection(cmd->input);
+		setup_input_redirection(cmd->input, shell);
 	if (cmd->output)
-		setup_output_redirection(cmd->output);
+		setup_output_redirection(cmd->output, shell);
 }
 
 int	is_builtin(char *command)
 {
-	return (ft_strcmp(command, "echo") == 0 || ft_strcmp(command, "exit") == 0);
+	return (ft_strcmp(command, "echo") == 0 || ft_strcmp(command, "exit") == 0 || ft_strcmp(command, "cd") == 0
+		|| ft_strcmp(command, "pwd") == 0 || ft_strcmp(command, "export") == 0 || ft_strcmp(command, "unset") == 0
+		|| ft_strcmp(command, "env") == 0);
 }
-// void	execute_single_command(t_command *cmd, t_shell *shell)
-// {
-// 	if (cmd->argv[0] == NULL)
-// 	{
-// 		if (cmd->input && cmd->input->file)
-// 		{
-// 			if (access(cmd->input->file, F_OK) != 0)
-// 			{
-// 				fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->input->file);
-// 				shell->exit_code = 1;
-// 				return;
-// 			}
-// 		}
-// 		if (cmd->output && cmd->output->file)
-// 		{
-// 			int fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-// 			if (fd == -1)
-// 			{
-// 				fprintf(stderr, "minishell: %s: No such file or directory\n", cmd->output->file);
-// 				shell->exit_code = 1;
-// 				return;
-// 			}
-// 			close(fd);
-// 		}
-// 		return;
-// 	}
-// 	if (is_builtin(cmd->argv[0]))
-// 	{
-// 		handle_builtin(cmd, shell);
-// 	}
-// 	else
-// 	{
-// 		exec_start(cmd, shell);
-// 	}
-// }
 
 void	execute_single_command(t_command *cmd, t_shell *shell)
 {
@@ -161,10 +179,12 @@ void	execute_single_command(t_command *cmd, t_shell *shell)
     // Check if the command is a built-in
     if (is_builtin(cmd->argv[0]))
     {
+		// printf("buildin\n");
         handle_builtin(cmd, shell);
     }
     else
     {
+		// printf("non-buildin\n");
         exec_start(cmd, shell);
     }
 }
@@ -177,6 +197,10 @@ int	main(int argc, char **argv, char **env)
 	t_shell	shell;
 
 	ft_init_shell(&shell, env);
+
+    ft_terminal_settings(0); // Save original terminal settings
+    configure_terminal_settings();
+    setup_signal_handlers();
 
 	if (argc > 1 || argv[0] == NULL)
 		return (0);
@@ -225,54 +249,3 @@ int	main(int argc, char **argv, char **env)
 	return (shell.exit_code);
 }
 
-// #define TESTER 1
-
-
-// TO DO
-// no expandir variables que se encuentren adentro de Q, quizas con un flag o algo
-
-// unir tokens que con WORD DQ y Q que esten consecutivos
-
-// checkear >">"
-
-
-	// print_env_vars(shell.env_list);
-// void handle_sigint(int sig)
-// {
-// 	printf("\n");
-// 	rl_on_new_line();
-// 	rl_replace_line("", 0);
-// 	rl_redisplay();
-// }
-
-// void	handle_sigquit(int sig)
-// {
-
-// }
-
-
-
-
-		// print_command(shell.cmds);
-// To do
-
-// limpiar argv despues de conseguir input y output files
-
-		// print_cmd_list(cmds);
-		// print_linked_list(tokens);
-
-// ver si puedo implementar una history
-// ver que es expand
-
-// 3.1.2.3 Double Quotes
-// Enclosing characters in double quotes
-// (‘"’) preserves the literal value of all characters
-//  within the quotes, with the exception of ‘$’, ‘`’, ‘\’
-
-// Tilde Expansion:
-
-// Expands the tilde character (~) to the value of the home directory. For example, ~ expands to /home/username.
-// Parameter and Variable Expansion:
-
-// Replaces variables with their values. For example, $HOME expands to /home/username.
-// Can also include modifiers, such as ${VAR:-default}, which provides a default value if the variable is unset.
