@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   handle_redir.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/24 12:38:09 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/07 15:10:16 by adrherna         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../includes/parser.h"
 #include <stdbool.h>
 #include <stdio.h>
@@ -53,6 +41,7 @@ void	ft_handle_input(t_token *tokens, t_redirection *input)
 		input->type = REDIR_HEREDOC;
 		input->file = ft_strdup("./tmp/heredoc.txt");
 	}
+
 }
 
 void	ft_handle_redir(t_token *tokens, t_redirection *input,
