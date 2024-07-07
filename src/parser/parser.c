@@ -22,9 +22,9 @@ void	ft_parser(t_shell *shell, t_token **tokens)
 		if (current->type == PIPE)
 			current = current->next;
 		new = ft_new_node();
-		new->argv = ft_get_darray(&current, &shell, new->input, new->output);
-		// If no arguments, new->argv is already NULL
+		new->argv = ft_get_darray(&current, new->input, new->output);
 		add_or_init_node(&shell->cmds, new);
+		// If no arguments, new->argv is already NULL
 		// print_command(new);
 	}
 }
