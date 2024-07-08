@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:51:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/08 12:53:06 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/08 13:13:22 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,42 +30,102 @@ char	*ft_extract_sq(char *input, int *i)
 	return (segment);
 }
 
+//dsfjkdsfodsfdsfdsf
 
-char	*ft_extract_dq(char *input, int *i, t_shell *shell)
+char *extract_and_append_segment(char *input, int *i, char *segment)
 {
-	char	*segment;
-	char	*exp_var;
-	char	*temp_segment;
+	char *temp_segment = ft_extract_segment_dq(input, i);
+	if (temp_segment)
+	{
+		char *new_segment = ft_join_input(segment, temp_segment);
+		free(temp_segment);
+		return new_segment;
+	}
+	return segment;
+}
 
-	segment = strdup("");
+char *handle_and_append_variable(char *input, int *i, char *segment, t_shell *shell)
+{
+	if (input[*i] == '$')
+	{
+		char *exp_var = ft_extract_var(input, i);
+		if (exp_var)
+		{
+			char *expanded_var = ft_expand_var_dq(shell, exp_var);
+			if (expanded_var)
+			{
+				char *new_segment = ft_join_input(segment, expanded_var);
+				free(expanded_var);
+				return new_segment;
+			}
+			free(exp_var);
+		}
+	}
+	return segment;
+}
+
+char *ft_extract_dq(char *input, int *i, t_shell *shell)
+{
+	char *segment = strdup("");
 	if (!segment)
-		return (NULL);
+		return NULL;
+
 	(*i)++;
 	while (input[*i] != '\0' && input[*i] != '\"')
 	{
-		temp_segment = ft_extract_segment_dq(input, i);
-		if (temp_segment)
-		{
-			segment = ft_join_input(segment, temp_segment);
-			free(temp_segment);
-		}
-		if (input[*i] == '$')
-		{
-			exp_var = ft_extract_var(input, i);
-			if (exp_var)
-			{
-				exp_var = ft_expand_var_dq(shell, exp_var);
-				if (exp_var)
-					segment = ft_join_input(segment, exp_var);
-				free(exp_var);
-			}
-		}
+
+		segment = extract_and_append_segment(input, i, segment);
+
+		segment = handle_and_append_variable(input, i, segment, shell);
 	}
 	if (input[*i] == '\"')
 		(*i)++;
 	segment = ft_quote_string(segment);
-	return (segment);
+	return segment;
 }
+
+// char	*ft_extract_dq(char *input, int *i, t_shell *shell)
+// {
+// 	char	*segment;
+// 	char	*exp_var;
+// 	char	*temp_segment;
+
+// 	segment = strdup("");
+// 	if (!segment)
+// 		return (NULL);
+// 	(*i)++;
+// 	while (input[*i] != '\0' && input[*i] != '\"')
+// 	{
+// 		temp_segment = ft_extract_segment_dq(input, i);
+// 		// segment 1
+// 		if (temp_segment)
+// 		{
+// 			segment = ft_join_input(segment, temp_segment);
+// 			free(temp_segment);
+// 		}
+// 		//
+// 		// segment 2
+// 		if (input[*i] == '$')
+// 		{
+// 			exp_var = ft_extract_var(input, i);
+// 			if (exp_var)
+// 			{
+// 				exp_var = ft_expand_var_dq(shell, exp_var);
+// 				if (exp_var)
+// 					segment = ft_join_input(segment, exp_var);
+// 				free(exp_var);
+// 			}
+// 		}
+// 		//
+// 	}
+// 	if (input[*i] == '\"')
+// 		(*i)++;
+// 	segment = ft_quote_string(segment);
+// 	return (segment);
+// }
+
+
+//dsfjkdsfodsfdsfdsf
 
 char	*ft_extract_segment(char *input, int *i, t_shell *shell)
 {
