@@ -1,8 +1,7 @@
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror  -g
+CFLAGS = -Wall -Wextra -Werror -g
 # CFLAGS = -fsanitize=address -g
-# ~
 # Project name
 NAME = minishell
 

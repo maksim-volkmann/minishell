@@ -7,14 +7,12 @@
 #include <stdio.h>
 
 // Function to free a split array
-// Function to free a split array
-void ft_free_split(char **arr)
-{
+// This function frees the memory allocated for an array of strings
+void ft_free_split(char **arr) {
     int i = 0;
     if (!arr)
         return;
-    while (arr[i])
-    {
+    while (arr[i]) {
         free(arr[i]);
         i++;
     }
@@ -22,11 +20,10 @@ void ft_free_split(char **arr)
 }
 
 // Function to find the value of an environment variable
-char *get_env_value(t_env_var *env_list, const char *key)
-{
+// This function searches for the environment variable with the given key and returns its value
+char *get_env_value(t_env_var *env_list, const char *key) {
     t_env_var *current = env_list;
-    while (current)
-    {
+    while (current) {
         if (ft_strcmp(current->key, key) == 0)
             return current->value;
         current = current->next;
@@ -34,17 +31,18 @@ char *get_env_value(t_env_var *env_list, const char *key)
     return NULL;
 }
 
-char *create_cmd_path(char *dir, char *cmd)
-{
+// Function to create a command path by joining a directory and command name
+// This function returns a new string that represents the full path of a command
+char *create_cmd_path(char *dir, char *cmd) {
     char *path = ft_strjoin(dir, "/");
     char *full_path = ft_strjoin(path, cmd);
     free(path);
     return full_path;
 }
 
-// Find the correct path for the given command
-char *find_correct_path(char *cmd, t_env_var *env_list)
-{
+// Function to find the correct path for a given command
+// This function searches through the PATH environment variable for the executable command
+char *find_correct_path(char *cmd, t_env_var *env_list) {
     char *path_var = get_env_value(env_list, "PATH");
     char **paths;
     char *correct_path;
@@ -53,11 +51,9 @@ char *find_correct_path(char *cmd, t_env_var *env_list)
     if (!path_var)
         return NULL;
     paths = ft_split(path_var, ':');
-    while (paths[i])
-    {
+    while (paths[i]) {
         correct_path = create_cmd_path(paths[i], cmd);
-        if (access(correct_path, X_OK) == 0)
-        {
+        if (access(correct_path, X_OK) == 0) {  // Check if the command is executable
             ft_free_split(paths);
             return correct_path;
         }
@@ -68,21 +64,18 @@ char *find_correct_path(char *cmd, t_env_var *env_list)
     return NULL;
 }
 
-// Setup input redirection
-void setup_input_redirection(t_redirection *input, t_shell *shell)
-{
+// Function to setup input redirection
+// This function redirects the standard input (STDIN) to the specified file
+void setup_input_redirection(t_redirection *input, t_shell *shell) {
     int fd;
-    if (input && input->file)
-    {
+    if (input && input->file) {
         fd = open(input->file, O_RDONLY);
-        if (fd == -1)
-        {
+        if (fd == -1) {
             perror(input->file);
             shell->exit_code = 1;
             exit(shell->exit_code);
         }
-        if (dup2(fd, STDIN_FILENO) == -1)
-        {
+        if (dup2(fd, STDIN_FILENO) == -1) {  // Redirect STDIN to the file descriptor
             perror("dup2 input redirection file");
             shell->exit_code = 1;
             exit(shell->exit_code);
@@ -91,24 +84,21 @@ void setup_input_redirection(t_redirection *input, t_shell *shell)
     }
 }
 
-// Setup output redirection
-void setup_output_redirection(t_redirection *output, t_shell *shell)
-{
+// Function to setup output redirection
+// This function redirects the standard output (STDOUT) to the specified file
+void setup_output_redirection(t_redirection *output, t_shell *shell) {
     int fd = -1;
-    if (output && output->file)
-    {
+    if (output && output->file) {
         if (output->type == REDIR_OUTPUT)
             fd = open(output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
         else if (output->type == REDIR_APPEND)
             fd = open(output->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-        if (fd == -1)
-        {
+        if (fd == -1) {
             perror(output->file);
             shell->exit_code = 1;
             exit(shell->exit_code);
         }
-        if (dup2(fd, STDOUT_FILENO) == -1)
-        {
+        if (dup2(fd, STDOUT_FILENO) == -1) {  // Redirect STDOUT to the file descriptor
             perror("dup2 output redirection file");
             shell->exit_code = 1;
             exit(shell->exit_code);
@@ -118,86 +108,74 @@ void setup_output_redirection(t_redirection *output, t_shell *shell)
 }
 
 // Function to handle the echo command
-void execute_echo(char **argv)
-{
+// This function prints the provided arguments to the standard output
+void execute_echo(char **argv) {
     int i = 1;
     int newline = 1;
 
-    // Check for -n flag
-    while (argv[i] && ft_strncmp(argv[i], "-n", 2) == 0)
-    {
-        // Ensure all characters after the initial -n are also 'n'
+    // Check for -n flag (which indicates no newline at the end)
+    while (argv[i] && ft_strncmp(argv[i], "-n", 2) == 0) {
         int j = 2;
-        while (argv[i][j] == 'n')
-        {
+        while (argv[i][j] == 'n') {
             j++;
         }
-        // If we reach the end of the string and all characters are 'n', it's a valid -n flag
-        if (argv[i][j] == '\0')
-        {
+        if (argv[i][j] == '\0') {
             newline = 0;
             i++;
-        }
-        else
-        {
+        } else {
             break;
         }
     }
 
-    while (argv[i])
-    {
+    // Print the arguments
+    while (argv[i]) {
         printf("%s", argv[i]);
         if (argv[i + 1])
             printf(" ");
         i++;
     }
 
+    // Print newline if -n flag is not set
     if (newline)
         printf("\n");
 }
 
 // Function to handle the exit command
-int execute_exit(char **argv, t_shell *shell)
-{
+// This function handles the logic for the exit command, including error checking for numeric arguments
+int execute_exit(char **argv, t_shell *shell) {
     int count = 0;
     bool has_sign = false;
 
+    // Count the number of arguments
     while (argv[count])
         count++;
     if (count == 1)
         ft_exit(shell);
-    if (strcmp(argv[1], "") == 0)
-    {
+    if (strcmp(argv[1], "") == 0) {
         shell->exit_code = 255;
         fprintf(stderr, "exit\nminishell: exit: %s: numeric argument required\n", argv[1]);
         ft_exit(shell);
     }
     int i = 0;
-    while (argv[1][i])
-    {
-        if ((!ft_isdigit(argv[1][i]) && argv[1][i] != '-' && argv[1][i] != '+')
-            || (has_sign && (argv[1][i] == '-' || argv[1][i] == '+')))
-        {
+    // Check if the argument is a valid number
+    while (argv[1][i]) {
+        if ((!ft_isdigit(argv[1][i]) && argv[1][i] != '-' && argv[1][i] != '+') ||
+            (has_sign && (argv[1][i] == '-' || argv[1][i] == '+'))) {
             shell->exit_code = 255;
-            if (count == 2)
-            {
+            if (count == 2) {
                 fprintf(stderr, "exit\nminishell: exit: %s: numeric argument required\n", argv[1]);
                 ft_exit(shell);
-            }
-            else
-            {
+            } else {
                 fprintf(stderr, "exit\nminishell: exit: too many arguments\n");
                 ft_exit(shell);
             }
         }
-        if (argv[1][i] == '-' || argv[1][i] == '+')
-        {
+        if (argv[1][i] == '-' || argv[1][i] == '+') {
             has_sign = true;
         }
         i++;
     }
-    if (count == 2)
-    {
+    if (count == 2) {
         shell->exit_code = ft_atoi(argv[1]);
         ft_exit(shell);
     }
@@ -206,30 +184,27 @@ int execute_exit(char **argv, t_shell *shell)
     return 1;
 }
 
-void execute_pwd()
-{
+// Function to handle the pwd command
+// This function prints the current working directory
+void execute_pwd() {
     char buffer[1024];
     char *cwd;
 
     cwd = getcwd(buffer, sizeof(buffer));
-    if (cwd)
-    {
+    if (cwd) {
         ft_putstr_fd(cwd, STDOUT_FILENO);
         ft_putchar_fd('\n', STDOUT_FILENO);
-    }
-    else
-    {
+    } else {
         perror("getcwd");
     }
 }
 
-void update_env_var(t_env_var **env_list, const char *key, const char *value)
-{
+// Function to update an environment variable
+// This function updates the value of an environment variable or adds it if it doesn't exist
+void update_env_var(t_env_var **env_list, const char *key, const char *value) {
     t_env_var *current = *env_list;
-    while (current)
-    {
-        if (ft_strcmp(current->key, key) == 0)
-        {
+    while (current) {
+        if (ft_strcmp(current->key, key) == 0) {
             free(current->value);
             current->value = ft_strdup(value);
             return;
@@ -239,14 +214,14 @@ void update_env_var(t_env_var **env_list, const char *key, const char *value)
     add_env_var(env_list, key, value);
 }
 
-int update_pwd(t_env_var **env_list, char *old_pwd)
-{
+// Function to update the PWD and OLDPWD environment variables
+// This function updates the current and previous working directories
+int update_pwd(t_env_var **env_list, char *old_pwd) {
     char buffer[1024];
     char *new_pwd;
 
     new_pwd = getcwd(buffer, sizeof(buffer));
-    if (!new_pwd)
-    {
+    if (!new_pwd) {
         perror("getcwd");
         return 1;
     }
@@ -257,19 +232,18 @@ int update_pwd(t_env_var **env_list, char *old_pwd)
     return 0;
 }
 
-int change_to_home(t_env_var **env_list)
-{
+// Function to change the directory to the home directory
+// This function changes the current working directory to the user's home directory
+int change_to_home(t_env_var **env_list) {
     char *home_dir;
 
     home_dir = get_env_value(*env_list, "HOME");
-    if (!home_dir)
-    {
+    if (!home_dir) {
         ft_putendl_fd("cd: HOME not set", STDERR_FILENO);
         return 1;
     }
 
-    if (chdir(home_dir) != 0)
-    {
+    if (chdir(home_dir) != 0) {
         perror("chdir");
         return 1;
     }
@@ -277,71 +251,59 @@ int change_to_home(t_env_var **env_list)
     return 0;
 }
 
-int execute_cd(char **args, t_env_var **env_list)
-{
+// Function to handle the cd command
+// This function changes the current working directory and updates the PWD and OLDPWD environment variables
+int execute_cd(char **args, t_env_var **env_list) {
     char buffer[1024];
     char *old_pwd;
     int status;
 
-    // Get the current working directory
     old_pwd = getcwd(buffer, sizeof(buffer));
-    if (!old_pwd)
-    {
+    if (!old_pwd) {
         perror("getcwd");
         return 1;
     }
 
-    // If no argument is provided, change to home directory
-    if (!args[1])
-    {
+    if (!args[1]) {
         if (change_to_home(env_list) != 0)
             return 1;
-        // Update PWD and OLDPWD environment variables
         status = update_pwd(env_list, old_pwd);
         return status;
     }
 
-    // Change directory to the given path
-    if (chdir(args[1]) != 0)
-    {
+    if (chdir(args[1]) != 0) {
         ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
         ft_putstr_fd(args[1], STDERR_FILENO);
         ft_putendl_fd(": No such file or directory", STDERR_FILENO);
         return 1;
     }
 
-    // Update PWD and OLDPWD environment variables
     status = update_pwd(env_list, old_pwd);
 
     return status;
 }
 
-int execute_env(char **args, t_env_var *env_list)
-{
-    if (args[1] != NULL) // Check if there are arguments
-    {
+// Function to handle the env command
+// This function prints the current environment variables
+int execute_env(char **args, t_env_var *env_list) {
+    if (args[1] != NULL) {
         ft_putstr_fd("env: ", STDERR_FILENO);
         ft_putstr_fd(args[1], STDERR_FILENO);
         ft_putendl_fd(": No such file or directory", STDERR_FILENO);
-        return 127; // Set exit code to 127 (command not found)
-    }
-    else
-    {
-        print_env_vars(env_list); // Print environment variables if no arguments
-        return 0; // Success exit code
+        return 127;
+    } else {
+        print_env_vars(env_list);
+        return 0;
     }
 }
 
-// EXPORT:
-
-void print_export_vars(t_env_var *env_list)
-{
+// Function to print exported variables
+// This function prints all environment variables in the format used by the export command
+void print_export_vars(t_env_var *env_list) {
     t_env_var *current = env_list;
-    while (current)
-    {
+    while (current) {
         printf("declare -x %s", current->key);
-        if (current->value)
-        {
+        if (current->value) {
             printf("=\"%s\"", current->value);
         }
         printf("\n");
@@ -349,52 +311,45 @@ void print_export_vars(t_env_var *env_list)
     }
 }
 
-void reduce_white_space(char *str)
-{
+// Function to reduce white space in a string
+// This function trims leading, trailing, and excessive spaces between words in a string
+void reduce_white_space(char *str) {
     char *dst = str;
     char *src = str;
     int in_word = 0;
 
-    // Skip leading whitespace
     while (ft_isspace((unsigned char)*src))
         src++;
 
-    // Process the string
-    while (*src)
-    {
-        if (ft_isspace((unsigned char)*src))
-        {
-            if (in_word)
-            {
+    while (*src) {
+        if (ft_isspace((unsigned char)*src)) {
+            if (in_word) {
                 *dst++ = ' ';
                 in_word = 0;
             }
-        }
-        else
-        {
+        } else {
             *dst++ = *src;
             in_word = 1;
         }
         src++;
     }
 
-    // Remove trailing space if any
     if (dst > str && ft_isspace((unsigned char)*(dst - 1)))
         dst--;
 
     *dst = '\0';
 }
 
-int is_valid_var_name(const char *name)
-{
+// Function to check if a variable name is valid
+// This function checks if a given string is a valid variable name in the shell
+int is_valid_var_name(const char *name) {
     int i;
 
     if (!name || (!ft_isalpha(name[0]) && name[0] != '_'))
         return 0;
 
     i = 1;
-    while (name[i] != '\0')
-    {
+    while (name[i] != '\0') {
         if (!ft_isalnum(name[i]) && name[i] != '_')
             return 0;
         i++;
@@ -402,41 +357,37 @@ int is_valid_var_name(const char *name)
     return 1;
 }
 
-char *find_plus_equal(const char *str)
-{
+// Function to find the += operator in a string
+// This function searches for the += substring in a given string
+char *find_plus_equal(const char *str) {
     return ft_strnstr(str, "+=", ft_strlen(str));
 }
 
-void execute_export(char **args, t_env_var **env_list, t_shell *shell)
-{
+// Function to handle the export command
+// This function sets or updates environment variables based on the provided arguments
+void execute_export(char **args, t_env_var **env_list, t_shell *shell) {
     int i = 1;
     char *key;
     char *value;
     int invalid_identifier = 0;
 
-    if (args[1] == NULL)
-    {
+    if (args[1] == NULL) {
         print_export_vars(*env_list);
         return;
     }
 
-    while (args[i])
-    {
+    while (args[i]) {
         char *plus_equal_sign = find_plus_equal(args[i]);
 
-        if (plus_equal_sign != NULL)
-        {
-            *plus_equal_sign = '\0';  // Temporarily split the string
+        if (plus_equal_sign != NULL) {
+            *plus_equal_sign = '\0';
             key = args[i];
-            value = plus_equal_sign + 2;  // Get the value after +=
+            value = plus_equal_sign + 2;
 
-            if (is_valid_var_name(key))
-            {
+            if (is_valid_var_name(key)) {
                 t_env_var *current = *env_list;
-                while (current)
-                {
-                    if (ft_strcmp(current->key, key) == 0)
-                    {
+                while (current) {
+                    if (ft_strcmp(current->key, key) == 0) {
                         char *new_value = ft_strjoin(current->value, value);
                         free(current->value);
                         current->value = new_value;
@@ -444,53 +395,39 @@ void execute_export(char **args, t_env_var **env_list, t_shell *shell)
                     }
                     current = current->next;
                 }
-                if (current == NULL)
-                {
+                if (current == NULL) {
                     add_env_var(env_list, key, value);
                 }
-            }
-            else
-            {
-                *plus_equal_sign = '+';  // Restore the original argument for the error message
+            } else {
+                *plus_equal_sign = '+';
                 ft_putstr_fd("export: ", STDERR_FILENO);
                 ft_putstr_fd(args[i], STDERR_FILENO);
                 ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
                 invalid_identifier = 1;
             }
-        }
-        else
-        {
+        } else {
             char *equal_sign = ft_strchr(args[i], '=');
 
-            if (equal_sign != NULL)
-            {
-                *equal_sign = '\0';  // Temporarily split the string
+            if (equal_sign != NULL) {
+                *equal_sign = '\0';
                 key = args[i];
                 value = equal_sign + 1;
 
-                if (is_valid_var_name(key))
-                {
+                if (is_valid_var_name(key)) {
                     update_env_var(env_list, key, value);
-                }
-                else
-                {
+                } else {
                     *equal_sign = '=';
                     ft_putstr_fd("export: ", STDERR_FILENO);
                     ft_putstr_fd(args[i], STDERR_FILENO);
                     ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
                     invalid_identifier = 1;
                 }
-            }
-            else
-            {
+            } else {
                 key = args[i];
 
-                if (is_valid_var_name(key))
-                {
+                if (is_valid_var_name(key)) {
                     update_env_var(env_list, key, NULL);
-                }
-                else
-                {
+                } else {
                     ft_putstr_fd("export: ", STDERR_FILENO);
                     ft_putstr_fd(args[i], STDERR_FILENO);
                     ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
@@ -502,20 +439,19 @@ void execute_export(char **args, t_env_var **env_list, t_shell *shell)
     }
 
     if (invalid_identifier)
-        shell->exit_code = 1; // Set exit code to 1 for invalid identifier
+        shell->exit_code = 1;
     else
-        shell->exit_code = 0; // Set exit code to 0 for success
+        shell->exit_code = 0;
 }
 
-void remove_env_var(t_env_var **env_list, const char *key)
-{
+// Function to remove an environment variable
+// This function removes an environment variable with the given key from the environment list
+void remove_env_var(t_env_var **env_list, const char *key) {
     t_env_var *current = *env_list;
     t_env_var *prev = NULL;
 
-    while (current)
-    {
-        if (ft_strcmp(current->key, key) == 0)
-        {
+    while (current) {
+        if (ft_strcmp(current->key, key) == 0) {
             if (prev)
                 prev->next = current->next;
             else
@@ -531,132 +467,112 @@ void remove_env_var(t_env_var **env_list, const char *key)
     }
 }
 
-void execute_unset(char **args, t_env_var **env_list, t_shell *shell)
-{
+// Function to handle the unset command
+// This function removes environment variables based on the provided arguments
+void execute_unset(char **args, t_env_var **env_list, t_shell *shell) {
     int i = 1;
     int invalid_identifier = 0;
 
-    while (args[i])
-    {
-        if (!is_valid_var_name(args[i]))
-        {
+    while (args[i]) {
+        if (!is_valid_var_name(args[i])) {
             ft_putstr_fd("unset: ", STDERR_FILENO);
             ft_putstr_fd(args[i], STDERR_FILENO);
             ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
             invalid_identifier = 1;
-        }
-        else
-        {
+        } else {
             remove_env_var(env_list, args[i]);
         }
         i++;
     }
 
     if (invalid_identifier)
-        shell->exit_code = 1; // Set exit code to 1 for invalid identifier
+        shell->exit_code = 1;
     else
-        shell->exit_code = 0; // Set exit code to 0 for success
+        shell->exit_code = 0;
 }
 
 // Function to handle built-in commands
-int handle_builtin(t_command *cmd, t_shell *shell)
-{
+// This function executes built-in commands and handles their input/output redirections
+int handle_builtin(t_command *cmd, t_shell *shell) {
     int saved_stdout = -1;
 
-    if (cmd->output)
-    {
+    if (cmd->output) {
         saved_stdout = dup(STDOUT_FILENO);
         setup_output_redirection(cmd->output, shell);
     }
 
-    if (cmd->argv[0] == NULL)
-    {
-        if (cmd->output)
-        {
+    if (cmd->argv[0] == NULL) {
+        if (cmd->output) {
             dup2(saved_stdout, STDOUT_FILENO);
             close(saved_stdout);
         }
         return 0;
     }
 
-    if (ft_strcmp(cmd->argv[0], "echo") == 0)
-    {
+    if (ft_strcmp(cmd->argv[0], "echo") == 0) {
         execute_echo(cmd->argv);
         shell->exit_code = 0;
-        if (cmd->output)
-        {
+        if (cmd->output) {
             dup2(saved_stdout, STDOUT_FILENO);
             close(saved_stdout);
         }
         return 0;
     }
 
-    if (ft_strcmp(cmd->argv[0], "pwd") == 0)
-    {
+    if (ft_strcmp(cmd->argv[0], "pwd") == 0) {
         execute_pwd();
         shell->exit_code = 0;
-        if (cmd->output)
-        {
+        if (cmd->output) {
             dup2(saved_stdout, STDOUT_FILENO);
             close(saved_stdout);
         }
         return 0;
     }
 
-    if (ft_strcmp(cmd->argv[0], "cd") == 0)
-    {
+    if (ft_strcmp(cmd->argv[0], "cd") == 0) {
         shell->exit_code = execute_cd(cmd->argv, &shell->env_list);
-        if (cmd->output)
-        {
+        if (cmd->output) {
             dup2(saved_stdout, STDOUT_FILENO);
             close(saved_stdout);
         }
         return 0;
     }
 
-    if (ft_strcmp(cmd->argv[0], "env") == 0)
-    {
+    if (ft_strcmp(cmd->argv[0], "env") == 0) {
         shell->exit_code = execute_env(cmd->argv, shell->env_list);
-        if (cmd->output)
-        {
+        if (cmd->output) {
             dup2(saved_stdout, STDOUT_FILENO);
             close(saved_stdout);
         }
         return 0;
     }
 
-    if (ft_strcmp(cmd->argv[0], "export") == 0)
-    {
+    if (ft_strcmp(cmd->argv[0], "export") == 0) {
         execute_export(cmd->argv, &shell->env_list, shell);
-        if (cmd->output)
-        {
+        if (cmd->output) {
             dup2(saved_stdout, STDOUT_FILENO);
             close(saved_stdout);
         }
         return 0;
     }
 
-    if (ft_strcmp(cmd->argv[0], "unset") == 0)
-    {
+    if (ft_strcmp(cmd->argv[0], "unset") == 0) {
         execute_unset(cmd->argv, &shell->env_list, shell);
-        if (cmd->output)
-        {
+        if (cmd->output) {
             dup2(saved_stdout, STDOUT_FILENO);
             close(saved_stdout);
         }
         return 0;
     }
 
-    if (ft_strcmp(cmd->argv[0], "exit") == 0)
-    {
+    if (ft_strcmp(cmd->argv[0], "exit") == 0) {
         shell->exit_code = execute_exit(cmd->argv, shell);
         if (cmd->output)
             close(saved_stdout);
         return 0;
     }
 
-    if (cmd->output)
-    {
+    if (cmd->output) {
         dup2(saved_stdout, STDOUT_FILENO);
         close(saved_stdout);
     }
@@ -664,20 +580,16 @@ int handle_builtin(t_command *cmd, t_shell *shell)
     return -1;
 }
 
-// Execute a command
-void execute_command(t_command *cmd, t_env_var *env_list)
-{
+// Function to execute a command
+// This function finds the correct path for the command and executes it using execve
+void execute_command(t_command *cmd, t_env_var *env_list) {
     char *executable_path;
 
-    if (ft_strchr(cmd->argv[0], '/') != NULL)
-    {
+    if (ft_strchr(cmd->argv[0], '/') != NULL) {
         executable_path = ft_strdup(cmd->argv[0]);
-    }
-    else
-    {
+    } else {
         executable_path = find_correct_path(cmd->argv[0], env_list);
-        if (executable_path == NULL)
-        {
+        if (executable_path == NULL) {
             fprintf(stderr, "%s: command not found\n", cmd->argv[0]);
             exit(127);
         }
@@ -685,16 +597,14 @@ void execute_command(t_command *cmd, t_env_var *env_list)
 
     int env_count = 0;
     t_env_var *current = env_list;
-    while (current)
-    {
+    while (current) {
         env_count++;
         current = current->next;
     }
 
     char **envp = malloc(sizeof(char *) * (env_count + 1));
     current = env_list;
-    for (int i = 0; i < env_count; i++)
-    {
+    for (int i = 0; i < env_count; i++) {
         envp[i] = malloc(strlen(current->key) + strlen(current->value) + 2);
         sprintf(envp[i], "%s=%s", current->key, current->value);
         current = current->next;
@@ -703,8 +613,7 @@ void execute_command(t_command *cmd, t_env_var *env_list)
 
     execve(executable_path, cmd->argv, envp);
 
-    for (int i = 0; i < env_count; i++)
-    {
+    for (int i = 0; i < env_count; i++) {
         free(envp[i]);
     }
     free(envp);
@@ -714,8 +623,8 @@ void execute_command(t_command *cmd, t_env_var *env_list)
     exit(EXIT_FAILURE);
 }
 
-
-// Updated fork_and_execute function
+// Function to fork a process and execute a command
+// This function handles forking and executing a command with input/output redirections
 void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int output_fd, t_shell *shell) {
     pid_t pid = fork();
 
@@ -724,9 +633,6 @@ void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int out
         shell->exit_code = 1;
         exit(shell->exit_code);
     } else if (pid == 0) {
-        // Child process
-
-        // Setup input redirection if needed
         if (input_fd != -1) {
             if (dup2(input_fd, STDIN_FILENO) == -1) {
                 perror("dup2 input_fd");
@@ -736,7 +642,6 @@ void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int out
             close(input_fd);
         }
 
-        // Setup output redirection if needed
         if (output_fd != -1) {
             if (dup2(output_fd, STDOUT_FILENO) == -1) {
                 perror("dup2 output_fd");
@@ -746,15 +651,12 @@ void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int out
             close(output_fd);
         }
 
-        // Setup redirections specified in the command
         setup_input_redirection(cmd->input, shell);
         setup_output_redirection(cmd->output, shell);
 
-        // Execute the command
         execute_command(cmd, env_list);
         exit(shell->exit_code);
     } else {
-        // Parent process
         if (input_fd != -1) close(input_fd);
         if (output_fd != -1) close(output_fd);
         waitpid(pid, &shell->exit_code, 0);
@@ -766,7 +668,8 @@ void fork_and_execute(t_command *cmd, t_env_var *env_list, int input_fd, int out
     }
 }
 
-
+// Function to execute a pipeline of commands
+// This function handles setting up pipes between commands and forking processes to execute them
 void exec_start(t_command *commands, t_shell *shell) {
     int pipe_fd[2];
     int input_fd = -1;
@@ -801,8 +704,6 @@ void exec_start(t_command *commands, t_shell *shell) {
             perror("fork");
             exit(EXIT_FAILURE);
         } else if (last_pid == 0) {
-            // Child process
-
             if (input_fd != -1) {
                 if (dup2(input_fd, STDIN_FILENO) == -1) {
                     perror("dup2 input_fd");
@@ -821,10 +722,8 @@ void exec_start(t_command *commands, t_shell *shell) {
                 close(pipe_fd[1]);
             }
 
-            // Close unused pipe ends in the child process
             if (pipe_fd[0] != -1) close(pipe_fd[0]);
 
-            // Setup redirections specified in the command
             setup_input_redirection(cmd->input, shell);
             setup_output_redirection(cmd->output, shell);
 
@@ -833,7 +732,6 @@ void exec_start(t_command *commands, t_shell *shell) {
             }
             exit(shell->exit_code);
         } else {
-            // Parent process
             if (input_fd != -1) close(input_fd);
             if (pipe_fd[1] != -1) close(pipe_fd[1]);
             input_fd = pipe_fd[0];
@@ -843,7 +741,6 @@ void exec_start(t_command *commands, t_shell *shell) {
 
     if (input_fd != -1) close(input_fd);
 
-    // Wait for the last process to get the correct exit code
     waitpid(last_pid, &status, 0);
     if (WIFEXITED(status)) {
         shell->exit_code = WEXITSTATUS(status);
@@ -851,8 +748,6 @@ void exec_start(t_command *commands, t_shell *shell) {
         shell->exit_code = WTERMSIG(status) + 128;
     }
 
-    // Wait for all remaining processes in the pipeline
     while (wait(NULL) > 0) {
-        // No need to set exit code here as we only care about the last process
     }
 }
