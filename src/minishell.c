@@ -202,7 +202,7 @@ int	main(int argc, char **argv, char **env)
     configure_terminal_settings();
     setup_signal_handlers();
 
-	atexit(leaks);
+	// atexit(leaks);
 	if (argc > 1 || argv[0] == NULL)
 		return (0);
 	while (1)

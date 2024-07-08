@@ -8,6 +8,7 @@
 char	*ft_expander(char *input, t_shell *shell);
 char	*ft_extract_segment(char *input, int *i, t_shell *shell);
 char	*ft_extract_sq(char *input, int *i);
+char	*ft_extract_dq(char *input, int *i, t_shell *shell);
 
 // helper.c
 char	*ft_expand_var(t_shell *shell, char *var);
@@ -24,3 +25,12 @@ char	*ft_quote_string(char *input);
 char	*ft_strdup_dq(const char *s);
 char	*ft_expand_var_dq(t_shell *shell, char *var);
 #endif
+
+
+// helper_3.c
+
+char *ft_handle_single_quote(char *input, int *index, char *exp_input);
+
+char *ft_handle_double_quote(char *input, int *index, t_shell *shell, char *exp_input);
+
+char *ft_handle_segment(char *input, int *index, t_shell *shell, char *exp_input);

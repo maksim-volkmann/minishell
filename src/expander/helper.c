@@ -1,19 +1,5 @@
 #include "../../includes/expander.h"
 
-int	ft_is_separator_var(char c)
-{
-	int	i;
-
-	i = 0;
-	while (NOVAR[i] != '\0')
-	{
-		if (NOVAR[i] == c)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
 char	*ft_extract_var(char *input, int *i)
 {
 	char		*var;

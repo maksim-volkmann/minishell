@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:51:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/27 17:14:10 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/08 12:53:06 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,35 +99,56 @@ char	*ft_extract_segment(char *input, int *i, t_shell *shell)
 	return (segment);
 }
 
-char	*ft_expander(char *input, t_shell *shell)
+char *ft_expander(char *input, t_shell *shell)
 {
-	char	*exp_input;
-	char	*temp;
-	int		i;
+	char *exp_input;
+	int i;
 
-	i = 0;
 	exp_input = ft_strdup("");
-	while (input[i] != 0)
+	i = 0;
+	while (input[i] != '\0')
 	{
 		if (input[i] == '\'')
-		{
-			temp = ft_extract_sq(input, &i);
-			exp_input = ft_join_input(exp_input, temp);
-			free(temp);
-		}
+			exp_input = ft_handle_single_quote(input, &i , exp_input);
 		else if (input[i] == '\"')
-		{
-			temp = ft_extract_dq(input, &i, shell);
-			exp_input = ft_join_input(exp_input, temp);
-			free(temp);
-		}
+			exp_input = ft_handle_double_quote(input, &i, shell, exp_input);
 		else
-		{
-			temp = ft_extract_segment(input, &i, shell);
-			exp_input = ft_join_input(exp_input, temp);
-			free(temp);
-		}
+			exp_input = ft_handle_segment(input, &i, shell, exp_input);
 	}
+
 	free(input);
-	return (exp_input);
+	return exp_input;
 }
+
+// char	*ft_expander(char *input, t_shell *shell)
+// {
+// 	char	*exp_input;
+// 	char	*temp;
+// 	int		i;
+
+// 	i = 0;
+// 	exp_input = ft_strdup("");
+// 	while (input[i] != 0)
+// 	{
+// 		if (input[i] == '\'')
+// 		{
+// 			temp = ft_extract_sq(input, &i);
+// 			exp_input = ft_join_input(exp_input, temp);
+// 			free(temp);
+// 		}
+// 		else if (input[i] == '\"')
+// 		{
+// 			temp = ft_extract_dq(input, &i, shell);
+// 			exp_input = ft_join_input(exp_input, temp);
+// 			free(temp);
+// 		}
+// 		else
+// 		{
+// 			temp = ft_extract_segment(input, &i, shell);
+// 			exp_input = ft_join_input(exp_input, temp);
+// 			free(temp);
+// 		}
+// 	}
+// 	free(input);
+// 	return (exp_input);
+// }
