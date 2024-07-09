@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:51:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/08 13:13:22 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/09 11:12:00 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ char	*ft_extract_sq(char *input, int *i)
 	return (segment);
 }
 
-//dsfjkdsfodsfdsfdsf
+// dq management
 
-char *extract_and_append_segment(char *input, int *i, char *segment)
+char *extract_and_append_segment_dq(char *input, int *i, char *segment)
 {
 	char *temp_segment = ft_extract_segment_dq(input, i);
 	if (temp_segment)
@@ -44,7 +44,7 @@ char *extract_and_append_segment(char *input, int *i, char *segment)
 	return segment;
 }
 
-char *handle_and_append_variable(char *input, int *i, char *segment, t_shell *shell)
+char *handle_and_append_variable_dq(char *input, int *i, char *segment, t_shell *shell)
 {
 	if (input[*i] == '$')
 	{
@@ -74,9 +74,9 @@ char *ft_extract_dq(char *input, int *i, t_shell *shell)
 	while (input[*i] != '\0' && input[*i] != '\"')
 	{
 
-		segment = extract_and_append_segment(input, i, segment);
+		segment = extract_and_append_segment_dq(input, i, segment);
 
-		segment = handle_and_append_variable(input, i, segment, shell);
+		segment = handle_and_append_variable_dq(input, i, segment, shell);
 	}
 	if (input[*i] == '\"')
 		(*i)++;
@@ -124,40 +124,97 @@ char *ft_extract_dq(char *input, int *i, t_shell *shell)
 // 	return (segment);
 // }
 
+// dq management
 
-//dsfjkdsfodsfdsfdsf
+// segment management
 
-char	*ft_extract_segment(char *input, int *i, t_shell *shell)
+char *extract_and_append_segment(char *input, int *i, char *segment)
 {
-	char	*segment;
-	char	*exp_var;
-	char	*temp_segment;
+	char *temp_segment;
+	char *new_segment;
 
-	segment = strdup("");
-	if (!segment)
-		return (NULL);
-	while (input[*i] != '\0' && input[*i] != '\"' && input[*i] != '\'')
+	temp_segment = ft_segment_helper(input, i);
+	if (temp_segment)
 	{
-		temp_segment = ft_segment_helper(input, i);
-		if (temp_segment)
+		new_segment = ft_join_input(segment, temp_segment);
+		// free(temp_segment);  // Free the temporary segment
+		return new_segment;
+	}
+	return segment;
+}
+
+char *handle_and_append_variable(char *input, int *i, char *segment, t_shell *shell)
+{
+	char *exp_var;
+	char *expanded_var;
+	char *new_segment;
+
+	if (input[*i] == '$')
+	{
+		exp_var = ft_extract_var(input, i);
+		if (exp_var)
 		{
-			segment = ft_join_input(segment, temp_segment);
-			free(temp_segment);
-		}
-		if (input[*i] == '$')
-		{
-			exp_var = ft_extract_var(input, i);
-			if (exp_var)
+			expanded_var = ft_expand_var(shell, exp_var);
+			// free(exp_var);  // Free the extracted exp_var
+			if (expanded_var)
 			{
-				exp_var = ft_expand_var(shell, exp_var);
-				if (exp_var)
-					segment = ft_join_input(segment, exp_var);
-				free(exp_var);
+				new_segment = ft_join_input(segment, expanded_var);
+				// free(expanded_var);  // Free the expanded_var
+				return (new_segment);
 			}
 		}
 	}
 	return (segment);
 }
+
+char *ft_extract_segment(char *input, int *i, t_shell *shell)
+{
+	char *segment;
+
+	segment = strdup("");
+	if (!segment)
+		return NULL;
+	while (input[*i] != '\0' && input[*i] != '\"' && input[*i] != '\'')
+	{
+		segment = extract_and_append_segment(input, i, segment);
+		segment = handle_and_append_variable(input, i, segment, shell);
+	}
+	return (segment);
+}
+
+// char	*ft_extract_segment(char *input, int *i, t_shell *shell)
+// {
+// 	char	*segment;
+// 	char	*exp_var;
+// 	char	*temp_segment;
+
+// 	segment = strdup("");
+// 	if (!segment)
+// 		return (NULL);
+// 	while (input[*i] != '\0' && input[*i] != '\"' && input[*i] != '\'')
+// 	{
+// 		temp_segment = ft_segment_helper(input, i);
+// 		if (temp_segment)
+// 		{
+// 			segment = ft_join_input(segment, temp_segment);
+// 			free(temp_segment);
+// 		}
+// 		if (input[*i] == '$')
+// 		{
+// 			exp_var = ft_extract_var(input, i);
+// 			if (exp_var)
+// 			{
+// 				exp_var = ft_expand_var(shell, exp_var);
+// 				if (exp_var)
+// 					segment = ft_join_input(segment, exp_var);
+// 				free(exp_var);
+// 			}
+// 		}
+// 	}
+// 	return (segment);
+// }
+
+// segment management
 
 char *ft_expander(char *input, t_shell *shell)
 {
