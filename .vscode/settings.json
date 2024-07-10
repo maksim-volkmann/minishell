@@ -63,6 +63,10 @@
     "iterator": "c",
     "builtins.h": "c",
     "readline.h": "c",
-    "stdlib.h": "c"
+    "stdlib.h": "c",
+    "termios.h": "c",
+    "minishell.h": "c",
+    "__locale": "c",
+    "ios": "c"
   }
 }

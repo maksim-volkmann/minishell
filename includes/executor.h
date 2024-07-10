@@ -48,7 +48,7 @@ char *create_cmd_path(char *dir, char *cmd);
 char *find_correct_path(char *cmd, t_env_var *env_list);
 void setup_input_redirection(t_redirection *input, t_shell *shell);
 void setup_output_redirection(t_redirection *output, t_shell *shell);
-void execute_echo(char **argv);
+// void execute_echo(char **argv);
 // void execute_pwd(void);
 int execute_exit(char **argv, t_shell *shell);
 int handle_builtin(t_command *cmd, t_shell *shell);

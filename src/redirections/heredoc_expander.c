@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_expander.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: goldman <goldman@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 12:49:37 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/05 13:04:03 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/09 17:32:48 by goldman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 char	*ft_expand_hered_dq(t_shell *shell, char *var)
 {
 	t_env_var	*current;
-	char		*exp_var;
+	// char		*exp_var;
 
 	if (ft_strcmp(var, "?") == 0)
 		return (ft_itoa(shell->exit_code));
@@ -30,7 +30,7 @@ char	*ft_expand_hered_dq(t_shell *shell, char *var)
 	{
 		if (ft_strcmp(current->key, var) == 0)
 		{
-			exp_var = current->value;
+			// exp_var = current->value;
 			free(var);
 			return (ft_strdup(current->value));
 		}
@@ -43,7 +43,7 @@ char	*ft_expand_hered_dq(t_shell *shell, char *var)
 char	*ft_expand_var_hered(t_shell *shell, char *var)
 {
 	t_env_var	*current;
-	char		*exp_var;
+	// char		*exp_var;
 
 	if (ft_strcmp(var, "?") == 0)
 		return (ft_itoa(shell->exit_code));
@@ -54,7 +54,7 @@ char	*ft_expand_var_hered(t_shell *shell, char *var)
 	{
 		if (ft_strcmp(current->key, var) == 0)
 		{
-			exp_var = current->value;
+			// exp_var = current->value;
 			free(var);
 			return (ft_strdup(current->value));
 		}
