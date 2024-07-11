@@ -92,20 +92,20 @@ int	ft_heredoc_check(t_shell *shell)
 	return (0);
 }
 
-int	ft_manage_input(t_shell *shell)
-{
-	if (!shell->input)
-		ft_exit(shell);
-	add_history(shell->input);
-	// ft_heredoc_check(shell);
-	shell->input = ft_expander_heredoc(shell->input, shell);
-	if (ft_strcmp(shell->input, "") == 0)
-	{
-		free(shell->input);
-		return (1);
-	}
-	return (0);
-}
+// int	ft_manage_input(t_shell *shell)
+// {
+// 	if (!shell->input)
+// 		ft_exit(shell);
+// 	add_history(shell->input);
+// 	// ft_heredoc_check(shell);
+// 	shell->input = ft_expander_heredoc(shell->input, shell);
+// 	if (ft_strcmp(shell->input, "") == 0)
+// 	{
+// 		free(shell->input);
+// 		return (1);
+// 	}
+// 	return (0);
+// }
 
 void	handle_redirection(t_command *cmd, t_shell *shell)
 {

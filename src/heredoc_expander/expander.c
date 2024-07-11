@@ -6,14 +6,14 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:51:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/09 12:45:24 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/11 13:51:03 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/expander.h"
 #include <sys/fcntl.h>
 
-char *ft_expander(char *input, t_shell *shell)
+char *ft_expander_hd(char *input, t_shell *shell)
 {
 	char *exp_input;
 	int i;

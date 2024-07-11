@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   helper_3.c                                         :+:      :+:    :+:   */
+/*   single_quote.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/08 12:23:35 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/08 12:52:35 by adrherna         ###   ########.fr       */
+/*   Created: 2024/07/09 11:55:55 by adrherna          #+#    #+#             */
+/*   Updated: 2024/07/09 11:58:27 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/expander.h"
+
 char *ft_handle_single_quote(char *input, int *index, char *exp_input)
 {
 	char *temp;
@@ -22,37 +23,20 @@ char *ft_handle_single_quote(char *input, int *index, char *exp_input)
 	return new_exp_input;
 }
 
-char *ft_handle_double_quote(char *input, int *index, t_shell *shell, char *exp_input)
+char	*ft_extract_sq(char *input, int *i)
 {
-	char *temp;
-	char *new_exp_input;
+	char	*segment;
+	int		start;
+	int		end;
 
-	temp = ft_extract_dq(input, index, shell);
-	new_exp_input = ft_join_input(exp_input, temp);
-	free(temp);
-	return new_exp_input;
+	start = (*i);
+	(*i)++;
+	while (input[(*i)] != 0 && input[(*i)] != '\'')
+		(*i)++;
+	if (input[*i] == '\'' && input[(*i) + 1] != 0)
+		(*i)++;
+	end = (*i);
+	segment = ft_extract_str(input, start, end);
+	return (segment);
 }
 
-char *ft_handle_segment(char *input, int *index, t_shell *shell, char *exp_input)
-{
-	char *temp;
-	char *new_exp_input;
-
-	temp = ft_extract_segment(input, index, shell);
-	new_exp_input = ft_join_input(exp_input, temp);
-	return new_exp_input;
-}
-
-int	ft_is_separator_var(char c)
-{
-	int	i;
-
-	i = 0;
-	while (NOVAR[i] != '\0')
-	{
-		if (NOVAR[i] == c)
-			return (1);
-		i++;
-	}
-	return (0);
-}
