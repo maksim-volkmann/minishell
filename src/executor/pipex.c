@@ -75,7 +75,7 @@ void setup_input_redirection(t_redirection *input, t_shell *shell) {
             perror(input->file);
             shell->exit_code = 1;
             exit(shell->exit_code);
-        }
+        }git 
         if (dup2(fd, STDIN_FILENO) == -1) {  // Redirect STDIN to the file descriptor
             perror("dup2 input redirection file");
             shell->exit_code = 1;
