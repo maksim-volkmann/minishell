@@ -63,12 +63,12 @@
 
 
 
-void	prnt_err(char *cmd, char *msg, int code, t_shell *shell)
+void	prnt_err(const char *cmd, const char *msg, int code, t_shell *shell)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(cmd, STDERR_FILENO);
+	ft_putstr_fd((char *)cmd, STDERR_FILENO);
 	ft_putstr_fd(": ", STDERR_FILENO);
-	ft_putendl_fd(msg, STDERR_FILENO);
+	ft_putendl_fd((char *)msg, STDERR_FILENO);
 	shell->exit_code = code;
 }
 
@@ -109,13 +109,13 @@ int ft_manage_input(t_shell *shell) {
     return 0;
 }
 
-void handle_redirection(t_command *cmd, t_shell *shell)
-{
-	if (cmd->input)
-		setup_input_redirection(cmd->input, shell);
-	if (cmd->output)
-		setup_output_redirection(cmd->output, shell);
-}
+// void handle_redirection(t_command *cmd, t_shell *shell)
+// {
+// 	if (cmd->input)
+// 		setup_input_redirection(cmd->input, shell);
+// 	if (cmd->output)
+// 		setup_output_redirection(cmd->output, shell);
+// }
 
 int	is_builtin(char *command)
 {
@@ -131,21 +131,23 @@ int	is_builtin(char *command)
 }
 
 
-//TODO: check if we can combine some of those functions, because we giving the same error message.
-int	validate_input_file_when_argv_null(t_command *cmd, t_shell *shell)
+int	file_err(const char *file, t_shell *shell)
+{
+	prnt_err(file, "No such file or directory", 1, shell);
+	return (1);
+}
+
+int	validate_input_no_cmd(t_command *cmd, t_shell *shell)
 {
 	if (cmd->input && cmd->input->file)
 	{
 		if (access(cmd->input->file, F_OK) != 0)
-		{
-			prnt_err(cmd->input->file, "No such file or directory-1", 1, shell);
-			return (1);
-		}
+			return (file_err(cmd->input->file, shell));
 	}
 	return (0);
 }
 
-int	validate_output_file_when_argv_null(t_command *cmd, t_shell *shell)
+int	validate_output_no_cmd(t_command *cmd, t_shell *shell)
 {
 	int	fd;
 
@@ -153,10 +155,7 @@ int	validate_output_file_when_argv_null(t_command *cmd, t_shell *shell)
 	{
 		fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
-		{
-			prnt_err(cmd->output->file, "No such file or directory-2", 1, shell);
-			return (1);
-		}
+			return (file_err(cmd->output->file, shell));
 		close(fd);
 	}
 	return (0);
@@ -167,10 +166,7 @@ int	validate_input_file(t_command *cmd, t_shell *shell)
 	if (cmd->input && cmd->input->file)
 	{
 		if (access(cmd->input->file, F_OK) != 0)
-		{
-			prnt_err(cmd->input->file, "No such file or directory-3", 1, shell);
-			return (1);
-		}
+			return (file_err(cmd->input->file, shell));
 	}
 	return (0);
 }
@@ -183,32 +179,26 @@ int	validate_output_file(t_command *cmd, t_shell *shell)
 	{
 		fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
-		{
-			prnt_err(cmd->output->file, "No such file or directory-4", 1, shell);
-			return (1);
-		}
+			return (file_err(cmd->output->file, shell));
 		close(fd);
 	}
 	return (0);
 }
 
-void	execute_single_command(t_command *cmd, t_shell *shell)
+void	exec_single(t_command *cmd, t_shell *shell)
 {
 	if (cmd->argv[0] == NULL)
 	{
-		if (validate_input_file_when_argv_null(cmd, shell))
+		if (validate_input_no_cmd(cmd, shell))
 			return ;
-		if (validate_output_file_when_argv_null(cmd, shell))
+		if (validate_output_no_cmd(cmd, shell))
 			return ;
 		return ;
 	}
-
 	if (validate_input_file(cmd, shell))
 		return ;
-
 	if (validate_output_file(cmd, shell))
 		return ;
-
 	if (is_builtin(cmd->argv[0]))
 		handle_builtin(cmd, shell);
 	else
@@ -252,10 +242,10 @@ int main(int argc, char **argv, char **env) {
         }
         ft_lexer(shell.input, &shell);
         ft_parser(&shell, &shell.tokens);
-        if (shell.cmds && shell.cmds->next == NULL)
-            execute_single_command(shell.cmds, &shell);
-        else
-            exec_start(shell.cmds, &shell);
+		if (shell.cmds && shell.cmds->next == NULL)
+			exec_single(shell.cmds, &shell);
+		else
+			exec_start(shell.cmds, &shell);
 
         free_command(shell.cmds);
         free_token_list(shell.tokens);

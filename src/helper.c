@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 11:48:49 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/06 09:56:50 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/15 17:39:16 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,18 @@ void	leaks(void)
 
 void free_env_vars(t_env_var *env_list)
 {
-    t_env_var *current;
-    t_env_var *next;
+	t_env_var *current;
+	t_env_var *next;
 
-    current = env_list;
-    while (current != NULL) {
-        next = current->next;
-        free(current->key);
-        free(current->value);
-        free(current);
-        current = next;
-    }
+	current = env_list;
+	while (current != NULL)
+	{
+		next = current->next;
+		free(current->key);
+		free(current->value);
+		free(current);
+		current = next;
+	}
 }
 
 const char* get_token_type_string(t_token_type type)
@@ -119,78 +120,129 @@ void print_command(t_command *cmd)
     }
 }
 
-// Function to add an environment variable to the list
-void add_env_var(t_env_var **env_list, const char *key, const char *value)
+
+
+t_env_var	*create_env_var(const char *key, const char *value)
 {
-    t_env_var *new_var;
-    t_env_var *current;
-    t_env_var *prev = NULL;
+	t_env_var	*new_var;
 
-    new_var = malloc(sizeof(t_env_var));
-    if (!new_var)
-    {
-        perror("malloc");
-        exit(EXIT_FAILURE);
-    }
-    new_var->key = ft_strdup(key);
-    if (value)
-    {
-        new_var->value = ft_strdup(value);
-    }
-    else
-    {
-        new_var->value = NULL;
-    }
-    new_var->next = NULL;
+	new_var = malloc(sizeof(t_env_var));
+	if (!new_var)
+	{
+		perror("malloc");
+		exit(EXIT_FAILURE);
+	}
+	new_var->key = ft_strdup(key);
+	if (value)
+		new_var->value = ft_strdup(value);
+	else
+		new_var->value = NULL;
+	new_var->next = NULL;
+	return (new_var);
+}
 
-    if (*env_list == NULL || ft_strcmp((*env_list)->key, key) > 0)
-    {
-        new_var->next = *env_list;
-        *env_list = new_var;
-    }
-    else
-    {
-        current = *env_list;
-        while (current != NULL && ft_strcmp(current->key, key) < 0)
-        {
-            prev = current;
-            current = current->next;
-        }
-        new_var->next = current;
-        if (prev)
-        {
-            prev->next = new_var;
-        }
-    }
+void	add_env_var(t_env_var **env_list, const char *key, const char *value)
+{
+	t_env_var	*new_var;
+	t_env_var	*current;
+	t_env_var	*prev;
+
+	new_var = create_env_var(key, value);
+	prev = NULL;
+	if (*env_list == NULL || ft_strcmp((*env_list)->key, key) > 0)
+	{
+		new_var->next = *env_list;
+		*env_list = new_var;
+	}
+	else
+	{
+		current = *env_list;
+		while (current != NULL && ft_strcmp(current->key, key) < 0)
+		{
+			prev = current;
+			current = current->next;
+		}
+		new_var->next = current;
+		if (prev)
+			prev->next = new_var;
+	}
 }
 
 
 
 
+// Function to add an environment variable to the list
+// void add_env_var(t_env_var **env_list, const char *key, const char *value)
+// {
+//     t_env_var *new_var;
+//     t_env_var *current;
+//     t_env_var *prev = NULL;
 
-void copy_env_vars(t_shell *shell, char **env)
+//     new_var = malloc(sizeof(t_env_var));
+//     if (!new_var)
+//     {
+//         perror("malloc");
+//         exit(EXIT_FAILURE);
+//     }
+//     new_var->key = ft_strdup(key);
+//     if (value)
+//     {
+//         new_var->value = ft_strdup(value);
+//     }
+//     else
+//     {
+//         new_var->value = NULL;
+//     }
+//     new_var->next = NULL;
+
+//     if (*env_list == NULL || ft_strcmp((*env_list)->key, key) > 0)
+//     {
+//         new_var->next = *env_list;
+//         *env_list = new_var;
+//     }
+//     else
+//     {
+//         current = *env_list;
+//         while (current != NULL && ft_strcmp(current->key, key) < 0)
+//         {
+//             prev = current;
+//             current = current->next;
+//         }
+//         new_var->next = current;
+//         if (prev)
+//         {
+//             prev->next = new_var;
+//         }
+//     }
+// }
+
+
+
+
+
+void	copy_env_vars(t_shell *shell, char **env)
 {
-    int        i;
-    char    *key;
-    char    *value;
-    char    *sep;
+	int		i;
+	char	*key;
+	char	*value;
+	char	*sep;
 
-    i = 0;
-    while (env[i])
-    {
-        sep = ft_strchr(env[i], '=');
-        if (!sep)
-        {
-            i++;
-            continue;
-        }
-        key = ft_substr(env[i], 0, sep - env[i]);
-        value = ft_strdup(sep + 1);
-        add_env_var(&shell->env_list, key, value);
-        free(key);
-        free(value);
-        i++;
-    }
+	i = 0;
+	while (env[i])
+	{
+		sep = ft_strchr(env[i], '=');
+		if (!sep)
+		{
+			i++;
+			continue ;
+		}
+		key = ft_substr(env[i], 0, sep - env[i]);
+		value = ft_strdup(sep + 1);
+		add_env_var(&shell->env_list, key, value);
+		free(key);
+		free(value);
+		i++;
+	}
 }
 
 
@@ -211,7 +263,7 @@ void print_env_vars(t_env_var *env_list)
 
 
 
-
+//TODO: remove this, its just for testing.
 void print_command_details(t_command *cmds)
 {
     t_command *current_cmd = cmds;
