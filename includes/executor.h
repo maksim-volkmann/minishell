@@ -133,6 +133,6 @@ char	*get_executable_path(char *cmd, t_env_var *env_list);
 void	execute_command(t_command *cmd, t_env_var *env_list);
 
 //free_here.c
-void	ft_free_split(char **arr)
+void	ft_free_split(char **arr);
 
 #endif

@@ -138,13 +138,13 @@ int main(int argc, char **argv, char **env) {
         shell.tokens = NULL;
         shell.syn_err_present = false;
 
-        if (isatty(fileno(stdin)))
+        // if (isatty(fileno(stdin)))
             shell.input = readline("minishell> ");
-        else {
-            char *line = get_next_line(fileno(stdin));
-            shell.input = ft_strtrim(line, "\n");
-            free(line);
-        }
+        // else {
+        //     char *line = get_next_line(fileno(stdin));
+        //     shell.input = ft_strtrim(line, "\n");
+        //     free(line);
+        // }
 
         if (!shell.input)
             ft_exit(&shell);
