@@ -26,6 +26,7 @@ int		execute_cd(char **args, t_env_var **env_list);
 
 void	execute_pwd(void);
 
+void	print_env_vars(t_env_var *env_list);
 int		execute_env(char **args, t_env_var *env_list);
 
 

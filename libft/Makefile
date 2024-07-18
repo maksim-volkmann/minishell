@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+         #
+#    By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/19 21:34:32 by mvolkman          #+#    #+#              #
-#    Updated: 2024/06/07 10:37:27 by adrherna         ###   ########.fr        #
+#    Updated: 2024/07/17 12:24:13 by mvolkman         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,8 @@ SRCS = \
 	ft_split.c \
 	get_next_line.c \
 	ft_printf.c \
-	ft_printf_helper.c
+	ft_printf_helper.c \
+	ft_strcpy.c \
 
 BONUS_SRCS = \
 	ft_lstnew_bonus.c \

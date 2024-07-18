@@ -62,7 +62,7 @@
 // }
 
 
-
+//TODO: Can I re-use this for every error printing?
 void	prnt_err(const char *cmd, const char *msg, int code, t_shell *shell)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
@@ -117,93 +117,10 @@ int ft_manage_input(t_shell *shell) {
 // 		setup_output_redirection(cmd->output, shell);
 // }
 
-int	is_builtin(char *command)
-{
-	return (
-		ft_strcmp(command, "echo") == 0
-		|| ft_strcmp(command, "exit") == 0
-		|| ft_strcmp(command, "cd") == 0
-		|| ft_strcmp(command, "pwd") == 0
-		|| ft_strcmp(command, "export") == 0
-		|| ft_strcmp(command, "unset") == 0
-		|| ft_strcmp(command, "env") == 0
-	);
-}
 
 
-int	file_err(const char *file, t_shell *shell)
-{
-	prnt_err(file, "No such file or directory", 1, shell);
-	return (1);
-}
 
-int	validate_input_no_cmd(t_command *cmd, t_shell *shell)
-{
-	if (cmd->input && cmd->input->file)
-	{
-		if (access(cmd->input->file, F_OK) != 0)
-			return (file_err(cmd->input->file, shell));
-	}
-	return (0);
-}
 
-int	validate_output_no_cmd(t_command *cmd, t_shell *shell)
-{
-	int	fd;
-
-	if (cmd->output && cmd->output->file)
-	{
-		fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-			return (file_err(cmd->output->file, shell));
-		close(fd);
-	}
-	return (0);
-}
-
-int	validate_input_file(t_command *cmd, t_shell *shell)
-{
-	if (cmd->input && cmd->input->file)
-	{
-		if (access(cmd->input->file, F_OK) != 0)
-			return (file_err(cmd->input->file, shell));
-	}
-	return (0);
-}
-
-int	validate_output_file(t_command *cmd, t_shell *shell)
-{
-	int	fd;
-
-	if (cmd->output && cmd->output->file)
-	{
-		fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-			return (file_err(cmd->output->file, shell));
-		close(fd);
-	}
-	return (0);
-}
-
-void	exec_single(t_command *cmd, t_shell *shell)
-{
-	if (cmd->argv[0] == NULL)
-	{
-		if (validate_input_no_cmd(cmd, shell))
-			return ;
-		if (validate_output_no_cmd(cmd, shell))
-			return ;
-		return ;
-	}
-	if (validate_input_file(cmd, shell))
-		return ;
-	if (validate_output_file(cmd, shell))
-		return ;
-	if (is_builtin(cmd->argv[0]))
-		handle_builtin(cmd, shell);
-	else
-		exec_start(cmd, shell);
-}
 
 int main(int argc, char **argv, char **env) {
     t_shell shell;

@@ -85,4 +85,17 @@ void copy_env_vars(t_shell *shell, char **env);
 void print_command_details(t_command *cmds);
 void print_env_vars(t_env_var *env_list);
 
+
+
+void	prnt_err(const char *cmd, const char *msg, int code, t_shell *shell);
+
+
+
+
+//single_helper.c
+int	is_builtin(char *command);
+int	file_err(const char *file, t_shell *shell);
+
+
+
 #endif

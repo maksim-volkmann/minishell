@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/19 21:38:25 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/06/07 10:47:47 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/17 12:24:50 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <ctype.h>
 # include <unistd.h>
 # include <stdarg.h>
-// # include <stdio.h> // for printf (delete later)
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
@@ -65,6 +64,7 @@ void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
 char	**ft_split(char const *s, char c);
+char	*ft_strcpy(char *dest, const char *src);
 
 // Bonus
 t_list	*ft_lstnew(void *content);

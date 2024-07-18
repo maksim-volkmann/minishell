@@ -76,5 +76,63 @@ void	exec_start(t_command *commands, t_shell *shell);
 void	free_command2(t_command *cmd);
 char	*find_plus_equal(const char *str);
 
+//redirections.c
+void	setup_input_redir(t_redirection *input, t_shell *shell);
+void	setup_output_redir(t_redirection *output, t_shell *shell);
+
+//export_unset_exit.c
+int		execute_export_builtin(t_command *cmd, t_shell *shell);
+int		execute_unset_builtin(t_command *cmd, t_shell *shell);
+int		execute_exit_builtin(t_command *cmd, t_shell *shell);
+
+//handke_buildin.c
+void	restore_stdout(int saved_stdout);
+int		execute_specific_builtin(t_command *cmd, t_shell *shell);
+int		handle_builtin(t_command *cmd, t_shell *shell);
+
+//env_export_unset_exit.c
+int		execute_echo_builtin(t_command *cmd, t_shell *shell);
+int		execute_pwd_builtin(t_command *cmd, t_shell *shell);
+int		execute_cd_builtin(t_command *cmd, t_shell *shell);
+int		execute_env_builtin(t_command *cmd, t_shell *shell);
+
+
+//executor.c
+void	exec_start(t_command *commands, t_shell *shell);
+void	check_input_file(t_command *cmd, t_shell *shell);
+int		create_pipe_if_needed(t_command *cmd, int pipe_fd[2]);
+pid_t 	fork_process(t_command *cmd, t_shell *shell, int *input_fd, int pipe_fd[2]);
+void	wait_for_last_process(pid_t last_pid, t_shell *shell);
+
+
+//move those:
+void	child_proc(t_command *cmd, t_shell *shell, int input_fd, int pipe_fd[2]);
+void	parent_proc(pid_t last_pid, int *input_fd, int pipe_fd[2]);
+char	*ft_strcpy(char *dest, const char *src);
+
+//exec_single.c
+int		validate_input_no_cmd(t_command *cmd, t_shell *shell);
+int		validate_output_no_cmd(t_command *cmd, t_shell *shell);
+int		validate_input_file(t_command *cmd, t_shell *shell);
+int		validate_output_file(t_command *cmd, t_shell *shell);
+void	exec_single(t_command *cmd, t_shell *shell);
+
+
+//prepare_env.c
+void	free_envp(char **envp);
+int		count_env_vars(t_env_var *env_list);
+char	*create_env_var_string(const char *key, const char *value);
+void	free_envp_on_error(char **envp, int i);
+char	**prepare_envp(t_env_var *env_list);
+
+//start_execve.c
+char	*create_cmd_path(char *dir, char *cmd);
+char	*get_env_value(t_env_var *env_list, const char *key);
+char	*find_correct_path(char *cmd, t_env_var *env_list);
+char	*get_executable_path(char *cmd, t_env_var *env_list);
+void	execute_command(t_command *cmd, t_env_var *env_list);
+
+//free_here.c
+void	ft_free_split(char **arr)
 
 #endif

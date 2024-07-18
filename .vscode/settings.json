@@ -67,6 +67,10 @@
     "termios.h": "c",
     "minishell.h": "c",
     "__locale": "c",
-    "ios": "c"
+    "ios": "c",
+    "redirections.h": "c",
+    "history.h": "c",
+    "unistd.h": "c",
+    "*.working": "c"
   }
 }

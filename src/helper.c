@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: goldman <goldman@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 11:48:49 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/15 17:39:16 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/16 23:49:21 by goldman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,18 +248,18 @@ void	copy_env_vars(t_shell *shell, char **env)
 
 
 
-void print_env_vars(t_env_var *env_list)
-{
-	t_env_var *current = env_list;
-	while (current)
-	{
-		if (current->value)
-		{
-			printf("%s=%s\n", current->key, current->value);
-		}
-		current = current->next;
-	}
-}
+// void print_env_vars(t_env_var *env_list)
+// {
+// 	t_env_var *current = env_list;
+// 	while (current)
+// 	{
+// 		if (current->value)
+// 		{
+// 			printf("%s=%s\n", current->key, current->value);
+// 		}
+// 		current = current->next;
+// 	}
+// }
 
 
 

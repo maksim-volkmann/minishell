@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goldman <goldman@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 17:21:16 by goldman           #+#    #+#             */
-/*   Updated: 2024/07/17 00:40:43 by goldman          ###   ########.fr       */
+/*   Updated: 2024/07/17 12:33:34 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,72 +21,72 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-void	ft_free_split(char **arr)
-{
-	int	i;
+// void	ft_free_split(char **arr)
+// {
+// 	int	i;
 
-	i = 0;
-	if (!arr)
-		return ;
-	while (arr[i])
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
-}
+// 	i = 0;
+// 	if (!arr)
+// 		return ;
+// 	while (arr[i])
+// 	{
+// 		free(arr[i]);
+// 		i++;
+// 	}
+// 	free(arr);
+// }
 
-char	*get_env_value(t_env_var *env_list, const char *key)
-{
-	t_env_var	*current;
+// char	*get_env_value(t_env_var *env_list, const char *key)
+// {
+// 	t_env_var	*current;
 
-	current = env_list;
-	while (current)
-	{
-		if (ft_strcmp(current->key, key) == 0)
-			return (current->value);
-		current = current->next;
-	}
-	return (NULL);
-}
+// 	current = env_list;
+// 	while (current)
+// 	{
+// 		if (ft_strcmp(current->key, key) == 0)
+// 			return (current->value);
+// 		current = current->next;
+// 	}
+// 	return (NULL);
+// }
 
-char	*create_cmd_path(char *dir, char *cmd)
-{
-	char	*path;
-	char	*full_path;
+// char	*create_cmd_path(char *dir, char *cmd)
+// {
+// 	char	*path;
+// 	char	*full_path;
 
-	path = ft_strjoin(dir, "/");
-	full_path = ft_strjoin(path, cmd);
-	free(path);
-	return (full_path);
-}
+// 	path = ft_strjoin(dir, "/");
+// 	full_path = ft_strjoin(path, cmd);
+// 	free(path);
+// 	return (full_path);
+// }
 
-char	*find_correct_path(char *cmd, t_env_var *env_list)
-{
-	char	*path_var;
-	char	**paths;
-	char	*correct_path;
-	int		i;
+// char	*find_correct_path(char *cmd, t_env_var *env_list)
+// {
+// 	char	*path_var;
+// 	char	**paths;
+// 	char	*correct_path;
+// 	int		i;
 
-	path_var = get_env_value(env_list, "PATH");
-	if (!path_var)
-		return (NULL);
-	paths = ft_split(path_var, ':');
-	i = 0;
-	while (paths[i])
-	{
-		correct_path = create_cmd_path(paths[i], cmd);
-		if (access(correct_path, X_OK) == 0)
-		{
-			ft_free_split(paths);
-			return (correct_path);
-		}
-		free(correct_path);
-		i++;
-	}
-	ft_free_split(paths);
-	return (NULL);
-}
+// 	path_var = get_env_value(env_list, "PATH");
+// 	if (!path_var)
+// 		return (NULL);
+// 	paths = ft_split(path_var, ':');
+// 	i = 0;
+// 	while (paths[i])
+// 	{
+// 		correct_path = create_cmd_path(paths[i], cmd);
+// 		if (access(correct_path, X_OK) == 0)
+// 		{
+// 			ft_free_split(paths);
+// 			return (correct_path);
+// 		}
+// 		free(correct_path);
+// 		i++;
+// 	}
+// 	ft_free_split(paths);
+// 	return (NULL);
+// }
 
 // void	setup_input_redir(t_redirection *input, t_shell *shell)
 // {
@@ -280,183 +280,185 @@ char	*find_correct_path(char *cmd, t_env_var *env_list)
 
 
 
-char	*ft_strcpy(char *dest, const char *src)
-{
-	int	i;
+// char	*ft_strcpy(char *dest, const char *src)
+// {
+// 	int	i;
 
-	i = 0;
-	while (src[i])
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
+// 	i = 0;
+// 	while (src[i])
+// 	{
+// 		dest[i] = src[i];
+// 		i++;
+// 	}
+// 	dest[i] = '\0';
+// 	return (dest);
+// }
 
-int	count_env_vars(t_env_var *env_list)
-{
-	int	count;
+// int	count_env_vars(t_env_var *env_list)
+// {
+// 	int	count;
 
-	count = 0;
-	while (env_list)
-	{
-		count++;
-		env_list = env_list->next;
-	}
-	return (count);
-}
+// 	count = 0;
+// 	while (env_list)
+// 	{
+// 		count++;
+// 		env_list = env_list->next;
+// 	}
+// 	return (count);
+// }
 
-char	*create_env_var_string(const char *key, const char *value)
-{
-	char	*env_var;
-	size_t	key_len;
-	size_t	value_len;
+// char	*create_env_var_string(const char *key, const char *value)
+// {
+// 	char	*env_var;
+// 	size_t	key_len;
+// 	size_t	value_len;
 
-	key_len = ft_strlen(key);
-	value_len = ft_strlen(value);
-	env_var = malloc(key_len + value_len + 2);
-	if (!env_var)
-		return (NULL);
-	ft_strcpy(env_var, key);
-	env_var[key_len] = '=';
-	ft_strcpy(env_var + key_len + 1, value);
-	return (env_var);
-}
+// 	key_len = ft_strlen(key);
+// 	value_len = ft_strlen(value);
+// 	env_var = malloc(key_len + value_len + 2);
+// 	if (!env_var)
+// 		return (NULL);
+// 	ft_strcpy(env_var, key);
+// 	env_var[key_len] = '=';
+// 	ft_strcpy(env_var + key_len + 1, value);
+// 	return (env_var);
+// }
 
-void	free_envp_on_error(char **envp, int i)
-{
-	while (i > 0)
-		free(envp[--i]);
-	free(envp);
-}
+// void	free_envp_on_error(char **envp, int i)
+// {
+// 	while (i > 0)
+// 		free(envp[--i]);
+// 	free(envp);
+// }
 
-char	**prepare_envp(t_env_var *env_list)
-{
-	char		**envp;
-	int			env_count;
-	int			i;
-	t_env_var	*current;
+// char	**prepare_envp(t_env_var *env_list)
+// {
+// 	char		**envp;
+// 	int			env_count;
+// 	int			i;
+// 	t_env_var	*current;
 
-	env_count = count_env_vars(env_list);
-	envp = malloc(sizeof(char *) * (env_count + 1));
-	if (!envp)
-		return (NULL);
-	current = env_list;
-	i = 0;
-	while (current)
-	{
-		envp[i] = create_env_var_string(current->key, current->value);
-		if (!envp[i])
-		{
-			free_envp_on_error(envp, i);
-			return (NULL);
-		}
-		current = current->next;
-		i++;
-	}
-	envp[env_count] = NULL;
-	return (envp);
-}
+// 	env_count = count_env_vars(env_list);
+// 	envp = malloc(sizeof(char *) * (env_count + 1));
+// 	if (!envp)
+// 		return (NULL);
+// 	current = env_list;
+// 	i = 0;
+// 	while (current)
+// 	{
+// 		envp[i] = create_env_var_string(current->key, current->value);
+// 		if (!envp[i])
+// 		{
+// 			free_envp_on_error(envp, i);
+// 			return (NULL);
+// 		}
+// 		current = current->next;
+// 		i++;
+// 	}
+// 	envp[env_count] = NULL;
+// 	return (envp);
+// }
 
-char	*get_executable_path(char *cmd, t_env_var *env_list)
-{
-	char	*executable_path;
 
-	if (ft_strchr(cmd, '/') != NULL)
-		executable_path = ft_strdup(cmd);
-	else
-	{
-		executable_path = find_correct_path(cmd, env_list);
-		if (executable_path == NULL)
-		{
-			ft_putstr_fd(cmd, STDERR_FILENO);
-			ft_putendl_fd(": command not found", STDERR_FILENO);
-			exit(127);
-		}
-	}
-	return (executable_path);
-}
 
-void	free_envp(char **envp)
-{
-	int	i;
+// void	free_envp(char **envp)
+// {
+// 	int	i;
 
-	i = 0;
-	while (envp[i])
-	{
-		free(envp[i]);
-		i++;
-	}
-	free(envp);
-}
+// 	i = 0;
+// 	while (envp[i])
+// 	{
+// 		free(envp[i]);
+// 		i++;
+// 	}
+// 	free(envp);
+// }
 
-void	execute_command(t_command *cmd, t_env_var *env_list)
-{
-	char	*executable_path;
-	char	**envp;
+// char	*get_executable_path(char *cmd, t_env_var *env_list)
+// {
+// 	char	*executable_path;
 
-	executable_path = get_executable_path(cmd->argv[0], env_list);
-	envp = prepare_envp(env_list);
-	execve(executable_path, cmd->argv, envp);
-	free_envp(envp);
-	perror("execve failed");
-	free(executable_path);
-	exit(EXIT_FAILURE);
-}
+// 	if (ft_strchr(cmd, '/') != NULL)
+// 		executable_path = ft_strdup(cmd);
+// 	else
+// 	{
+// 		executable_path = find_correct_path(cmd, env_list);
+// 		if (executable_path == NULL)
+// 		{
+// 			ft_putstr_fd(cmd, STDERR_FILENO);
+// 			ft_putendl_fd(": command not found", STDERR_FILENO);
+// 			exit(127);
+// 		}
+// 	}
+// 	return (executable_path);
+// }
 
-void	handle_error(const char *msg, t_shell *shell)
-{
-	perror(msg);
-	shell->exit_code = 1;
-	exit(shell->exit_code);
-}
+// void	execute_command(t_command *cmd, t_env_var *env_list)
+// {
+// 	char	*executable_path;
+// 	char	**envp;
 
-void	perform_redirection(int old_fd, int new_fd, const char *msg, t_shell *shell)
-{
-	if (old_fd != -1)
-	{
-		if (dup2(old_fd, new_fd) == -1)
-			handle_error(msg, shell);
-		close(old_fd);
-	}
-}
+// 	executable_path = get_executable_path(cmd->argv[0], env_list);
+// 	envp = prepare_envp(env_list);
+// 	execve(executable_path, cmd->argv, envp);
+// 	free_envp(envp);
+// 	perror("execve failed");
+// 	free(executable_path);
+// 	exit(EXIT_FAILURE);
+// }
 
-void	perform_dup_and_close(int old_fd, int new_fd, const char *error_msg, t_shell *shell)
-{
-	if (old_fd != -1)
-	{
-		if (dup2(old_fd, new_fd) == -1)
-		{
-			perror(error_msg);
-			shell->exit_code = 1;
-			exit(shell->exit_code);
-		}
-		close(old_fd);
-	}
-}
+// void	handle_error(const char *msg, t_shell *shell)
+// {
+// 	perror(msg);
+// 	shell->exit_code = 1;
+// 	exit(shell->exit_code);
+// }
 
-void	child_proc(t_command *cmd, t_shell *shell, int input_fd, int pipe_fd[2])
-{
-	perform_dup_and_close(input_fd, STDIN_FILENO, "dup2 input_fd", shell);
-	perform_dup_and_close(pipe_fd[1], STDOUT_FILENO, "dup2 pipe_fd[1]", shell);
-	if (pipe_fd[0] != -1)
-		close(pipe_fd[0]);
-	setup_input_redir(cmd->input, shell);
-	setup_output_redir(cmd->output, shell);
-	if (handle_builtin(cmd, shell) == -1)
-		execute_command(cmd, shell->env_list);
-	exit(shell->exit_code);
-}
+// void	perform_redirection(int old_fd, int new_fd, const char *msg, t_shell *shell)
+// {
+// 	if (old_fd != -1)
+// 	{
+// 		if (dup2(old_fd, new_fd) == -1)
+// 			handle_error(msg, shell);
+// 		close(old_fd);
+// 	}
+// }
 
-void	parent_proc(pid_t last_pid, int *input_fd, int pipe_fd[2])
-{
-	if (*input_fd != -1)
-		close(*input_fd);
-	if (pipe_fd[1] != -1)
-		close(pipe_fd[1]);
-	*input_fd = pipe_fd[0];
-}
+// void	perform_dup_and_close(int old_fd, int new_fd, const char *error_msg, t_shell *shell)
+// {
+// 	if (old_fd != -1)
+// 	{
+// 		if (dup2(old_fd, new_fd) == -1)
+// 		{
+// 			perror(error_msg);
+// 			shell->exit_code = 1;
+// 			exit(shell->exit_code);
+// 		}
+// 		close(old_fd);
+// 	}
+// }
+
+// void	child_proc(t_command *cmd, t_shell *shell, int input_fd, int pipe_fd[2])
+// {
+// 	perform_dup_and_close(input_fd, STDIN_FILENO, "dup2 input_fd", shell);
+// 	perform_dup_and_close(pipe_fd[1], STDOUT_FILENO, "dup2 pipe_fd[1]", shell);
+// 	if (pipe_fd[0] != -1)
+// 		close(pipe_fd[0]);
+// 	setup_input_redir(cmd->input, shell);
+// 	setup_output_redir(cmd->output, shell);
+// 	if (handle_builtin(cmd, shell) == -1)
+// 		execute_command(cmd, shell->env_list);
+// 	exit(shell->exit_code);
+// }
+
+// void	parent_proc(pid_t last_pid, int *input_fd, int pipe_fd[2])
+// {
+// 	if (*input_fd != -1)
+// 		close(*input_fd);
+// 	if (pipe_fd[1] != -1)
+// 		close(pipe_fd[1]);
+// 	*input_fd = pipe_fd[0];
+// }
 
 // void	wait_for_last_process(pid_t last_pid, t_shell *shell)
 // {
