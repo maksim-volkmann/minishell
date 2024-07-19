@@ -62,6 +62,103 @@
 // }
 
 
+
+
+volatile int g_exit_status = 0;
+
+// Function to save and restore terminal settings using a static variable
+void ft_terminal_settings(int mode) {
+    static struct termios original_attributes;
+
+    if (mode == 0) {
+        // Save current terminal settings
+        tcgetattr(STDIN_FILENO, &original_attributes);
+    } else {
+        // Restore original terminal settings
+        tcsetattr(STDIN_FILENO, TCSANOW, &original_attributes);
+    }
+}
+
+// Function to configure the terminal settings
+void configure_terminal_settings(void) {
+    struct termios attributes;
+    tcgetattr(STDIN_FILENO, &attributes);
+    attributes.c_lflag &= ~ECHOCTL; // Disable echo for control characters
+    tcsetattr(STDIN_FILENO, TCSANOW, &attributes);
+}
+
+// Signal handler function for the main shell
+void signal_handler(int sig)
+{
+    if (sig == SIGINT)
+    {
+        g_exit_status = 130;
+        write(1, "\n", 1);
+        rl_replace_line("", 0);
+        rl_on_new_line();
+        rl_redisplay();
+    }
+}
+
+// Function to set up signal handlers for the main shell
+void setup_signal_handlers(void)
+{
+    struct sigaction sa;
+
+    sa.sa_handler = signal_handler;
+    sa.sa_flags = SA_RESTART;
+    sigemptyset(&sa.sa_mask);
+
+    sigaction(SIGINT, &sa, NULL);
+    sa.sa_handler = SIG_IGN;
+    sigaction(SIGQUIT, &sa, NULL);
+}
+
+// Signal handler function for child processes
+void child_signal_handler(int sig)
+{
+    if (sig == SIGINT)
+        write(1, "\n", 1);
+}
+
+// Function to set up signal handlers for child processes
+void setup_child_signal_handlers(void)
+{
+    struct sigaction sa;
+
+    sa.sa_handler = child_signal_handler;
+    sa.sa_flags = SA_RESTART;
+    sigemptyset(&sa.sa_mask);
+
+    sigaction(SIGINT, &sa, NULL);
+    sa.sa_handler = SIG_IGN;
+    sigaction(SIGQUIT, &sa, NULL);
+}
+
+// Function to reset signal handlers for the main shell
+void reset_signal_handlers(void) {
+    struct sigaction sa;
+
+    sa.sa_handler = SIG_DFL;
+    sa.sa_flags = 0;
+    sigemptyset(&sa.sa_mask);
+
+    sigaction(SIGINT, &sa, NULL);
+    sigaction(SIGQUIT, &sa, NULL);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 //TODO: Can I re-use this for every error printing?
 void	prnt_err(const char *cmd, const char *msg, int code, t_shell *shell)
 {
@@ -122,29 +219,97 @@ int ft_manage_input(t_shell *shell) {
 
 
 
-int main(int argc, char **argv, char **env) {
+// int main(int argc, char **argv, char **env) {
+//     t_shell shell;
+
+//     ft_init_shell(&shell, env);
+
+// ft_terminal_settings(0); // Save original terminal settings
+//     configure_terminal_settings();
+//     setup_signal_handlers(); // Set up signal handlers for the main shell
+
+//     if (argc > 1 || argv[0] == NULL)
+//         return 0;
+//     while (1) {
+//         shell.cmds = NULL;
+//         shell.tokens = NULL;
+//         shell.syn_err_present = false;
+
+//         if (isatty(fileno(stdin)))
+//             shell.input = readline("minishell> ");
+//         else {
+//             char *line = get_next_line(fileno(stdin));
+//             shell.input = ft_strtrim(line, "\n");
+//             free(line);
+//         }
+
+//         // if (isatty(fileno(stdin))) {
+//         //     printf("DEBUG: Interactive mode, printing prompt\n");
+//         //     shell.input = readline("minishell> ");
+//         // } else {
+//         //     char *line = get_next_line(fileno(stdin));
+//         //     shell.input = ft_strtrim(line, "\n");
+//         //     free(line);
+//         // }
+
+//         if (!shell.input)
+//             ft_exit(&shell);
+
+//         add_history(shell.input);
+//         if (ft_heredoc_check(&shell) == 1)
+//             continue;
+//         shell.input = ft_expander(shell.input, &shell);
+//         if (ft_strcmp(shell.input, "") == 0) {
+//             free(shell.input);
+//             continue;
+//         }
+//         ft_lexer(shell.input, &shell);
+//         ft_parser(&shell, &shell.tokens);
+// 		if (shell.cmds && shell.cmds->next == NULL)
+// 			exec_single(shell.cmds, &shell);
+// 		else
+// 			exec_start(shell.cmds, &shell);
+
+//         free_command(shell.cmds);
+//         free_token_list(shell.tokens);
+//         free(shell.input);
+//         shell.input = NULL;
+//     }
+
+//     free_env_vars(shell.env_list);
+// 	reset_signal_handlers(); // Reset signal handlers before exiting
+//     return shell.exit_code;
+// }
+
+
+
+int main(int argc, char **argv, char **env)
+{
     t_shell shell;
 
     ft_init_shell(&shell, env);
 
-    // ft_terminal_settings(0); // Save original terminal settings
-    // configure_terminal_settings();
-    // setup_signal_handlers();
+    ft_terminal_settings(0); // Save original terminal settings
+    configure_terminal_settings();
+    setup_signal_handlers(); // Set up signal handlers for the main shell
 
     if (argc > 1 || argv[0] == NULL)
         return 0;
-    while (1) {
+
+    while (1)
+    {
         shell.cmds = NULL;
         shell.tokens = NULL;
         shell.syn_err_present = false;
 
-        // if (isatty(fileno(stdin)))
+        if (isatty(fileno(stdin)))
             shell.input = readline("minishell> ");
-        // else {
-        //     char *line = get_next_line(fileno(stdin));
-        //     shell.input = ft_strtrim(line, "\n");
-        //     free(line);
-        // }
+        else
+        {
+            char *line = get_next_line(fileno(stdin));
+            shell.input = ft_strtrim(line, "\n");
+            free(line);
+        }
 
         if (!shell.input)
             ft_exit(&shell);
@@ -153,16 +318,17 @@ int main(int argc, char **argv, char **env) {
         if (ft_heredoc_check(&shell) == 1)
             continue;
         shell.input = ft_expander(shell.input, &shell);
-        if (ft_strcmp(shell.input, "") == 0) {
+        if (ft_strcmp(shell.input, "") == 0)
+        {
             free(shell.input);
             continue;
         }
         ft_lexer(shell.input, &shell);
         ft_parser(&shell, &shell.tokens);
-		if (shell.cmds && shell.cmds->next == NULL)
-			exec_single(shell.cmds, &shell);
-		else
-			exec_start(shell.cmds, &shell);
+        if (shell.cmds && shell.cmds->next == NULL)
+            exec_single(shell.cmds, &shell);
+        else
+            exec_start(shell.cmds, &shell);
 
         free_command(shell.cmds);
         free_token_list(shell.tokens);
@@ -171,5 +337,6 @@ int main(int argc, char **argv, char **env) {
     }
 
     free_env_vars(shell.env_list);
+    reset_signal_handlers(); // Reset signal handlers before exiting
     return shell.exit_code;
 }

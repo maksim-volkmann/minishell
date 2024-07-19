@@ -53,7 +53,7 @@ bool	check_newline_flag(char **argv, int *i)
 	bool	newline;
 
 	newline = true;
-	while (argv[*i] && strncmp(argv[*i], "-n", 2) == 0)
+	while (argv[*i] && ft_strncmp(argv[*i], "-n", 2) == 0)
 	{
 		j = 2;
 		while (argv[*i][j] == 'n')

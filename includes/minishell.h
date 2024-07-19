@@ -98,4 +98,7 @@ int	file_err(const char *file, t_shell *shell);
 
 
 
+void setup_child_signal_handlers(void);
+
+
 #endif

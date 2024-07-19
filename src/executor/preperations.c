@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.c                                         :+:      :+:    :+:   */
+/*   preperations.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: goldman <goldman@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 00:40:26 by goldman           #+#    #+#             */
-/*   Updated: 2024/07/17 00:53:29 by goldman          ###   ########.fr       */
+/*   Updated: 2024/07/19 15:20:47 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,41 @@ void	wait_for_last_process(pid_t last_pid, t_shell *shell)
 		pid = wait(NULL);
 }
 
-pid_t	fork_process(t_command *cmd, t_shell *shell, int *input_fd, int pipe_fd[2])
-{
-	pid_t	pid;
+// pid_t	fork_process(t_command *cmd, t_shell *shell, int *input_fd, int pipe_fd[2])
+// {
+// 	pid_t	pid;
 
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	if (pid == 0)
-		child_proc(cmd, shell, *input_fd, pipe_fd);
-	else
-		parent_proc(pid, input_fd, pipe_fd);
-	return (pid);
+// 	pid = fork();
+// 	if (pid == -1)
+// 	{
+// 		perror("fork");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	if (pid == 0)
+// 		child_proc(cmd, shell, *input_fd, pipe_fd);
+// 	else
+// 		parent_proc(pid, input_fd, pipe_fd);
+// 	return (pid);
+// }
+
+pid_t fork_process(t_command *cmd, t_shell *shell, int *input_fd, int pipe_fd[2])
+{
+    pid_t pid;
+
+    pid = fork();
+    if (pid == -1)
+    {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
+    if (pid == 0)
+        child_proc(cmd, shell, *input_fd, pipe_fd);
+    else
+        parent_proc(pid, input_fd, pipe_fd);
+    return (pid);
 }
+
+
 
 int	create_pipe_if_needed(t_command *cmd, int pipe_fd[2])
 {
