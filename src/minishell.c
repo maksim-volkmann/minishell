@@ -289,9 +289,9 @@ int main(int argc, char **argv, char **env)
 
     ft_init_shell(&shell, env);
 
-    ft_terminal_settings(0); // Save original terminal settings
-    configure_terminal_settings();
-    setup_signal_handlers(); // Set up signal handlers for the main shell
+    // ft_terminal_settings(0); // Save original terminal settings
+    // configure_terminal_settings();
+    // setup_signal_handlers(); // Set up signal handlers for the main shell
 
     if (argc > 1 || argv[0] == NULL)
         return 0;
