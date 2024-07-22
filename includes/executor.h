@@ -136,4 +136,9 @@ void	execute_command(t_cmd *cmd, t_env *env_list);
 //free_here.c
 void	ft_free_split(char **arr);
 
+
+
+void reset_child_signal_handlers(void);
+
+
 #endif

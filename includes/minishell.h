@@ -3,6 +3,19 @@
 
 # include <stdbool.h>
 
+// #include "executor.h"
+// #include "builtins.h"
+// #include "parser.h"
+// #include "lexer.h"
+// #include "minishell.h"
+// #include "redirections.h"
+// #include <stdbool.h>
+// #include <stdio.h>
+// #include <signal.h>
+// #include <termios.h>
+// #include <readline/readline.h>
+// #include <readline/history.h>
+
 typedef enum e_token_type
 {
 	LESS = 0,
@@ -32,15 +45,15 @@ typedef enum e_redir_type
 
 typedef struct s_redirection
 {
-	t_redir_type			type;
-	char					*file;
+	t_redir_type		type;
+	char				*file;
 }	t_redir;
 
 typedef struct s_command
 {
 	char				**argv;
-	t_redir		*input;
-	t_redir		*output;
+	t_redir				*input;
+	t_redir				*output;
 	struct s_command	*next;
 }	t_cmd;
 
@@ -60,16 +73,19 @@ typedef struct s_token
 
 typedef struct s_shell
 {
-	t_cmd	*cmds;
-	t_env	*env_list;
+	t_cmd		*cmds;
+	t_env		*env_list;
 	t_token		*tokens;
 	int			exit_code;
 	bool		syn_err_present;
 	char		*input;
+	bool		child_running;
 }	t_shell;
 
 int		ft_strcmp(const char *s1, const char *s2);
 int	is_builtin(char *command);
+
+extern volatile int child_running;
 
 // helper.c
 
