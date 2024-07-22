@@ -1,4 +1,5 @@
 #include "../../includes/parser.h"
+#include "../../includes/heredoc.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <unistd.h>
