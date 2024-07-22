@@ -64,88 +64,88 @@
 
 
 
-volatile int g_exit_status = 0;
+// volatile int g_exit_status = 0;
 
-// Function to save and restore terminal settings using a static variable
-void ft_terminal_settings(int mode) {
-    static struct termios original_attributes;
+// // Function to save and restore terminal settings using a static variable
+// void ft_terminal_settings(int mode) {
+//     static struct termios original_attributes;
 
-    if (mode == 0) {
-        // Save current terminal settings
-        tcgetattr(STDIN_FILENO, &original_attributes);
-    } else {
-        // Restore original terminal settings
-        tcsetattr(STDIN_FILENO, TCSANOW, &original_attributes);
-    }
-}
+//     if (mode == 0) {
+//         // Save current terminal settings
+//         tcgetattr(STDIN_FILENO, &original_attributes);
+//     } else {
+//         // Restore original terminal settings
+//         tcsetattr(STDIN_FILENO, TCSANOW, &original_attributes);
+//     }
+// }
 
-// Function to configure the terminal settings
-void configure_terminal_settings(void) {
-    struct termios attributes;
-    tcgetattr(STDIN_FILENO, &attributes);
-    attributes.c_lflag &= ~ECHOCTL; // Disable echo for control characters
-    tcsetattr(STDIN_FILENO, TCSANOW, &attributes);
-}
+// // Function to configure the terminal settings
+// void configure_terminal_settings(void) {
+//     struct termios attributes;
+//     tcgetattr(STDIN_FILENO, &attributes);
+//     attributes.c_lflag &= ~ECHOCTL; // Disable echo for control characters
+//     tcsetattr(STDIN_FILENO, TCSANOW, &attributes);
+// }
 
-// Signal handler function for the main shell
-void signal_handler(int sig)
-{
-    if (sig == SIGINT)
-    {
-        g_exit_status = 130;
-        write(1, "\n", 1);
-        rl_replace_line("", 0);
-        rl_on_new_line();
-        rl_redisplay();
-    }
-}
+// // Signal handler function for the main shell
+// void signal_handler(int sig)
+// {
+//     if (sig == SIGINT)
+//     {
+//         g_exit_status = 130;
+//         write(1, "\n", 1);
+//         rl_replace_line("", 0);
+//         rl_on_new_line();
+//         rl_redisplay();
+//     }
+// }
 
-// Function to set up signal handlers for the main shell
-void setup_signal_handlers(void)
-{
-    struct sigaction sa;
+// // Function to set up signal handlers for the main shell
+// void setup_signal_handlers(void)
+// {
+//     struct sigaction sa;
 
-    sa.sa_handler = signal_handler;
-    sa.sa_flags = SA_RESTART;
-    sigemptyset(&sa.sa_mask);
+//     sa.sa_handler = signal_handler;
+//     sa.sa_flags = SA_RESTART;
+//     sigemptyset(&sa.sa_mask);
 
-    sigaction(SIGINT, &sa, NULL);
-    sa.sa_handler = SIG_IGN;
-    sigaction(SIGQUIT, &sa, NULL);
-}
+//     sigaction(SIGINT, &sa, NULL);
+//     sa.sa_handler = SIG_IGN;
+//     sigaction(SIGQUIT, &sa, NULL);
+// }
 
-// Signal handler function for child processes
-void child_signal_handler(int sig)
-{
-    if (sig == SIGINT)
-        write(1, "\n", 1);
-}
+// // Signal handler function for child processes
+// void child_signal_handler(int sig)
+// {
+//     if (sig == SIGINT)
+//         write(1, "\n", 1);
+// }
 
-// Function to set up signal handlers for child processes
-void setup_child_signal_handlers(void)
-{
-    struct sigaction sa;
+// // Function to set up signal handlers for child processes
+// void setup_child_signal_handlers(void)
+// {
+//     struct sigaction sa;
 
-    sa.sa_handler = child_signal_handler;
-    sa.sa_flags = SA_RESTART;
-    sigemptyset(&sa.sa_mask);
+//     sa.sa_handler = child_signal_handler;
+//     sa.sa_flags = SA_RESTART;
+//     sigemptyset(&sa.sa_mask);
 
-    sigaction(SIGINT, &sa, NULL);
-    sa.sa_handler = SIG_IGN;
-    sigaction(SIGQUIT, &sa, NULL);
-}
+//     sigaction(SIGINT, &sa, NULL);
+//     sa.sa_handler = SIG_IGN;
+//     sigaction(SIGQUIT, &sa, NULL);
+// }
 
-// Function to reset signal handlers for the main shell
-void reset_signal_handlers(void) {
-    struct sigaction sa;
+// // Function to reset signal handlers for the main shell
+// void reset_signal_handlers(void) {
+//     struct sigaction sa;
 
-    sa.sa_handler = SIG_DFL;
-    sa.sa_flags = 0;
-    sigemptyset(&sa.sa_mask);
+//     sa.sa_handler = SIG_DFL;
+//     sa.sa_flags = 0;
+//     sigemptyset(&sa.sa_mask);
 
-    sigaction(SIGINT, &sa, NULL);
-    sigaction(SIGQUIT, &sa, NULL);
-}
+//     sigaction(SIGINT, &sa, NULL);
+//     sigaction(SIGQUIT, &sa, NULL);
+// }
 
 
 
