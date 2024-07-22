@@ -6,124 +6,62 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 12:17:44 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/04 09:53:10 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:21:28 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 #include "../../includes/expander.h"
+#include "../../includes/heredoc.h"
+#include "../../includes/redirections.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/_types/_null.h>
 
-char	*ft_append_newline(char *str)
+int	ft_heredoc_check(t_shell *shell)
 {
-	size_t	len;
-	char	*new_str;
-	if (!str)
-		return (NULL);
-	len = ft_strlen(str);
-	new_str = malloc(len + 2);
-	if (!new_str)
+	pid_t	pid;
+	int		status;
+
+	ft_lexer(shell->input, shell);
+	if (ft_syntax_checker(shell->tokens) == 1
+		|| ft_syntax_checker_2(shell->tokens) == 1
+		|| shell->syn_err_present == true)
 	{
-		free(str);
-		return (NULL);
+		ft_putstr_fd("syntax error\n", 2);
+		free_token_list(shell->tokens);
+		shell->exit_code = 2;
+		return (1);
 	}
-	ft_strlcpy(new_str, str, len + 1);
-	new_str[len] = '\n';
-	new_str[len + 1] = '\0';
-	return (new_str);
+	pid = fork();
+	if (pid == 0)
+	{
+		ft_heredoc_loop(shell);
+		free_token_list(shell->tokens);
+		exit(0);
+	}
+	else
+		waitpid(pid, &status, 0);
+	free_token_list(shell->tokens);
+	shell->tokens = NULL;
+	return (0);
 }
 
-
-char	*ft_heredoc_join(char *s1, char *s2)
+char	*initialize_heredoc(t_shell *shell, char ***delimiters, int *del_count)
 {
-	char	*constr;
-	size_t	i;
-	size_t	x;
-	size_t	total_len;
-
-	if (!s1 || !s2)
-		return (NULL);
-	total_len = ft_strlen(s1) + ft_strlen(s2) + 2;
-	constr = (char *)malloc(sizeof(char) * total_len);
-	if (!constr)
-		return (NULL);
-	i = 0;
-	while (s1[i] != '\0')
-	{
-		constr[i] = s1[i];
-		i++;
-	}
-	if (ft_strlen(s1) != 0)
-		constr[i++] = '\n';
-	x = 0;
-	while (s2[x] != '\0')
-		constr[i++] = s2[x++];
-	constr[i] = '\0';
-	free(s1);
-	return (constr);
+	*delimiters = ft_extract_delimiters(shell->tokens);
+	*del_count = ft_count_delimiters(shell->tokens);
+	return (ft_strdup(""));
 }
 
-int	ft_count_delimiters(t_token *tokens)
+void	process_heredoc(t_shell *shell, char **content,
+		char **delimiters, int del_count)
 {
-	t_token	*current;
-	int		del_count;
-
-	current = tokens;
-	del_count = 0;
-	while (current != NULL)
-	{
-		if (current->type == DLESS)
-			del_count++;
-		current = current->next;
-	}
-	return (del_count);
-}
-
-char	**ft_extract_delimiters(t_token *tokens)
-{
-	char		**delimiters;
-	const int	len = ft_count_delimiters(tokens);
-	int			i;
-
-	delimiters = malloc(sizeof(char *) * (len + 1));
-	if (!delimiters)
-		return (NULL);
-	i = 0;
-	while (tokens != NULL)
-	{
-		if (tokens->type == DLESS)
-		{
-			if (tokens->next != NULL && tokens->next->type != DLESS
-				&& tokens->next->type != LESS && tokens->next->type != GREAT
-				&& tokens->next->type != DGREAT)
-				delimiters[i++] = tokens->next->token;
-			else
-				printf("syntax error near unexpected token '<<'\n");
-		}
-		tokens = tokens->next;
-	}
-	delimiters[i] = NULL;
-	return (delimiters);
-}
-
-void	ft_heredoc_loop(t_shell *shell)
-{
-	char	**delimiters;
-	int		del_count;
-	char	*content;
-	char	*line;
 	int		i;
+	char	*line;
 
-	delimiters = ft_extract_delimiters(shell->tokens);
-	del_count = ft_count_delimiters(shell->tokens);
-	content = ft_strdup("");
 	i = 0;
-
-	if (ft_count_delimiters(shell->tokens) == 0)
-		return ;
 	while (del_count != 0)
 	{
 		line = readline("> ");
@@ -131,94 +69,99 @@ void	ft_heredoc_loop(t_shell *shell)
 			break ;
 		if (ft_strcmp(line, delimiters[i]) == 0)
 		{
-			del_count -= 1;
+			del_count--;
 			i++;
 		}
 		else if (ft_count_delimiters(shell->tokens) > 1 && i >= del_count - 1)
-			content = ft_heredoc_join(content, line);
+			*content = ft_heredoc_join(*content, line);
 		else if (i >= del_count - 1)
-			content = ft_heredoc_join(content, line);
+			*content = ft_heredoc_join(*content, line);
 	}
+}
+
+void	ft_heredoc_loop(t_shell *shell)
+{
+	char	**delimiters;
+	int		del_count;
+	char	*content;
+
+	content = initialize_heredoc(shell, &delimiters, &del_count);
+	if (del_count == 0)
+		return ;
+	process_heredoc(shell, &content, delimiters, del_count);
 	ft_open_file("./tmp/heredoc.txt", content, shell);
 	ft_free_heredoc(content, delimiters);
 }
 
-// const char	**ft_extract_delimiters(t_token *tokens)
+// void	process_line(char **content, char *line,
+	// char **delimiters, int *del_count, int *i)
 // {
-// 	t_token		*current;
-// 	char		**delimiters;
-// 	const int	len = ft_count_delimiters(tokens);
-// 	int			i;
-
-// 	delimiters = malloc(sizeof(char *) * (len + 1));
-// 	i = 0;
-// 	while (current != NULL)
+// 	if (ft_strcmp(line, delimiters[*i]) == 0)
 // 	{
-// 		if (current->type == DLESS)
-// 		{
-// 			if (current->next != NULL && current->next->type != DLESS
-// 				&& current->next->type != LESS && current->next->type != GREAT
-// 				&& current->next->type != DGREAT)
-// 			{
-// 				delimiters[i] = current->token;
-// 				printf("|%s|\n", current->token);
-// 				i++;
-// 			}
-// 			else
-// 				printf("syntax error near unexpected token '<<'\n");
-// 		}
-// 		current = current->next;
+// 		(*del_count)--;
+// 		(*i)++;
 // 	}
-// 	return ((const char **)delimiters);
+// 	else if (*del_count > 1 && *i >= *del_count - 1)
+// 		*content = ft_heredoc_join(*content, line);
+// 	else if (*i >= *del_count - 1)
+// 		*content = ft_heredoc_join(*content, line);
 // }
 
-
-// void	ft_heredoc(t_token *tokens)
+// void	ft_heredoc_loop(t_shell *shell)
 // {
-// 	const char	**delimiters = ft_extract_delimiters(tokens);
-// 	int			del_count;
-// 	char		*content;
-// 	char		*line;
-// 	int			i;
+// 	char	**delimiters;
+// 	int		del_count;
+// 	char	*content;
+// 	int		i;
+// 	char	*line;
 
-// 	del_count = ft_count_delimiters(tokens);
+// 	delimiters = ft_extract_delimiters(shell->tokens);
+// 	del_count = ft_count_delimiters(shell->tokens);
 // 	content = ft_strdup("");
 // 	i = 0;
-// 	while (1)
+// 	if (del_count == 0)
+// 		return ;
+// 	while (del_count != 0)
 // 	{
-// 		if (del_count == 0)
-// 			break ;
 // 		line = readline("> ");
+// 		if (!line)
+// 			break ;
+// 		process_line(&content, line, delimiters, &del_count, &i);
+// 	}
+// 	ft_open_file("./tmp/heredoc.txt", content, shell);
+// 	ft_free_heredoc(content, delimiters);
+// }
+
+// void	ft_heredoc_loop(t_shell *shell)
+// {
+// 	char	**delimiters;
+// 	int		del_count;
+// 	char	*content;
+// 	char	*line;
+// 	int		i;
+
+// 	delimiters = ft_extract_delimiters(shell->tokens);
+// 	del_count = ft_count_delimiters(shell->tokens);
+// 	content = ft_strdup("");
+// 	i = 0;
+
+// 	if (ft_count_delimiters(shell->tokens) == 0)
+// 		return ;
+// 	while (del_count != 0)
+// 	{
+// 		line = readline("> ");
+// 		if (!line)
+// 			break ;
 // 		if (ft_strcmp(line, delimiters[i]) == 0)
 // 		{
 // 			del_count -= 1;
 // 			i++;
 // 		}
+// 		else if (ft_count_delimiters(shell->tokens) > 1 && i >= del_count - 1)
+// 			content = ft_heredoc_join(content, line);
 // 		else if (i >= del_count - 1)
-// 			content = ft_heredoc_join(line, content);
+// 			content = ft_heredoc_join(content, line);
 // 	}
-// 	printf("%s\n", content);
+// 	ft_open_file("./tmp/heredoc.txt", content, shell);
+// 	ft_free_heredoc(content, delimiters);
 // }
-
-// char	*ft_heredoc(char *delimiter, t_shell *shell)
-// {
-// 	char	*filename;
-// 	char	*line;
-// 	char	*content;
-
-// 	filename = ft_strdup("./tmp/heredoc");
-// 	content = ft_strdup("");
-// 	while (1)
-// 	{
-// 		line = readline("> ");
-// 		if (ft_strcmp(line, delimiter) == 0)
-// 		{
-// 			free(line);
-// 			break ;
-// 		}
-// 		content = ft_heredoc_join(line, content);
-// 	}
-// 	if (ft_open_file(filename, content) == -1)
-// 	return (filename);
-// }
-

@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:29:48 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/07 15:05:35 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/21 17:26:23 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,13 @@ t_token	*ft_if_redi_op(const char *line, int *i, t_shell *shell)
 
 t_token	*ft_if_pipe(const char *line, int *i, t_shell *shell)
 {
-	t_token	*new_token = NULL;
+	t_token	*new_token;
 	char	*token;
 	int		start;
 	int		end;
 
 	start = *i;
+	new_token = NULL;
 	while (line[*i] == '|')
 		(*i)++;
 	end = *i;

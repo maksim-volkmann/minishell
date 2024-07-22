@@ -6,35 +6,11 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:56:24 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/09 12:00:32 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/21 16:50:35 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/expander.h"
-
-char	*ft_expand_var_dq(t_shell *shell, char *var)
-{
-	t_env_var	*current;
-	char		*exp_var;
-
-	if (ft_strcmp(var, "?") == 0)
-		return (ft_itoa(shell->exit_code));
-	if (ft_strcmp(var, " ") == 0 || ft_strcmp(var, "") == 0)
-		return (ft_strdup("$"));
-	current = shell->env_list;
-	while (current != NULL)
-	{
-		if (ft_strcmp(current->key, var) == 0)
-		{
-			exp_var = current->value;
-			free(var);
-			return (ft_strdup_dq(current->value));
-		}
-
-		current = current->next;
-	}
-	return (NULL);
-}
 
 char	*ft_extract_segment_dq(char *input, int *i)
 {
@@ -59,56 +35,66 @@ char	*ft_extract_segment_dq(char *input, int *i)
 	}
 }
 
-char *ft_handle_double_quote(char *input, int *index, t_shell *shell, char *exp_input)
+char	*ft_handle_double_quote(char *input, int *index,
+		t_shell *shell, char *exp_input)
 {
-	char *temp;
-	char *new_exp_input;
+	char	*temp;
+	char	*new_exp_input;
 
 	temp = ft_extract_dq(input, index, shell);
 	temp = ft_quote_string(temp);
 	new_exp_input = ft_join_input(exp_input, temp);
 	free(temp);
-	return new_exp_input;
+	return (new_exp_input);
 }
 
-char *extract_and_append_segment_dq(char *input, int *i, char *segment)
+char	*extract_and_append_segment_dq(char *input, int *i, char *segment)
 {
-	char *temp_segment = ft_extract_segment_dq(input, i);
+	char	*temp_segment;
+	char	*new_segment;
+
+	temp_segment = ft_extract_segment_dq(input, i);
 	if (temp_segment)
 	{
-		char *new_segment = ft_join_input(segment, temp_segment);
+		new_segment = ft_join_input(segment, temp_segment);
 		free(temp_segment);
-		return new_segment;
+		return (new_segment);
 	}
-	return segment;
+	return (segment);
 }
 
-char *handle_and_append_variable_dq(char *input, int *i, char *segment, t_shell *shell)
+char	*handle_and_append_variable_dq(char *input, int *i, char *segment,
+		t_shell *shell)
 {
+	char	*exp_var;
+	char	*expanded_var;
+	char	*new_segment;
+
 	if (input[*i] == '$')
 	{
-		char *exp_var = ft_extract_var(input, i);
+		exp_var = ft_extract_var(input, i);
 		if (exp_var)
 		{
-			char *expanded_var = ft_expand_var_dq(shell, exp_var);
+			expanded_var = ft_expand_var_dq(shell, exp_var);
 			if (expanded_var)
 			{
-				char *new_segment = ft_join_input(segment, expanded_var);
+				new_segment = ft_join_input(segment, expanded_var);
 				free(expanded_var);
-				return new_segment;
+				return (new_segment);
 			}
 			free(exp_var);
 		}
 	}
-	return segment;
+	return (segment);
 }
 
-char *ft_extract_dq(char *input, int *i, t_shell *shell)
+char	*ft_extract_dq(char *input, int *i, t_shell *shell)
 {
-	char *segment = strdup("");
-	if (!segment)
-		return NULL;
+	char	*segment;
 
+	segment = strdup("");
+	if (!segment)
+		return (NULL);
 	(*i)++;
 	while (input[*i] != '\0' && input[*i] != '\"')
 	{
@@ -118,5 +104,29 @@ char *ft_extract_dq(char *input, int *i, t_shell *shell)
 	if (input[*i] == '\"')
 		(*i)++;
 	// segment = ft_quote_string(segment);
-	return segment;
+	return (segment);
 }
+
+// char	*ft_expand_var_dq(t_shell *shell, char *var)
+// {
+// 	t_env_var	*current;
+// 	char		*exp_var;
+
+// 	if (ft_strcmp(var, "?") == 0)
+// 		return (ft_itoa(shell->exit_code));
+// 	if (ft_strcmp(var, " ") == 0 || ft_strcmp(var, "") == 0)
+// 		return (ft_strdup("$"));
+// 	current = shell->env_list;
+// 	while (current != NULL)
+// 	{
+// 		if (ft_strcmp(current->key, var) == 0)
+// 		{
+// 			exp_var = current->value;
+// 			free(var);
+// 			return (ft_strdup_dq(current->value));
+// 		}
+
+// 		current = current->next;
+// 	}
+// 	return (NULL);
+// }

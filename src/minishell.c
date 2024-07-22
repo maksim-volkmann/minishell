@@ -74,36 +74,21 @@ void	ft_init_shell(t_shell *shell, char *env[])
 	shell->exit_code = 0;
 }
 
-int	ft_heredoc_check(t_shell *shell)
-{
-	ft_lexer(shell->input, shell);
-	if (ft_syntax_checker(shell->tokens) == 1
-		|| ft_syntax_checker_2(shell->tokens) == 1
-		||shell->syn_err_present == true)
-	{
-		fprintf(stderr, "syntax error\n");
-		free_token_list(shell->tokens);
-		shell->exit_code = 2;
-		return (1);
-	}
-	ft_heredoc_loop(shell);
-	free_token_list(shell->tokens);
-	shell->tokens = NULL;
-	return (0);
-}
-
-// int	ft_manage_input(t_shell *shell)
+// int	ft_heredoc_check(t_shell *shell)
 // {
-// 	if (!shell->input)
-// 		ft_exit(shell);
-// 	add_history(shell->input);
-// 	// ft_heredoc_check(shell);
-// 	shell->input = ft_expander_heredoc(shell->input, shell);
-// 	if (ft_strcmp(shell->input, "") == 0)
+// 	ft_lexer(shell->input, shell);
+// 	if (ft_syntax_checker(shell->tokens) == 1
+// 		|| ft_syntax_checker_2(shell->tokens) == 1
+// 		||shell->syn_err_present == true)
 // 	{
-// 		free(shell->input);
+// 		ft_putstr_fd("syntax error\n", 2);
+// 		free_token_list(shell->tokens);
+// 		shell->exit_code = 2;
 // 		return (1);
 // 	}
+// 	ft_heredoc_loop(shell);
+// 	free_token_list(shell->tokens);
+// 	shell->tokens = NULL;
 // 	return (0);
 // }
 

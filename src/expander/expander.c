@@ -6,30 +6,29 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:51:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/09 12:45:24 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/21 16:38:53 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/expander.h"
 #include <sys/fcntl.h>
 
-char *ft_expander(char *input, t_shell *shell)
+char	*ft_expander(char *input, t_shell *shell)
 {
-	char *exp_input;
-	int i;
+	char	*exp_input;
+	int		i;
 
 	exp_input = ft_strdup("");
 	i = 0;
 	while (input[i] != '\0')
 	{
 		if (input[i] == '\'')
-			exp_input = ft_handle_single_quote(input, &i , exp_input);
+			exp_input = ft_handle_single_quote(input, &i, exp_input);
 		else if (input[i] == '\"')
 			exp_input = ft_handle_double_quote(input, &i, shell, exp_input);
 		else
 			exp_input = ft_handle_segment(input, &i, shell, exp_input);
 	}
-
 	free(input);
-	return exp_input;
+	return (exp_input);
 }
