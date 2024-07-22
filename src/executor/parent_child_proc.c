@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 11:12:29 by goldman           #+#    #+#             */
-/*   Updated: 2024/07/22 12:49:27 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:56:40 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	perform_dup_and_close(int old_fd, int new_fd, const char *error_msg, t_shel
 	}
 }
 
-void	child_proc(t_command *cmd, t_shell *shell, int input_fd, int pipe_fd[2])
+void	child_proc(t_cmd *cmd, t_shell *shell, int input_fd, int pipe_fd[2])
 {
 	perform_dup_and_close(input_fd, STDIN_FILENO, "dup2 input_fd", shell);
 	perform_dup_and_close(pipe_fd[1], STDOUT_FILENO, "dup2 pipe_fd[1]", shell);

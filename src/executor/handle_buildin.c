@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 23:52:06 by goldman           #+#    #+#             */
-/*   Updated: 2024/07/22 12:43:35 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:56:40 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	restore_stdout(int saved_stdout)
 	}
 }
 
-int	execute_specific_builtin(t_command *cmd, t_shell *shell)
+int	execute_specific_builtin(t_cmd *cmd, t_shell *shell)
 {
 	if (execute_echo_builtin(cmd, shell))
 		return (0);
@@ -41,7 +41,7 @@ int	execute_specific_builtin(t_command *cmd, t_shell *shell)
 	return (-1);
 }
 
-int	handle_builtin(t_command *cmd, t_shell *shell)
+int	handle_builtin(t_cmd *cmd, t_shell *shell)
 {
 	int	saved_stdout;
 	int	result;

@@ -8,9 +8,9 @@
 #include <stdio.h>
 
 // Function to print export variables
-void	print_export_vars(t_env_var *env_list)
+void	print_export_vars(t_env *env_list)
 {
-	t_env_var	*current;
+	t_env	*current;
 
 	current = env_list;
 	while (current)
@@ -81,12 +81,12 @@ char	*find_plus_equal(const char *str)
 }
 
 // Function to handle adding or updating an environment variable with concatenation
-void	handle_plus_equal(char *arg, t_env_var **env_list, t_shell *shell)
+void	handle_plus_equal(char *arg, t_env **env_list, t_shell *shell)
 {
 	char	*plus_equal_sign;
 	char	*key;
 	char	*value;
-	t_env_var	*current;
+	t_env	*current;
 
 	plus_equal_sign = find_plus_equal(arg);
 	*plus_equal_sign = '\0';
@@ -119,7 +119,7 @@ void	handle_plus_equal(char *arg, t_env_var **env_list, t_shell *shell)
 }
 
 // Function to handle adding or updating an environment variable
-void	handle_equal_sign(char *arg, t_env_var **env_list, t_shell *shell)
+void	handle_equal_sign(char *arg, t_env **env_list, t_shell *shell)
 {
 	char	*equal_sign;
 	char	*key;
@@ -142,7 +142,7 @@ void	handle_equal_sign(char *arg, t_env_var **env_list, t_shell *shell)
 }
 
 // Function to handle adding an environment variable without a value
-void	handle_no_equal_sign(char *arg, t_env_var **env_list, t_shell *shell)
+void	handle_no_equal_sign(char *arg, t_env **env_list, t_shell *shell)
 {
 	if (is_valid_var_name(arg))
 		update_env_var(env_list, arg, NULL);
@@ -156,7 +156,7 @@ void	handle_no_equal_sign(char *arg, t_env_var **env_list, t_shell *shell)
 }
 
 // Function to handle each export argument
-void	handle_export_arg(char *arg, t_env_var **env_list, t_shell *shell)
+void	handle_export_arg(char *arg, t_env **env_list, t_shell *shell)
 {
 	if (find_plus_equal(arg) != NULL)
 		handle_plus_equal(arg, env_list, shell);
@@ -167,7 +167,7 @@ void	handle_export_arg(char *arg, t_env_var **env_list, t_shell *shell)
 }
 
 // Function to handle the export command
-void	execute_export(char **args, t_env_var **env_list, t_shell *shell)
+void	execute_export(char **args, t_env **env_list, t_shell *shell)
 {
 	int	i;
 

@@ -10,9 +10,9 @@
 
 // Function to update an environment variable
 // This function updates the value of an environment variable or adds it if it doesn't exist
-void	update_env_var(t_env_var **env_list, const char *key, const char *value)
+void	update_env_var(t_env **env_list, const char *key, const char *value)
 {
-	t_env_var	*current;
+	t_env	*current;
 
 	current = *env_list;
 	while (current)
@@ -30,7 +30,7 @@ void	update_env_var(t_env_var **env_list, const char *key, const char *value)
 
 // Function to update the PWD and OLDPWD environment variables
 // This function updates the current and previous working directories
-int	update_pwd(t_env_var **env_list, char *old_pwd)
+int	update_pwd(t_env **env_list, char *old_pwd)
 {
 	char	buffer[1024];
 	char	*new_pwd;

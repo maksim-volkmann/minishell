@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   seg_heredoc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:57:08 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/21 17:00:07 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:58:12 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	*ft_extract_segment_hd(char *input, int *i, t_shell *shell)
 
 // char	*ft_expand_var_hd(t_shell *shell, char *var)
 // {
-// 	t_env_var	*current;
+// 	t_env	*current;
 // 	char		*exp_var;
 
 // 	if (ft_strcmp(var, "?") == 0)

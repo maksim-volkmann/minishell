@@ -14,7 +14,7 @@ void	assign_to_darray(char **src, char **darray, int *i, int *j)
 void	ft_parser(t_shell *shell, t_token **tokens)
 {
 	t_token		*current;
-	t_command	*new;
+	t_cmd	*new;
 
 	current = *tokens;
 	while (current != NULL)
@@ -25,6 +25,6 @@ void	ft_parser(t_shell *shell, t_token **tokens)
 		new->argv = ft_get_darray(&current, new->input, new->output);
 		add_or_init_node(&shell->cmds, new);
 		// If no arguments, new->argv is already NULL
-		// print_command(new);
+		// print_cmd(new);
 	}
 }

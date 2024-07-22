@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 23:46:09 by goldman           #+#    #+#             */
-/*   Updated: 2024/07/22 12:43:52 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:58:56 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../includes/executor.h"
 #include "../../includes/minishell.h"
 
-void	setup_input_redir(t_redirection *input, t_shell *shell)
+void	setup_input_redir(t_redir *input, t_shell *shell)
 {
 	int	fd;
 
@@ -37,7 +37,7 @@ void	setup_input_redir(t_redirection *input, t_shell *shell)
 	}
 }
 
-void	setup_output_redir(t_redirection *output, t_shell *shell)
+void	setup_output_redir(t_redir *output, t_shell *shell)
 {
 	int	fd;
 

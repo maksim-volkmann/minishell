@@ -3,26 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   list_helper.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 09:56:09 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/26 10:09:50 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:58:56 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 #include <sys/_types/_null.h>
 
-t_command	*ft_new_node(void)
+t_cmd	*ft_new_node(void)
 {
-	t_command	*new;
+	t_cmd	*new;
 
-	new = malloc(sizeof(t_command));
+	new = malloc(sizeof(t_cmd));
 	if (!new)
 		return (NULL);
 	new->argv = NULL;
-	new->output = malloc(sizeof(t_redirection));
-	new->input = malloc(sizeof(t_redirection));
+	new->output = malloc(sizeof(t_redir));
+	new->input = malloc(sizeof(t_redir));
 	if (!new->input || !new->output)
 		return (NULL);
 	new->input->file = NULL;
@@ -33,9 +33,9 @@ t_command	*ft_new_node(void)
 	return (new);
 }
 
-void	add_or_init_node(t_command **cmds, t_command *new_n)
+void	add_or_init_node(t_cmd **cmds, t_cmd *new_n)
 {
-	t_command	*current;
+	t_cmd	*current;
 
 	if (*cmds == NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 11:38:21 by goldman           #+#    #+#             */
-/*   Updated: 2024/07/22 12:43:49 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:58:12 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	free_envp(char **envp)
 	free(envp);
 }
 
-int	count_env_vars(t_env_var *env_list)
+int	count_envs(t_env *env_list)
 {
 	int	count;
 
@@ -65,14 +65,14 @@ void	free_envp_on_error(char **envp, int i)
 	free(envp);
 }
 
-char	**prepare_envp(t_env_var *env_list)
+char	**prepare_envp(t_env *env_list)
 {
 	char		**envp;
 	int			env_count;
 	int			i;
-	t_env_var	*current;
+	t_env	*current;
 
-	env_count = count_env_vars(env_list);
+	env_count = count_envs(env_list);
 	envp = malloc(sizeof(char *) * (env_count + 1));
 	if (!envp)
 		return (NULL);

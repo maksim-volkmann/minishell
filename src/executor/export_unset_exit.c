@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 00:26:22 by goldman           #+#    #+#             */
-/*   Updated: 2024/07/22 12:43:32 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:56:40 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "../../includes/minishell.h"
 #include "../../includes/builtins.h"
 
-int	execute_export_builtin(t_command *cmd, t_shell *shell)
+int	execute_export_builtin(t_cmd *cmd, t_shell *shell)
 {
 	if (ft_strcmp(cmd->argv[0], "export") == 0)
 	{
@@ -24,7 +24,7 @@ int	execute_export_builtin(t_command *cmd, t_shell *shell)
 	return (0);
 }
 
-int	execute_unset_builtin(t_command *cmd, t_shell *shell)
+int	execute_unset_builtin(t_cmd *cmd, t_shell *shell)
 {
 	if (ft_strcmp(cmd->argv[0], "unset") == 0)
 	{
@@ -34,7 +34,7 @@ int	execute_unset_builtin(t_command *cmd, t_shell *shell)
 	return (0);
 }
 
-int	execute_exit_builtin(t_command *cmd, t_shell *shell)
+int	execute_exit_builtin(t_cmd *cmd, t_shell *shell)
 {
 	if (ft_strcmp(cmd->argv[0], "exit") == 0)
 	{
