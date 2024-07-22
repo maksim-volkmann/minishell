@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   darray.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:46:42 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/08 12:53:29 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:58:56 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char** ft_allocate_darray(t_token** tokens)
 }
 
 void ft_populate_darray(t_token** tokens, char** darray,
-						t_redirection* input, t_redirection* output)
+						t_redir* input, t_redir* output)
 {
 	int i = 0;
 
@@ -74,8 +74,8 @@ void ft_populate_darray(t_token** tokens, char** darray,
 	darray[i] = NULL;
 }
 
-char** ft_get_darray(t_token** tokens, t_redirection* input,
-					t_redirection* output)
+char** ft_get_darray(t_token** tokens, t_redir* input,
+					t_redir* output)
 {
 	char** darray;
 
@@ -86,8 +86,8 @@ char** ft_get_darray(t_token** tokens, t_redirection* input,
 	return (darray);
 }
 
-// char	**ft_get_darray(t_token **tokens, t_redirection *input,
-// 						t_redirection *output)
+// char	**ft_get_darray(t_token **tokens, t_redir *input,
+// 						t_redir *output)
 // {
 // 	char	**darray;
 // 	int		size;

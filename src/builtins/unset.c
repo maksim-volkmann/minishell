@@ -9,10 +9,10 @@
 
 // Function to remove an environment variable
 // This function removes an environment variable with the given key from the environment list
-void	remove_env_var(t_env_var **env_list, const char *key)
+void	remove_env_var(t_env **env_list, const char *key)
 {
-	t_env_var	*current;
-	t_env_var	*prev;
+	t_env	*current;
+	t_env	*prev;
 
 	current = *env_list;
 	prev = NULL;
@@ -36,7 +36,7 @@ void	remove_env_var(t_env_var **env_list, const char *key)
 
 // Function to handle the unset command
 // This function removes environment variables based on the provided arguments
-void	execute_unset(char **args, t_env_var **env_list, t_shell *shell)
+void	execute_unset(char **args, t_env **env_list, t_shell *shell)
 {
 	int	i;
 	int	invalid_identifier;

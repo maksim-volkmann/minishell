@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:40:22 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/02 11:43:45 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:58:56 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 
-void	free_redirection(t_redirection *redir)
+void	free_redirection(t_redir *redir)
 {
 	if (redir != NULL)
 	{
@@ -20,11 +20,11 @@ void	free_redirection(t_redirection *redir)
 	}
 }
 
-void	free_command(t_command *cmd)
+void	free_command(t_cmd *cmd)
 
 {
-	t_command	*current;
-	t_command	*next;
+	t_cmd	*current;
+	t_cmd	*next;
 
 	current = cmd;
 	while (current != NULL)

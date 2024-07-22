@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-void	ft_handle_output(t_token *tokens, t_redirection *output)
+void	ft_handle_output(t_token *tokens, t_redir *output)
 {
 	int	fd;
 
@@ -30,7 +30,7 @@ void	ft_handle_output(t_token *tokens, t_redirection *output)
 	close(fd);
 }
 
-void	ft_handle_input(t_token *tokens, t_redirection *input)
+void	ft_handle_input(t_token *tokens, t_redir *input)
 {
 	if (tokens->type == LESS)
 	{
@@ -45,8 +45,8 @@ void	ft_handle_input(t_token *tokens, t_redirection *input)
 
 }
 
-void	ft_handle_redir(t_token *tokens, t_redirection *input,
-							t_redirection *output)
+void	ft_handle_redir(t_token *tokens, t_redir *input,
+							t_redir *output)
 {
 	if (tokens->type == GREAT || tokens->type == DGREAT)
 	{

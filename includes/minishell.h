@@ -34,22 +34,22 @@ typedef struct s_redirection
 {
 	t_redir_type			type;
 	char					*file;
-}	t_redirection;
+}	t_redir;
 
 typedef struct s_command
 {
 	char				**argv;
-	t_redirection		*input;
-	t_redirection		*output;
+	t_redir		*input;
+	t_redir		*output;
 	struct s_command	*next;
-}	t_command;
+}	t_cmd;
 
 typedef struct s_env_var
 {
 	char				*key;
 	char				*value;
 	struct s_env_var	*next;
-}	t_env_var;
+}	t_env;
 
 typedef struct s_token
 {
@@ -60,8 +60,8 @@ typedef struct s_token
 
 typedef struct s_shell
 {
-	t_command	*cmds;
-	t_env_var	*env_list;
+	t_cmd	*cmds;
+	t_env	*env_list;
 	t_token		*tokens;
 	int			exit_code;
 	bool		syn_err_present;
@@ -74,16 +74,16 @@ int	is_builtin(char *command);
 // helper.c
 
 void	leaks(void);
-void free_env_vars(t_env_var *env_list);
+void free_env_vars(t_env *env_list);
 const char* get_token_type_string(t_token_type type);
 void print_token_list(t_token *head);
 const char* redir_type_to_string(t_redir_type type);
-void print_redirection(t_redirection *redir);
-void print_command(t_command *cmd);
-void add_env_var(t_env_var **env_list, const char *key, const char *value);
+void print_redir(t_redir *redir);
+void print_cmd(t_cmd *cmd);
+void add_env_var(t_env **env_list, const char *key, const char *value);
 void copy_env_vars(t_shell *shell, char **env);
-void print_command_details(t_command *cmds);
-void print_env_vars(t_env_var *env_list);
+void print_cmd_details(t_cmd *cmds);
+void print_envs(t_env *env_list);
 
 
 

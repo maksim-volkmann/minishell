@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 11:21:29 by goldman           #+#    #+#             */
-/*   Updated: 2024/07/22 12:43:53 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:58:12 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ char	*create_cmd_path(char *dir, char *cmd)
 	return (full_path);
 }
 
-char	*get_env_value(t_env_var *env_list, const char *key)
+char	*get_env_value(t_env *env_list, const char *key)
 {
-	t_env_var	*current;
+	t_env	*current;
 
 	current = env_list;
 	while (current)
@@ -38,7 +38,7 @@ char	*get_env_value(t_env_var *env_list, const char *key)
 	return (NULL);
 }
 
-char	*find_correct_path(char *cmd, t_env_var *env_list)
+char	*find_correct_path(char *cmd, t_env *env_list)
 {
 	char	*path_var;
 	char	**paths;
@@ -65,7 +65,7 @@ char	*find_correct_path(char *cmd, t_env_var *env_list)
 	return (NULL);
 }
 
-char	*get_executable_path(char *cmd, t_env_var *env_list)
+char	*get_executable_path(char *cmd, t_env *env_list)
 {
 	char	*executable_path;
 
@@ -84,7 +84,7 @@ char	*get_executable_path(char *cmd, t_env_var *env_list)
 	return (executable_path);
 }
 
-void	execute_command(t_command *cmd, t_env_var *env_list)
+void	execute_command(t_cmd *cmd, t_env *env_list)
 {
 	char	*executable_path;
 	char	**envp;

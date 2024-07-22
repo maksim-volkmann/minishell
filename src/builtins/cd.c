@@ -9,7 +9,7 @@
 
 // Function to change the directory to the home directory
 // This function changes the current working directory to the user's home directory
-int	change_to_home(t_env_var **env_list)
+int	change_to_home(t_env **env_list)
 {
 	char	*home_dir;
 
@@ -27,7 +27,7 @@ int	change_to_home(t_env_var **env_list)
 	return (0);
 }
 
-int	execute_cd(char **args, t_env_var **env_list)
+int	execute_cd(char **args, t_env **env_list)
 {
 	char	buffer[1024];
 	char	*old_pwd;

@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 17:21:16 by goldman           #+#    #+#             */
-/*   Updated: 2024/07/22 12:06:09 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:56:40 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <fcntl.h>
 #include "../includes/executor.h"
 
-int	validate_input_no_cmd(t_command *cmd, t_shell *shell)
+int	validate_input_no_cmd(t_cmd *cmd, t_shell *shell)
 {
 	if (cmd->input && cmd->input->file)
 	{
@@ -26,7 +26,7 @@ int	validate_input_no_cmd(t_command *cmd, t_shell *shell)
 	return (0);
 }
 
-int	validate_output_no_cmd(t_command *cmd, t_shell *shell)
+int	validate_output_no_cmd(t_cmd *cmd, t_shell *shell)
 {
 	int	fd;
 
@@ -40,7 +40,7 @@ int	validate_output_no_cmd(t_command *cmd, t_shell *shell)
 	return (0);
 }
 
-int	validate_input_file(t_command *cmd, t_shell *shell)
+int	validate_input_file(t_cmd *cmd, t_shell *shell)
 {
 	if (cmd->input && cmd->input->file)
 	{
@@ -50,7 +50,7 @@ int	validate_input_file(t_command *cmd, t_shell *shell)
 	return (0);
 }
 
-int	validate_output_file(t_command *cmd, t_shell *shell)
+int	validate_output_file(t_cmd *cmd, t_shell *shell)
 {
 	int	fd;
 
@@ -64,7 +64,7 @@ int	validate_output_file(t_command *cmd, t_shell *shell)
 	return (0);
 }
 
-void	exec_single(t_command *cmd, t_shell *shell)
+void	exec_single(t_cmd *cmd, t_shell *shell)
 {
 	if (cmd->argv[0] == NULL)
 	{

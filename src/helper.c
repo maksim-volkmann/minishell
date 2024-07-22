@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 11:48:49 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/22 12:07:19 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:58:56 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	leaks(void)
 	system("leaks minishell");
 }
 
-void free_env_vars(t_env_var *env_list)
+void free_env_vars(t_env *env_list)
 {
-	t_env_var *current;
-	t_env_var *next;
+	t_env *current;
+	t_env *next;
 
 	current = env_list;
 	while (current != NULL)
@@ -78,7 +78,7 @@ const char* redir_type_to_string(t_redir_type type)
     }
 }
 
-void print_redirection(t_redirection *redir)
+void print_redir(t_redir *redir)
 {
     if (redir != NULL) {
         printf("  Redirection Type: %s\n", redir_type_to_string(redir->type));
@@ -92,7 +92,7 @@ void print_redirection(t_redirection *redir)
     }
 }
 
-void print_command(t_command *cmd)
+void print_cmd(t_cmd *cmd)
 {
     int i;
     while (cmd != NULL) {
@@ -109,10 +109,10 @@ void print_command(t_command *cmd)
         }
 
         printf("Input:\n");
-        print_redirection(cmd->input);
+        print_redir(cmd->input);
 
         printf("Output:\n");
-        print_redirection(cmd->output);
+        print_redir(cmd->output);
 
         cmd = cmd->next;
 
@@ -122,11 +122,11 @@ void print_command(t_command *cmd)
 
 
 
-t_env_var	*create_env_var(const char *key, const char *value)
+t_env	*create_env_var(const char *key, const char *value)
 {
-	t_env_var	*new_var;
+	t_env	*new_var;
 
-	new_var = malloc(sizeof(t_env_var));
+	new_var = malloc(sizeof(t_env));
 	if (!new_var)
 	{
 		perror("malloc");
@@ -141,11 +141,11 @@ t_env_var	*create_env_var(const char *key, const char *value)
 	return (new_var);
 }
 
-void	add_env_var(t_env_var **env_list, const char *key, const char *value)
+void	add_env_var(t_env **env_list, const char *key, const char *value)
 {
-	t_env_var	*new_var;
-	t_env_var	*current;
-	t_env_var	*prev;
+	t_env	*new_var;
+	t_env	*current;
+	t_env	*prev;
 
 	new_var = create_env_var(key, value);
 	prev = NULL;
@@ -172,13 +172,13 @@ void	add_env_var(t_env_var **env_list, const char *key, const char *value)
 
 
 // Function to add an environment variable to the list
-// void add_env_var(t_env_var **env_list, const char *key, const char *value)
+// void add_env_var(t_env **env_list, const char *key, const char *value)
 // {
-//     t_env_var *new_var;
-//     t_env_var *current;
-//     t_env_var *prev = NULL;
+//     t_env *new_var;
+//     t_env *current;
+//     t_env *prev = NULL;
 
-//     new_var = malloc(sizeof(t_env_var));
+//     new_var = malloc(sizeof(t_env));
 //     if (!new_var)
 //     {
 //         perror("malloc");
@@ -248,9 +248,9 @@ void	copy_env_vars(t_shell *shell, char **env)
 
 
 
-// void print_env_vars(t_env_var *env_list)
+// void print_envs(t_env *env_list)
 // {
-// 	t_env_var *current = env_list;
+// 	t_env *current = env_list;
 // 	while (current)
 // 	{
 // 		if (current->value)
@@ -264,9 +264,9 @@ void	copy_env_vars(t_shell *shell, char **env)
 
 
 //TODO: remove this, its just for testing.
-void print_command_details(t_command *cmds)
+void print_cmd_details(t_cmd *cmds)
 {
-    t_command *current_cmd = cmds;
+    t_cmd *current_cmd = cmds;
     int i;
 
     while (current_cmd)

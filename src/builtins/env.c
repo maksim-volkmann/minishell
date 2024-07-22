@@ -7,9 +7,9 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-void print_env_vars(t_env_var *env_list)
+void print_envs(t_env *env_list)
 {
-	t_env_var *current = env_list;
+	t_env *current = env_list;
 	while (current)
 	{
 		if (current->value)
@@ -20,7 +20,7 @@ void print_env_vars(t_env_var *env_list)
 	}
 }
 
-int	execute_env(char **args, t_env_var *env_list)
+int	execute_env(char **args, t_env *env_list)
 {
 	if (args[1] != NULL)
 	{
@@ -29,7 +29,7 @@ int	execute_env(char **args, t_env_var *env_list)
 		ft_putendl_fd(": No such file or directory", STDERR_FILENO);
 		return (127);
 	}
-	print_env_vars(env_list);
+	print_envs(env_list);
 	return (0);
 }
 
