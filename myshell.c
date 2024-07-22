@@ -151,6 +151,7 @@ void execute_pipeline(char *commands[], int n) {
         }
         if (pids[i] == 0) {
             // Child process setup
+            printf("Child process setup PID:%d\n", getpid());
             setup_child_signal_handlers(); // Set custom signal handlers for child
 
             if (in_fd != STDIN_FILENO) {
@@ -251,6 +252,7 @@ int main() {
     setup_signal_handlers();
 
     while (1) {
+        printf("Parent process running with PID %d\n", getpid());
         input = readline("myshell> ");
         if (input == NULL) {
             printf("\n");
