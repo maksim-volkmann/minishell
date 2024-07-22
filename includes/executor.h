@@ -107,7 +107,8 @@ void	wait_for_last_process(pid_t last_pid, t_shell *shell);
 
 //move those:
 void	child_proc(t_command *cmd, t_shell *shell, int input_fd, int pipe_fd[2]);
-void	parent_proc(pid_t last_pid, int *input_fd, int pipe_fd[2]);
+void	parent_proc(int *input_fd, int pipe_fd[2]);
+// void	parent_proc(pid_t last_pid, int *input_fd, int pipe_fd[2]);
 char	*ft_strcpy(char *dest, const char *src);
 
 //exec_single.c

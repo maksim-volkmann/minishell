@@ -33,84 +33,102 @@ void ft_init_shell(t_shell *shell, char *env[]) {
     shell->exit_code = 0;
 }
 
-int ft_heredoc_check(t_shell *shell) {
-    ft_lexer(shell->input, shell);
-    if (ft_syntax_checker(shell->tokens) == 1 || ft_syntax_checker_2(shell->tokens) == 1 || shell->syn_err_present == true) {
-        fprintf(stderr, "syntax error\n");
-        free_token_list(shell->tokens);
-        shell->exit_code = 2;
-        return 1;
-    }
-    ft_heredoc_loop(shell);
-    free_token_list(shell->tokens);
-    shell->tokens = NULL;
-    return 0;
-}
+// int ft_heredoc_check(t_shell *shell) {
+//     ft_lexer(shell->input, shell);
+//     if (ft_syntax_checker(shell->tokens) == 1 || ft_syntax_checker_2(shell->tokens) == 1 || shell->syn_err_present == true) {
+//         fprintf(stderr, "syntax error\n");
+//         free_token_list(shell->tokens);
+//         shell->exit_code = 2;
+//         return 1;
+//     }
+//     ft_heredoc_loop(shell);
+//     free_token_list(shell->tokens);
+//     shell->tokens = NULL;
+//     return 0;
+// }
 
-int ft_manage_input(t_shell *shell) {
-    if (!shell->input)
-        ft_exit(shell);
-    add_history(shell->input);
-    shell->input = ft_expander_heredoc(shell->input, shell);
-    if (ft_strcmp(shell->input, "") == 0) {
-        free(shell->input);
-        return 1;
-    }
-    return 0;
-}
+// int ft_manage_input(t_shell *shell) {
+//     if (!shell->input)
+//         ft_exit(shell);
+//     add_history(shell->input);
+//     shell->input = ft_expander_heredoc(shell->input, shell);
+//     if (ft_strcmp(shell->input, "") == 0) {
+//         free(shell->input);
+//         return 1;
+//     }
+//     return 0;
+// }
 
 
+
+// int	ft_heredoc_check(t_shell *shell)
+// {
+// 	ft_lexer(shell->input, shell);
+// 	if (ft_syntax_checker(shell->tokens) == 1
+// 		|| ft_syntax_checker_2(shell->tokens) == 1
+// 		||shell->syn_err_present == true)
+// 	{
+// 		ft_putstr_fd("syntax error\n", 2);
+// 		free_token_list(shell->tokens);
+// 		shell->exit_code = 2;
+// 		return (1);
+// 	}
+// 	ft_heredoc_loop(shell);
+// 	free_token_list(shell->tokens);
+// 	shell->tokens = NULL;
+// 	return (0);
+// }
 
 
 int main(int argc, char **argv, char **env)
 {
-    t_shell shell;
+	t_shell shell;
 
-    ft_init_shell(&shell, env);
+	ft_init_shell(&shell, env);
 
-    if (argc > 1 || argv[0] == NULL)
-        return 0;
+	if (argc > 1 || argv[0] == NULL)
+		return (0);
 
-    while (1)
-    {
-        shell.cmds = NULL;
-        shell.tokens = NULL;
-        shell.syn_err_present = false;
+	while (1)
+	{
+		shell.cmds = NULL;
+		shell.tokens = NULL;
+		shell.syn_err_present = false;
 
-        if (isatty(fileno(stdin)))
-            shell.input = readline("minishell> ");
-        else
-        {
-            char *line = get_next_line(fileno(stdin));
-            shell.input = ft_strtrim(line, "\n");
-            free(line);
-        }
+		if (isatty(fileno(stdin)))
+			shell.input = readline("minishell> ");
+		else
+		{
+			char *line = get_next_line(fileno(stdin));
+			shell.input = ft_strtrim(line, "\n");
+			free(line);
+		}
 
-        if (!shell.input)
-            ft_exit(&shell);
+		if (!shell.input)
+			ft_exit(&shell);
 
-        add_history(shell.input);
-        if (ft_heredoc_check(&shell) == 1)
-            continue;
-        shell.input = ft_expander(shell.input, &shell);
-        if (ft_strcmp(shell.input, "") == 0)
-        {
-            free(shell.input);
-            continue;
-        }
-        ft_lexer(shell.input, &shell);
-        ft_parser(&shell, &shell.tokens);
-        if (shell.cmds && shell.cmds->next == NULL)
-            exec_single(shell.cmds, &shell);
-        else
-            exec_start(shell.cmds, &shell);
+		add_history(shell.input);
+		if (ft_heredoc_check(&shell) == 1)
+			continue ;
+		shell.input = ft_expander(shell.input, &shell);
+		if (ft_strcmp(shell.input, "") == 0)
+		{
+			free(shell.input);
+			continue ;
+		}
+		ft_lexer(shell.input, &shell);
+		ft_parser(&shell, &shell.tokens);
+		if (shell.cmds && shell.cmds->next == NULL)
+			exec_single(shell.cmds, &shell);
+		else
+			exec_start(shell.cmds, &shell);
 
-        free_command(shell.cmds);
-        free_token_list(shell.tokens);
-        free(shell.input);
-        shell.input = NULL;
-    }
+		free_command(shell.cmds);
+		free_token_list(shell.tokens);
+		free(shell.input);
+		shell.input = NULL;
+	}
 
-    free_env_vars(shell.env_list);
-    return shell.exit_code;
+	free_env_vars(shell.env_list);
+	return (shell.exit_code);
 }

@@ -1,52 +1,5 @@
 #include "../../includes/expander.h"
 
-int	ft_is_separator_var(char c)
-{
-	int	i;
-
-	i = 0;
-	while (NOVAR[i] != '\0')
-	{
-		if (NOVAR[i] == c)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-char	*ft_extract_var(char *input, int *i)
-{
-	char		*var;
-	int			j;
-	const int	var_len = ft_var_len(input, (*i));
-
-	(*i)++;
-	if (input[(*i)] == '?')
-	{
-		var = ft_strdup("?");
-		(*i)++;
-		return (var);
-	}
-	if (input[(*i)] == ' ' || input[(*i)] == '\t' || input[(*i)] == '\0')
-		return (ft_strdup(" "));
-	var = malloc(var_len + 1);
-	j = 0;
-	while (input[(*i)] != 0)
-	{
-		if (ft_is_separator_var(input[(*i)]) != 0)
-			break ;
-		else
-		{
-			var[j] = input[(*i)];
-			j++;
-			(*i)++;
-		}
-	}
-	var[j] = '\0';
-
-	return (var);
-}
-
 int	ft_var_len(char *input, int i)
 {
 	int	len;
@@ -65,30 +18,6 @@ int	ft_var_len(char *input, int i)
 		}
 	}
 	return (len);
-}
-
-char	*ft_expand_var(t_shell *shell, char *var)
-{
-	t_env_var	*current;
-	char		*exp_var;
-
-	if (ft_strcmp(var, "?") == 0)
-		return (ft_itoa(shell->exit_code));
-	if (ft_strcmp(var, " ") == 0)
-		return (ft_strdup("$"));
-	current = shell->env_list;
-	while (current != NULL)
-	{
-		if (ft_strcmp(current->key, var) == 0)
-		{
-			exp_var = current->value;
-			free(var);
-			return (ft_strdup_dq(current->value));
-		}
-
-		current = current->next;
-	}
-	return (NULL);
 }
 
 char	*ft_join_input(char *s1, char *s2)
@@ -114,4 +43,56 @@ char	*ft_join_input(char *s1, char *s2)
 	constr[i] = '\0';
 	free(s1);
 	return (constr);
+}
+
+int	ft_is_separator_var(char c)
+{
+	int	i;
+
+	i = 0;
+	while (NOVAR[i] != '\0')
+	{
+		if (NOVAR[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+char	*ft_strdup_dq(const char *s)
+{
+	size_t	len;
+	char	*str;
+
+	if (!s)
+		return (NULL);
+
+	len = strlen(s);
+	str = (char *)malloc(len + 3);
+	if (!str)
+		return (NULL);
+
+	str[0] = '"';
+	ft_strlcpy(str + 1, s, len + 1);
+	str[len + 1] = '"';
+	str[len + 2] = '\0';
+
+	return (str);
+}
+
+char	*ft_quote_string(char *input)
+{
+	size_t	length;
+	char	*quoted_string;
+
+	length = strlen(input);
+	quoted_string = (char *)malloc(length + 3);
+	if (quoted_string == NULL)
+		return (NULL);
+	quoted_string[0] = '\"';
+	ft_strlcpy(quoted_string + 1, input, length + 1);
+	quoted_string[length + 1] = '\"';
+	quoted_string[length + 2] = '\0';
+	free(input);
+	return (quoted_string);
 }

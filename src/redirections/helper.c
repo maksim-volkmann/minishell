@@ -6,48 +6,21 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:48:41 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/07 15:14:02 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/21 17:23:46 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 #include "../../includes/expander.h"
 #include "../../includes/redirections.h"
+#include "../../includes/heredoc.h"
 #include <stdio.h>
 #include <sys/fcntl.h>
 
-// int	ft_check_filepath(char *filepath)
-// {
-// 	char	*dir_path;
-// 	char	*last_slash;
-
-// 	dir_path = ft_strdup(filepath);
-// 	last_slash = strrchr(dir_path, '/');
-// 	if (last_slash != NULL)
-// 	{
-// 		*last_slash = '\0';
-// 	}
-// 	else
-// 	{
-// 		free(dir_path);
-// 		return (1);
-// 	}
-// 	if (access(dir_path, W_OK) == 0)
-// 	{
-// 		free(dir_path);
-// 		return (1);
-// 	}
-// 	else
-// 	{
-// 		free(dir_path);
-// 		return (0);
-// 	}
-// }
-
-int ft_open_file(char *filename, char *content, t_shell *shell)
+int	ft_open_file(char *filename, char *content, t_shell *shell)
 {
-	int	fd;
-	ssize_t bytes_written;
+	int		fd;
+	ssize_t	bytes_written;
 
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
@@ -55,7 +28,7 @@ int ft_open_file(char *filename, char *content, t_shell *shell)
 		exit(EXIT_FAILURE);
 	}
 	content = ft_append_newline(content);
-	content = ft_expander_heredoc(content, shell);
+	content = ft_expander_hd(content, shell);
 	bytes_written = write(fd, content, ft_strlen(content));
 	if (bytes_written == -1)
 	{

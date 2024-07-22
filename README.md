@@ -26,9 +26,9 @@ To install the script, copy and run following command:
 
 ## TODO:
 
-1. Need to modify my own env to be able to use in execve.
-
- ctrl + \ . - interrupting running processes
+-Refactor redirections/heredoc
+-try to run heredoc in child proccess
+- decide where to unlink heredoc file 
 
 
 # REDIRECTIONS
@@ -46,5 +46,7 @@ EXPLANATIONS.
 REFACTORING.
 ----------> this doesnt run at all:
 ls >./outfiles/outfile01
+
+
 
 

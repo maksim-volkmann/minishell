@@ -1,9 +1,9 @@
 # Compiler and flags
 CC = cc
-# CFLAGS = -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror
 # CFLAGS = -fsanitize=address -g
 # Project name
-NAME = minishell 
+NAME = minishell
 
 # Directories
 SRC_DIR = src

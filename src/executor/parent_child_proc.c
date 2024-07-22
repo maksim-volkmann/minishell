@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 11:12:29 by goldman           #+#    #+#             */
-/*   Updated: 2024/07/22 12:16:50 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/22 12:49:27 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	child_proc(t_command *cmd, t_shell *shell, int input_fd, int pipe_fd[2])
 }
 
 
-void	parent_proc(pid_t last_pid, int *input_fd, int pipe_fd[2])
+void	parent_proc(int *input_fd, int pipe_fd[2])
 {
 	if (*input_fd != -1)
 		close(*input_fd);
