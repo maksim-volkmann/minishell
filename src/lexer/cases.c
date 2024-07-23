@@ -6,14 +6,13 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:29:48 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/21 17:26:23 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:12:10 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/lexer.h"
 #include <stdbool.h>
 #include <stdio.h>
-#include <sys/_types/_null.h>
 
 t_token	*ft_if_redi_op(const char *line, int *i, t_shell *shell)
 {

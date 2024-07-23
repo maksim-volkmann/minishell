@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/23 12:15:51 by adrherna          #+#    #+#             */
+/*   Updated: 2024/07/23 12:16:04 by adrherna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/executor.h"
 #include "../../includes/minishell.h"
 #include "../../includes/builtins.h"
@@ -8,7 +20,9 @@
 #include <stdio.h>
 
 // Function to change the directory to the home directory
-// This function changes the current working directory to the user's home directory
+// This function changes the current working
+// directory to the user's home directory
+
 int	change_to_home(t_env **env_list)
 {
 	char	*home_dir;

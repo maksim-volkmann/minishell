@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/23 12:19:02 by adrherna          #+#    #+#             */
+/*   Updated: 2024/07/23 12:19:05 by adrherna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/executor.h"
 #include "../../includes/minishell.h"
 #include "../../includes/builtins.h"
@@ -8,7 +20,9 @@
 #include <stdio.h>
 
 // Function to remove an environment variable
-// This function removes an environment variable with the given key from the environment list
+// This function removes an environment variable with
+// the given key from the environment list
+
 void	remove_env_var(t_env **env_list, const char *key)
 {
 	t_env	*current;

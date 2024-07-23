@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/23 12:16:25 by adrherna          #+#    #+#             */
+/*   Updated: 2024/07/23 12:16:32 by adrherna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/executor.h"
 #include "../../includes/minishell.h"
 #include "../../includes/builtins.h"
@@ -7,9 +19,10 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-
 // Function to update an environment variable
-// This function updates the value of an environment variable or adds it if it doesn't exist
+// This function updates the value of an environment
+// variable or adds it if it doesn't exist
+
 void	update_env_var(t_env **env_list, const char *key, const char *value)
 {
 	t_env	*current;

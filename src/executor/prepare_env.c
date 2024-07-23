@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   prepare_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/17 11:38:21 by goldman           #+#    #+#             */
-/*   Updated: 2024/07/22 12:58:12 by mvolkman         ###   ########.fr       */
+/*   Created: 2024/07/17 11:38:21 by mvolkman           #+#    #+#             */
+/*   Updated: 2024/07/23 12:24:48 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 # include <unistd.h>
-# include <fcntl.h>
-#include "../includes/executor.h"
+#include <fcntl.h>
+#include "../../includes/executor.h"
 
 void	free_envp(char **envp)
 {
@@ -70,7 +70,7 @@ char	**prepare_envp(t_env *env_list)
 	char		**envp;
 	int			env_count;
 	int			i;
-	t_env	*current;
+	t_env		*current;
 
 	env_count = count_envs(env_list);
 	envp = malloc(sizeof(char *) * (env_count + 1));

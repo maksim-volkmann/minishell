@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   start_execve.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/17 11:21:29 by goldman           #+#    #+#             */
-/*   Updated: 2024/07/22 12:58:12 by mvolkman         ###   ########.fr       */
+/*   Created: 2024/07/17 11:21:29 by adrherna           #+#    #+#             */
+/*   Updated: 2024/07/23 12:26:03 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-#include "../includes/executor.h"
+#include "../../includes/minishell.h"
+#include "../../includes/executor.h"
 
 char	*create_cmd_path(char *dir, char *cmd)
 {

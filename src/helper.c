@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 11:48:49 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/22 12:58:56 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/23 12:32:06 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	leaks(void)
 	system("leaks minishell");
 }
 
-void free_env_vars(t_env *env_list)
+void	free_env_vars(t_env *env_list)
 {
-	t_env *current;
-	t_env *next;
+	t_env	*current;
+	t_env	*next;
 
 	current = env_list;
 	while (current != NULL)

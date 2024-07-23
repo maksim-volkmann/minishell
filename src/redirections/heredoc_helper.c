@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 12:17:44 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/22 10:10:51 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:12:49 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/_types/_null.h>
 
 char	*ft_append_newline(char *str)
 {
