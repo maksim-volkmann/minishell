@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   darray.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:46:42 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/22 12:58:56 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/23 12:30:12 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,28 +28,29 @@ int	ft_darray_size(t_token	*tokens)
 	return (i);
 }
 
-char** ft_allocate_darray(t_token** tokens)
+char	**ft_allocate_darray(t_token **tokens)
 {
-	int size;
+	int		size;
 	char	**darray;
 
 	size = ft_darray_size((*tokens));
 	darray = NULL;
 	if (size == 0)
-		return NULL;
+		return (NULL);
 
 	darray = malloc(sizeof(char *) * (size + 1));
 	if (!darray)
-		return NULL;
+		return (NULL);
 
-	return darray;
+	return (darray);
 }
 
-void ft_populate_darray(t_token** tokens, char** darray,
-						t_redir* input, t_redir* output)
+void	ft_populate_darray(t_token **tokens, char **darray,
+						t_redir *input, t_redir *output)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	while ((*tokens) != NULL && (*tokens)->type != PIPE)
 	{
 		if ((*tokens)->type == DGREAT || (*tokens)->type == GREAT ||
@@ -59,12 +60,12 @@ void ft_populate_darray(t_token** tokens, char** darray,
 			if ((*tokens)->next == NULL)
 			{
 				(*tokens) = (*tokens)->next;
-				continue;
+				continue ;
 			}
 			else
 			{
 				(*tokens) = (*tokens)->next->next;
-				continue;
+				continue ;
 			}
 		}
 		darray[i] = (*tokens)->token;
@@ -74,10 +75,10 @@ void ft_populate_darray(t_token** tokens, char** darray,
 	darray[i] = NULL;
 }
 
-char** ft_get_darray(t_token** tokens, t_redir* input,
-					t_redir* output)
+char	**ft_get_darray(t_token **tokens, t_redir *input,
+					t_redir *output)
 {
-	char** darray;
+	char	**darray;
 
 	darray = ft_allocate_darray(tokens);
 	if (!darray)

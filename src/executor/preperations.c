@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   preperations.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 00:40:26 by goldman           #+#    #+#             */
-/*   Updated: 2024/07/22 12:56:40 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/23 12:25:46 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ void	wait_for_last_process(pid_t last_pid, t_shell *shell)
 		pid = wait(NULL);
 }
 
-// pid_t	fork_process(t_cmd *cmd, t_shell *shell, int *input_fd, int pipe_fd[2])
+// pid_t	fork_process(t_cmd *cmd,
+//			t_shell *shell, int *input_fd, int pipe_fd[2])
 // {
 // 	pid_t	pid;
 
@@ -45,24 +46,22 @@ void	wait_for_last_process(pid_t last_pid, t_shell *shell)
 // 	return (pid);
 // }
 
-pid_t fork_process(t_cmd *cmd, t_shell *shell, int *input_fd, int pipe_fd[2])
+pid_t	fork_process(t_cmd *cmd, t_shell *shell, int *input_fd, int pipe_fd[2])
 {
-    pid_t pid;
+	pid_t	pid;
 
-    pid = fork();
-    if (pid == -1)
-    {
-        perror("fork");
-        exit(EXIT_FAILURE);
-    }
-    if (pid == 0)
-        child_proc(cmd, shell, *input_fd, pipe_fd);
-    else
-        parent_proc(input_fd, pipe_fd);
-    return (pid);
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0)
+		child_proc(cmd, shell, *input_fd, pipe_fd);
+	else
+		parent_proc(input_fd, pipe_fd);
+	return (pid);
 }
-
-
 
 int	create_pipe_if_needed(t_cmd *cmd, int pipe_fd[2])
 {
@@ -102,7 +101,7 @@ void	exec_start(t_cmd *commands, t_shell *shell)
 {
 	int			pipe_fd[2];
 	int			input_fd;
-	t_cmd	*cmd;
+	t_cmd		*cmd;
 	pid_t		last_pid;
 
 	input_fd = -1;

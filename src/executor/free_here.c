@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   free_here.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 12:33:29 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/22 12:43:34 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/23 12:22:36 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-#include "../includes/executor.h"
+#include "../../includes/executor.h"
+#include "../../includes/minishell.h"
+
+// # include "../includes/minishell.h"
 
 void	ft_free_split(char **arr)
 {

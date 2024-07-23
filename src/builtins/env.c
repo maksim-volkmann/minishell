@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/23 12:16:41 by adrherna          #+#    #+#             */
+/*   Updated: 2024/07/23 12:17:04 by adrherna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/executor.h"
 #include "../../includes/minishell.h"
 #include "../../includes/builtins.h"
@@ -7,9 +19,11 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-void print_envs(t_env *env_list)
+void	print_envs(t_env *env_list)
 {
-	t_env *current = env_list;
+	t_env	*current;
+
+	current = env_list;
 	while (current)
 	{
 		if (current->value)

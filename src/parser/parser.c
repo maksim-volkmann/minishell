@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/23 12:30:28 by adrherna          #+#    #+#             */
+/*   Updated: 2024/07/23 12:30:35 by adrherna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/parser.h"
 #include <stdlib.h>
 
@@ -13,7 +25,7 @@ void	assign_to_darray(char **src, char **darray, int *i, int *j)
 
 void	ft_parser(t_shell *shell, t_token **tokens)
 {
-	t_token		*current;
+	t_token	*current;
 	t_cmd	*new;
 
 	current = *tokens;

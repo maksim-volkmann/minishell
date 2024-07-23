@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 12:17:44 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/22 12:21:28 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:00:50 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,76 +92,3 @@ void	ft_heredoc_loop(t_shell *shell)
 	ft_open_file("./tmp/heredoc.txt", content, shell);
 	ft_free_heredoc(content, delimiters);
 }
-
-// void	process_line(char **content, char *line,
-	// char **delimiters, int *del_count, int *i)
-// {
-// 	if (ft_strcmp(line, delimiters[*i]) == 0)
-// 	{
-// 		(*del_count)--;
-// 		(*i)++;
-// 	}
-// 	else if (*del_count > 1 && *i >= *del_count - 1)
-// 		*content = ft_heredoc_join(*content, line);
-// 	else if (*i >= *del_count - 1)
-// 		*content = ft_heredoc_join(*content, line);
-// }
-
-// void	ft_heredoc_loop(t_shell *shell)
-// {
-// 	char	**delimiters;
-// 	int		del_count;
-// 	char	*content;
-// 	int		i;
-// 	char	*line;
-
-// 	delimiters = ft_extract_delimiters(shell->tokens);
-// 	del_count = ft_count_delimiters(shell->tokens);
-// 	content = ft_strdup("");
-// 	i = 0;
-// 	if (del_count == 0)
-// 		return ;
-// 	while (del_count != 0)
-// 	{
-// 		line = readline("> ");
-// 		if (!line)
-// 			break ;
-// 		process_line(&content, line, delimiters, &del_count, &i);
-// 	}
-// 	ft_open_file("./tmp/heredoc.txt", content, shell);
-// 	ft_free_heredoc(content, delimiters);
-// }
-
-// void	ft_heredoc_loop(t_shell *shell)
-// {
-// 	char	**delimiters;
-// 	int		del_count;
-// 	char	*content;
-// 	char	*line;
-// 	int		i;
-
-// 	delimiters = ft_extract_delimiters(shell->tokens);
-// 	del_count = ft_count_delimiters(shell->tokens);
-// 	content = ft_strdup("");
-// 	i = 0;
-
-// 	if (ft_count_delimiters(shell->tokens) == 0)
-// 		return ;
-// 	while (del_count != 0)
-// 	{
-// 		line = readline("> ");
-// 		if (!line)
-// 			break ;
-// 		if (ft_strcmp(line, delimiters[i]) == 0)
-// 		{
-// 			del_count -= 1;
-// 			i++;
-// 		}
-// 		else if (ft_count_delimiters(shell->tokens) > 1 && i >= del_count - 1)
-// 			content = ft_heredoc_join(content, line);
-// 		else if (i >= del_count - 1)
-// 			content = ft_heredoc_join(content, line);
-// 	}
-// 	ft_open_file("./tmp/heredoc.txt", content, shell);
-// 	ft_free_heredoc(content, delimiters);
-// }
