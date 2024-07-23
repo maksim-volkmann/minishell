@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   list_helper.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/04 09:56:09 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/22 12:58:56 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:12:22 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
-#include <sys/_types/_null.h>
 
 t_cmd	*ft_new_node(void)
 {
