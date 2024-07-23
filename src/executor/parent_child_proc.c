@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   parent_child_proc.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 11:12:29 by goldman           #+#    #+#             */
-/*   Updated: 2024/07/22 12:56:40 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/23 12:23:23 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
-#include "../includes/executor.h"
+#include "../../includes/minishell.h"
+#include "../../includes/executor.h"
 
-
-void	perform_dup_and_close(int old_fd, int new_fd, const char *error_msg, t_shell *shell)
+void	perform_dup_and_close(int old_fd, int new_fd,
+		const char *error_msg, t_shell *shell)
 {
 	if (old_fd != -1)
 	{

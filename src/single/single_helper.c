@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   single_helper.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 16:00:30 by goldman           #+#    #+#             */
-/*   Updated: 2024/07/22 12:06:06 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/23 12:31:41 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 int	file_err(const char *file, t_shell *shell)
 {

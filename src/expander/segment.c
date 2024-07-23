@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   segment.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:57:08 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/22 12:58:12 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:17:21 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ char	*ft_handle_segment(char *input, int *index, t_shell *shell,
 
 	temp = ft_extract_segment(input, index, shell);
 	new_exp_input = ft_join_input(exp_input, temp);
+	free(temp);
 	return (new_exp_input);
 }
 
@@ -56,7 +57,7 @@ char	*extract_and_append_segment(char *input, int *i, char *segment)
 	if (temp_segment)
 	{
 		new_segment = ft_join_input(segment, temp_segment);
-		// free(temp_segment);  // Free the temporary segment
+		free(temp_segment);
 		return (new_segment);
 	}
 	return (segment);

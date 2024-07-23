@@ -3,18 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   exec_single.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/14 17:21:16 by goldman           #+#    #+#             */
-/*   Updated: 2024/07/22 12:56:40 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/23 12:31:23 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //TODO: Should I move this to seperate .h file or keep it in minishell.h?
-#include "../includes/minishell.h"
-# include <unistd.h>
-# include <fcntl.h>
-#include "../includes/executor.h"
+
+#include "../../includes/minishell.h"
+#include "../../includes/executor.h"
+#include <unistd.h>
+#include <fcntl.h>
 
 int	validate_input_no_cmd(t_cmd *cmd, t_shell *shell)
 {

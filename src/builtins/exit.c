@@ -19,15 +19,15 @@ int	count_args(char **argv)
 
 bool	is_valid_number(char *arg)
 {
-	int	i;
+	int		i;
 	bool	has_sign;
 
 	i = 0;
 	has_sign = false;
 	while (arg[i])
 	{
-		if ((!ft_isdigit(arg[i]) && arg[i] != '-' && arg[i] != '+') ||
-			(has_sign && (arg[i] == '-' || arg[i] == '+')))
+		if ((!ft_isdigit(arg[i]) && arg[i] != '-' && arg[i] != '+')
+			|| (has_sign && (arg[i] == '-' || arg[i] == '+')))
 			return (false);
 		if (arg[i] == '-' || arg[i] == '+')
 			has_sign = true;
@@ -46,7 +46,8 @@ int	execute_exit(char **argv, t_shell *shell)
 	if (ft_strcmp(argv[1], "") == 0 || !is_valid_number(argv[1]))
 	{
 		shell->exit_code = 255;
-		fprintf(stderr, "exit\nminishell: exit: %s: numeric argument required\n", argv[1]);
+		fprintf(stderr,
+			"exit\nminishell: exit: %s: numeric argument required\n", argv[1]);
 		ft_exit(shell);
 	}
 	if (count == 2)
