@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:01:16 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/23 13:01:19 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/23 17:59:51 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 #include <stdio.h>
 #include <signal.h>
 #include <termios.h>
+#include "../includes/signals.h"
+#include <unistd.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -90,64 +92,15 @@ void	ft_end_loop_free(t_shell *shell)
 	shell->input = NULL;
 }
 
-// int	main(int argc, char **argv, char **env)
-// {
-// 	t_shell	shell;
-
-// 	ft_init_shell(&shell, env);
-
-// 	if (argc > 1 || argv[0] == NULL)
-// 		return (0);
-
-// 	while (1)
-// 	{
-// 		shell.cmds = NULL;
-// 		shell.tokens = NULL;
-// 		shell.syn_err_present = false;
-
-// 		if (isatty(fileno(stdin)))
-// 			shell.input = readline("minishell> ");
-// 		else
-// 		{
-// 			char *line = get_next_line(fileno(stdin));
-// 			shell.input = ft_strtrim(line, "\n");
-// 			free(line);
-// 		}
-
-// 		if (!shell.input)
-// 			ft_exit(&shell);
-
-// 		add_history(shell.input);
-// 		if (ft_heredoc_check(&shell) == 1)
-// 			continue ;
-// 		shell.input = ft_expander(shell.input, &shell);
-// 		if (ft_strcmp(shell.input, "") == 0)
-// 		{
-// 			free(shell.input);
-// 			continue ;
-// 		}
-// 		ft_lexer(shell.input, &shell);
-// 		ft_parser(&shell, &shell.tokens);
-// 		if (shell.cmds && shell.cmds->next == NULL)
-// 			exec_single(shell.cmds, &shell);
-// 		else
-// 			exec_start(shell.cmds, &shell);
-
-// 		free_command(shell.cmds);
-// 		free_token_list(shell.tokens);
-// 		free(shell.input);
-// 		shell.input = NULL;
-// 	}
-
-// 	free_env_vars(shell.env_list);
-// 	return (shell.exit_code);
-// }
 
 int	main(int argc, char **argv, char **env)
 {
 	t_shell	shell;
 
 	ft_init_shell(&shell, env);
+
+	setup_parser_signals();
+	ft_configure_terminal();
 	if (argc > 1 || argv[0] == NULL)
 		return (0);
 	while (1)
@@ -160,12 +113,15 @@ int	main(int argc, char **argv, char **env)
 			continue ;
 		ft_lexer(shell.input, &shell);
 		ft_parser(&shell, &shell.tokens);
+		setup_execution_signals();
 		if (shell.cmds && shell.cmds->next == NULL)
 			exec_single(shell.cmds, &shell);
 		else
 			exec_start(shell.cmds, &shell);
 		ft_end_loop_free(&shell);
+		setup_parser_signals();
 	}
 	free_env_vars(shell.env_list);
-	return (shell.exit_code);
+	ft_restore_terminal(1);
+	return shell.exit_code;
 }

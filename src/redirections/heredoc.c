@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 12:17:44 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/23 14:07:29 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/23 18:50:00 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_heredoc_check(t_shell *shell)
 	ft_lexer(shell->input, shell);
 	if (ft_syntax_checker(shell->tokens) == 1
 		|| ft_syntax_checker_2(shell->tokens) == 1
-		||shell->syn_err_present == true)
+		|| shell->syn_err_present == true)
 	{
 		ft_putstr_fd("syntax error\n", 2);
 		free_token_list(shell->tokens);

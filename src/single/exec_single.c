@@ -5,7 +5,7 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/14 17:21:16 by goldman           #+#    #+#             */
+/*   Created: 2024/07/14 17:21:16 by mvolkman           #+#    #+#             */
 /*   Updated: 2024/07/23 12:31:23 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -51,6 +51,7 @@ int	validate_input_file(t_cmd *cmd, t_shell *shell)
 	return (0);
 }
 
+//TODO: APPEND VS TRUNCATE
 int	validate_output_file(t_cmd *cmd, t_shell *shell)
 {
 	int	fd;
