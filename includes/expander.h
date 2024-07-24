@@ -1,4 +1,16 @@
-# ifndef EXPANDER_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/24 13:24:02 by adrherna          #+#    #+#             */
+/*   Updated: 2024/07/24 13:31:16 by adrherna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef EXPANDER_H
 # define EXPANDER_H
 
 # include "./parser.h"
@@ -35,9 +47,3 @@ char	*ft_handle_segment(char *input, int *index,
 			t_shell *shell, char *exp_input);
 
 #endif
-
-// wsl
-
-// download ubuntu
-
-// connect vs code to wsl
