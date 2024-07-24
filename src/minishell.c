@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:01:16 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 11:34:22 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:49:43 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 #include <unistd.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+
+extern volatile sig_atomic_t g_signal_received;
 
 //TODO: Can I re-use this for every error printing?
 void	prnt_err(const char *cmd, const char *msg, int code, t_shell *shell)
@@ -103,6 +105,18 @@ int	main(int argc, char **argv, char **env)
 	ft_configure_terminal();
 	if (argc > 1 || argv[0] == NULL)
 		return (0);
+				if (g_signal_received == SIGINT)
+		{
+			printf("1 exit code : %d\n", shell.exit_code);
+			shell.exit_code = 1;
+			g_signal_received = 0; // Reset the signal
+			printf("2 exit code : %d\n", shell.exit_code);
+		}
+		else if (g_signal_received == SIGQUIT)
+		{
+			// Handle SIGQUIT if needed
+			g_signal_received = 0; // Reset the signal
+		}
 	while (1)
 	{
 		ft_loop_init(&shell);
@@ -113,15 +127,18 @@ int	main(int argc, char **argv, char **env)
 			continue ;
 		ft_lexer(shell.input, &shell);
 		ft_parser(&shell, &shell.tokens);
-		// print_cmd_details(shell.cmds);
+
 		setup_execution_signals();
-		// print_cmd_details(shell.cmds);
 		if (shell.cmds && shell.cmds->next == NULL)
 			exec_single(shell.cmds, &shell);
 		else
 			exec_start(shell.cmds, &shell);
+		// wait_for_last_process(shell.last_pid, &shell);
 		ft_end_loop_free(&shell);
-		setup_parser_signals();
+
+
+
+		setup_parser_signals(); // Re-setup parser signals at the end of each loop
 	}
 	free_env_vars(shell.env_list);
 	ft_restore_terminal(1);

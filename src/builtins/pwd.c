@@ -3,24 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:18:49 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/23 12:18:51 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:36:15 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 #include "../../includes/minishell.h"
 #include "../../includes/builtins.h"
-#include <unistd.h>
-#include <limits.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
 
-// Function to handle the pwd command
-// This function prints the current working directory
 void	execute_pwd(void)
 {
 	char	buffer[1024];

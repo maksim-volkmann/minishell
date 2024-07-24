@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signals.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/24 12:57:33 by mvolkman          #+#    #+#             */
+/*   Updated: 2024/07/24 13:04:53 by mvolkman         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SIGNALS_H
 #define SIGNALS_H
 
@@ -6,7 +18,7 @@
 #include <signal.h>
 #include <termios.h>
 
-struct termios orig_termios;
+// struct termios orig_termios;
 
 void ft_configure_terminal(void);
 void handle_execution_signal(int signal);

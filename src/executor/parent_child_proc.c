@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parent_child_proc.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/17 11:12:29 by mvolkman           #+#    #+#             */
-/*   Updated: 2024/07/23 14:09:39 by mvolkman         ###   ########.fr       */
+/*   Created: 2024/07/24 12:48:14 by mvolkman          #+#    #+#             */
+/*   Updated: 2024/07/24 12:48:41 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,3 @@ void	parent_proc(int *input_fd, int pipe_fd[2])
 		close(pipe_fd[1]);
 	*input_fd = pipe_fd[0];
 }
-

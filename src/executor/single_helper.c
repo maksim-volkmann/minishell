@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   single_helper.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/16 16:00:30 by mvolkman           #+#    #+#             */
-/*   Updated: 2024/07/23 12:31:41 by adrherna         ###   ########.fr       */
+/*   Created: 2024/07/24 12:57:33 by mvolkman          #+#    #+#             */
+/*   Updated: 2024/07/24 13:49:43 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

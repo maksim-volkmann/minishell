@@ -3,25 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:19:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/23 12:19:05 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:36:59 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 #include "../../includes/minishell.h"
 #include "../../includes/builtins.h"
-#include <unistd.h>
-#include <limits.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
-
-// Function to remove an environment variable
-// This function removes an environment variable with
-// the given key from the environment list
 
 void	remove_env_var(t_env **env_list, const char *key)
 {
@@ -48,8 +39,6 @@ void	remove_env_var(t_env **env_list, const char *key)
 	}
 }
 
-// Function to handle the unset command
-// This function removes environment variables based on the provided arguments
 void	execute_unset(char **args, t_env **env_list, t_shell *shell)
 {
 	int	i;

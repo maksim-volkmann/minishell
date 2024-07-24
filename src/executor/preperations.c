@@ -13,7 +13,29 @@
 #include "../../includes/executor.h"
 #include "../../includes/minishell.h"
 
-void wait_for_last_process(pid_t last_pid, t_shell *shell)
+// void wait_for_last_process(pid_t last_pid, t_shell *shell)
+// {
+// 	int status;
+// 	pid_t pid;
+
+// 	waitpid(last_pid, &status, 0);
+// 	if (WIFEXITED(status))
+// 		shell->exit_code = WEXITSTATUS(status);
+// 	else if (WIFSIGNALED(status)) {
+// 		shell->exit_code = WTERMSIG(status) + 128;
+// 		if (shell->exit_code == 130)
+// 		{
+// 			write(1, "^C\n", 3);
+// 			rl_redisplay();
+// 		}
+// 	}
+// 	pid = wait(NULL);
+// 	while (pid > 0) {
+// 		pid = wait(NULL);
+// 	}
+// }
+
+void	wait_for_last_process(pid_t last_pid, t_shell *shell)
 {
 	int status;
 	pid_t pid;
