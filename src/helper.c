@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 11:48:49 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 16:27:07 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 18:34:49 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,62 +106,62 @@ void	leaks(void)
 //     }
 // }
 
-// void print_cmd_details(t_cmd *cmds)
-// {
-//     t_cmd *current_cmd = cmds;
-//     int i;
+void print_cmd_details(t_cmd *cmds)
+{
+    t_cmd *current_cmd = cmds;
+    int i;
 
-//     while (current_cmd)
-//     {
-//         printf("Command:\n");
+    while (current_cmd)
+    {
+        printf("Command:\n");
 
-//         // Print all arguments
-//         for (i = 0; current_cmd->argv[i]; i++)
-//         {
-//             printf("  Arg[%d]: %s\n", i, current_cmd->argv[i]);
-//         }
+        // Print all arguments
+        for (i = 0; current_cmd->argv[i]; i++)
+        {
+            printf("  Arg[%d]: %s\n", i, current_cmd->argv[i]);
+        }
 
-//         // Print input redirection details if present
-//         if (current_cmd->input)
-//         {
-//             printf("  Input Redirection:\n");
-//             printf("    Type: %d\n", current_cmd->input->type);
-//             printf("    File: %s\n", current_cmd->input->file);
-//         }
-//         else
-//         {
-//             printf("  Input Redirection: None\n");
-//         }
+        // Print input redirection details if present
+        if (current_cmd->input)
+        {
+            printf("  Input Redirection:\n");
+            printf("    Type: %d\n", current_cmd->input->type);
+            printf("    File: %s\n", current_cmd->input->file);
+        }
+        else
+        {
+            printf("  Input Redirection: None\n");
+        }
 
-//         // Print output redirection details if present
-//         if (current_cmd->output)
-//         {
-//             printf("  Output Redirection:\n");
-//             printf("    Type: %d\n", current_cmd->output->type);
-//             printf("    File: %s\n", current_cmd->output->file);
-//         }
-//         else
-//         {
-//             printf("  Output Redirection: None\n");
-//         }
+        // Print output redirection details if present
+        if (current_cmd->output)
+        {
+            printf("  Output Redirection:\n");
+            printf("    Type: %d\n", current_cmd->output->type);
+            printf("    File: %s\n", current_cmd->output->file);
+        }
+        else
+        {
+            printf("  Output Redirection: None\n");
+        }
 
-//         // Print next command details if present
-//         if (current_cmd->next)
-//         {
-//             printf("  Next Command:\n");
-//             for (int j = 0; current_cmd->next->argv[j]; j++)
-//             {
-//                 printf("Next Arg[%d]: %s\n", j, current_cmd->next->argv[j]);
-//             }
-//         }
-//         else
-//         {
-//             printf("  Next Command: None\n");
-//         }
+        // Print next command details if present
+        if (current_cmd->next)
+        {
+            printf("  Next Command:\n");
+            for (int j = 0; current_cmd->next->argv[j]; j++)
+            {
+                printf("Next Arg[%d]: %s\n", j, current_cmd->next->argv[j]);
+            }
+        }
+        else
+        {
+            printf("  Next Command: None\n");
+        }
 
-//         current_cmd = current_cmd->next;
-//     }
-// }
+        current_cmd = current_cmd->next;
+    }
+}
 
 void	free_env_vars(t_env *env_list)
 {

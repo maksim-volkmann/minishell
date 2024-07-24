@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:53:27 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 16:22:42 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 20:31:27 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,12 @@
 # include <stdio.h>
 
 //cd.c
+int		update_pwd(t_env **env_list, char *old_pwd);
 int		change_to_home(t_env **env_list);
 int		change_directory(char *path, char *old_pwd, t_env **env_list);
 int		execute_cd(char **args, t_env **env_list);
 
 //echo.c
-void	update_env_var(t_env **env_list, const char *key, const char *value);
-int		update_pwd(t_env **env_list, char *old_pwd);
 bool	check_newline_flag(char **argv, int *i);
 void	execute_echo(char **argv);
 
@@ -56,6 +55,7 @@ int		is_valid_var_name(const char *name);
 void	reduce_white_space(char *str);
 
 //export_utils2.c
+void	update_env_var(t_env **env_list, const char *key, const char *value);
 void	copy_word(char **dst, char **src, int *in_word);
 void	print_invalid_identifier(char *arg, t_shell *shell);
 void	handle_no_equal_sign(char *arg, t_env **env_list, t_shell *shell);

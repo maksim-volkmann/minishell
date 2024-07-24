@@ -6,47 +6,13 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:16:25 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 11:56:20 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 20:31:04 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 #include "../../includes/minishell.h"
 #include "../../includes/builtins.h"
-
-void	update_env_var(t_env **env_list, const char *key, const char *value)
-{
-	t_env	*current;
-
-	current = *env_list;
-	while (current)
-	{
-		if (ft_strcmp(current->key, key) == 0)
-		{
-			free(current->value);
-			current->value = ft_strdup(value);
-			return ;
-		}
-		current = current->next;
-	}
-	add_env_var(env_list, key, value);
-}
-
-int	update_pwd(t_env **env_list, char *old_pwd)
-{
-	char	buffer[1024];
-	char	*new_pwd;
-
-	new_pwd = getcwd(buffer, sizeof(buffer));
-	if (!new_pwd)
-	{
-		perror("getcwd");
-		return (1);
-	}
-	update_env_var(env_list, "OLDPWD", old_pwd);
-	update_env_var(env_list, "PWD", new_pwd);
-	return (0);
-}
 
 bool	check_newline_flag(char **argv, int *i)
 {

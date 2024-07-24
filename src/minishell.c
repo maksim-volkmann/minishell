@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:01:16 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 16:24:41 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 18:41:00 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,7 @@
 //TOOD: NEED TO FIX THIS FILE. NORMMINETTE.
 
 //TODO: Can I re-use this for every error printing?
-void	prnt_err(const char *cmd, const char *msg, int code, t_shell *shell)
-{
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd((char *)cmd, STDERR_FILENO);
-	ft_putstr_fd(": ", STDERR_FILENO);
-	ft_putendl_fd((char *)msg, STDERR_FILENO);
-	shell->exit_code = code;
-}
+
 
 void	ft_exit(t_shell *shell)
 {
@@ -91,46 +84,45 @@ void update_exit_code(t_shell *shell)
 {
 	if (g_signal_received == SIGINT)
 	{
-		shell->exit_code = 1; // 128 + SIGINT
-		g_signal_received = 0;  // Reset the signal
+		shell->exit_code = 1;
+		g_signal_received = 0;
 	}
 }
 
 int main(int argc, char **argv, char **env)
 {
-    t_shell shell;
+	t_shell shell;
 
-    ft_init_shell(&shell, env);
+	ft_init_shell(&shell, env);
 
-    parent_signals();
-    ft_configure_terminal();
-    if (argc > 1 || argv[0] == NULL)
-        return (0);
+	parent_signals();
+	ft_configure_terminal();
+	if (argc > 1 || argv[0] == NULL)
+		return (0);
 
-    while (1)
-    {
-        // Update the exit code based on the signal at the start of the loop
-        update_exit_code(&shell);
+	while (1)
+	{
+		update_exit_code(&shell);
 
-        ft_loop_init(&shell);
-        ft_process_input(&shell);
-        if (ft_heredoc_check(&shell) == 1)
-            continue;
-        if (ft_expander_and_checker(&shell) == 1)
-            continue;
-        ft_lexer(shell.input, &shell);
-        ft_parser(&shell, &shell.tokens);
-
-        child_signals();
-        if (shell.cmds && shell.cmds->next == NULL)
-            exec_single(shell.cmds, &shell);
-        else
-            exec_start(shell.cmds, &shell);
-        ft_end_loop_free(&shell);
-        parent_signals();
-    }
-
-    free_env_vars(shell.env_list);
-    ft_restore_terminal(1);
-    return shell.exit_code;
+		ft_loop_init(&shell);
+		ft_process_input(&shell);
+		if (ft_heredoc_check(&shell) == 1)
+			continue;
+		if (ft_expander_and_checker(&shell) == 1)
+			continue;
+		ft_lexer(shell.input, &shell);
+		ft_parser(&shell, &shell.tokens);
+		child_signals();
+		//TODO: remove this after testing > and < and >>
+		// print_cmd_details(shell.cmds);
+		if (shell.cmds && shell.cmds->next == NULL)
+			exec_single(shell.cmds, &shell);
+		else
+			exec_start(shell.cmds, &shell);
+		ft_end_loop_free(&shell);
+		parent_signals();
+	}
+	free_env_vars(shell.env_list);
+	ft_restore_terminal(1);
+	return shell.exit_code;
 }

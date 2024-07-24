@@ -6,13 +6,29 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:15:51 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 16:22:22 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 20:29:44 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 #include "../../includes/minishell.h"
 #include "../../includes/builtins.h"
+
+int	update_pwd(t_env **env_list, char *old_pwd)
+{
+	char	buffer[1024];
+	char	*new_pwd;
+
+	new_pwd = getcwd(buffer, sizeof(buffer));
+	if (!new_pwd)
+	{
+		perror("getcwd");
+		return (1);
+	}
+	update_env_var(env_list, "OLDPWD", old_pwd);
+	update_env_var(env_list, "PWD", new_pwd);
+	return (0);
+}
 
 int	change_to_home(t_env **env_list)
 {

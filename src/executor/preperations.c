@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 13:57:08 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 16:15:45 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 18:24:49 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,7 @@ pid_t	fork_process(t_cmd *cmd, t_shell *shell, int *input_fd, int pipe_fd[2])
 		exit(EXIT_FAILURE);
 	}
 	if (pid == 0)
-	{
-		child_signals();
 		child_proc(cmd, shell, *input_fd, pipe_fd);
-	}
 	else
 		parent_proc(input_fd, pipe_fd);
 	return (pid);

@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 16:17:47 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 16:17:49 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 18:54:36 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,28 @@ int	validate_output_no_cmd(t_cmd *cmd, t_shell *shell)
 	}
 	return (0);
 }
+
+
+//TODO: check this if works after fixing parser.
+// int	validate_input_no_cmd(t_cmd *cmd, t_shell *shell)
+// {
+// 	if (cmd->input && !cmd->input->file)
+// 	{
+// 		prnt_err("syntax error", "near unexpected token `newline1'", 258, shell);
+// 		return (1);
+// 	}
+// 	return (0);
+// }
+
+// int	validate_output_no_cmd(t_cmd *cmd, t_shell *shell)
+// {
+// 	if (cmd->output && !cmd->output->file)
+// 	{
+// 		prnt_err("syntax error", "near unexpected token `newline2'", 258, shell);
+// 		return (1);
+// 	}
+// 	return (0);
+// }
 
 int	validate_input_file(t_cmd *cmd, t_shell *shell)
 {

@@ -6,14 +6,14 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 13:00:47 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 16:29:03 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 18:28:38 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdbool.h>
+//TODO: fix this shit, remove anything that is unsed or dead.
 
 # include <stdbool.h>
 # include <stdio.h>
@@ -88,7 +88,6 @@ typedef struct s_shell
 	int			exit_code;
 	bool		syn_err_present;
 	char		*input;
-	bool		child_running;
 }	t_shell;
 
 int		ft_strcmp(const char *s1, const char *s2);

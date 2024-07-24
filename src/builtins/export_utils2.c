@@ -6,13 +6,31 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:18:18 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 16:18:21 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 20:30:58 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 #include "../../includes/minishell.h"
 #include "../../includes/builtins.h"
+
+void	update_env_var(t_env **env_list, const char *key, const char *value)
+{
+	t_env	*current;
+
+	current = *env_list;
+	while (current)
+	{
+		if (ft_strcmp(current->key, key) == 0)
+		{
+			free(current->value);
+			current->value = ft_strdup(value);
+			return ;
+		}
+		current = current->next;
+	}
+	add_env_var(env_list, key, value);
+}
 
 void	copy_word(char **dst, char **src, int *in_word)
 {
