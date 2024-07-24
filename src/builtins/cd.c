@@ -3,25 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/23 12:15:51 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/23 12:16:04 by adrherna         ###   ########.fr       */
+/*   Created: 2024/07/23 12:15:51 by mvolkman          #+#    #+#             */
+/*   Updated: 2024/07/24 11:54:32 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 #include "../../includes/minishell.h"
 #include "../../includes/builtins.h"
-#include <unistd.h>
-#include <limits.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
-
-// Function to change the directory to the home directory
-// This function changes the current working
-// directory to the user's home directory
 
 int	change_to_home(t_env **env_list)
 {

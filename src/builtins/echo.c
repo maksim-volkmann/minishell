@@ -3,25 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:16:25 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/23 12:16:32 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 11:56:20 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 #include "../../includes/minishell.h"
 #include "../../includes/builtins.h"
-#include <unistd.h>
-#include <limits.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
-
-// Function to update an environment variable
-// This function updates the value of an environment
-// variable or adds it if it doesn't exist
 
 void	update_env_var(t_env **env_list, const char *key, const char *value)
 {
@@ -41,8 +32,6 @@ void	update_env_var(t_env **env_list, const char *key, const char *value)
 	add_env_var(env_list, key, value);
 }
 
-// Function to update the PWD and OLDPWD environment variables
-// This function updates the current and previous working directories
 int	update_pwd(t_env **env_list, char *old_pwd)
 {
 	char	buffer[1024];
@@ -58,7 +47,6 @@ int	update_pwd(t_env **env_list, char *old_pwd)
 	update_env_var(env_list, "PWD", new_pwd);
 	return (0);
 }
-
 
 bool	check_newline_flag(char **argv, int *i)
 {

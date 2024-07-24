@@ -85,7 +85,7 @@ typedef struct s_shell
 int		ft_strcmp(const char *s1, const char *s2);
 int	is_builtin(char *command);
 
-extern volatile int child_running;
+// extern volatile int child_running;
 
 // helper.c
 

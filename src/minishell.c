@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:01:16 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/23 17:59:51 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 11:34:22 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,9 @@ int	main(int argc, char **argv, char **env)
 			continue ;
 		ft_lexer(shell.input, &shell);
 		ft_parser(&shell, &shell.tokens);
+		// print_cmd_details(shell.cmds);
 		setup_execution_signals();
+		// print_cmd_details(shell.cmds);
 		if (shell.cmds && shell.cmds->next == NULL)
 			exec_single(shell.cmds, &shell);
 		else

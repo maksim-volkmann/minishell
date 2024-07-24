@@ -9,7 +9,7 @@
 # include "../libft/include/libft.h"
 # include "./parser.h"
 # include "./minishell.h"
-# define NOWORD "<>|()& \t\n\'\""
+# define NOWORD "<>|() \t\n\'\""
 # define NOVAR " \"\'\t\n$/"
 
 // lexer.c

@@ -56,9 +56,13 @@ int	validate_output_file(t_cmd *cmd, t_shell *shell)
 {
 	int	fd;
 
+	fd = -1;
 	if (cmd->output && cmd->output->file)
 	{
-		fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (cmd->output->type == REDIR_OUTPUT)
+			fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		else if (cmd->output->type == REDIR_APPEND)
+			fd = open(cmd->output->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
 			return (file_err(cmd->output->file, shell));
 		close(fd);
