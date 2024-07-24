@@ -6,11 +6,10 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 10:24:05 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/04 10:42:24 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:53:39 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/syntax.h"
 #include "../../includes/minishell.h"
 #include "../../includes/parser.h"
 #include <stdio.h>

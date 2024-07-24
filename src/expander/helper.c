@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:26:28 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/23 12:26:30 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:47:04 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,17 +78,14 @@ char	*ft_strdup_dq(const char *s)
 
 	if (!s)
 		return (NULL);
-
 	len = strlen(s);
 	str = (char *)malloc(len + 3);
 	if (!str)
 		return (NULL);
-
 	str[0] = '"';
 	ft_strlcpy(str + 1, s, len + 1);
 	str[len + 1] = '"';
 	str[len + 2] = '\0';
-
 	return (str);
 }
 

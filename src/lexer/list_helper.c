@@ -6,11 +6,11 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 10:21:13 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/23 12:28:23 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:57:49 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/lexer.h"
+#include "../../includes/parser.h"
 #include <stdio.h>
 
 t_token	*ft_new_token(char *str, enum e_token_type type)

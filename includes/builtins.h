@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:53:27 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 12:19:17 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:37:35 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
-#define BUILTINS_H
+# define BUILTINS_H
 
-#include "executor.h"
-#include "minishell.h"
-#include <unistd.h>
-#include <limits.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
+# include "executor.h"
+# include "minishell.h"
+# include <unistd.h>
+# include <limits.h>
+# include <errno.h>
+# include <fcntl.h>
+# include <stdio.h>
 
 //cd.c
 int		change_to_home(t_env **env_list);
@@ -59,9 +59,6 @@ void	copy_word(char **dst, char **src, int *in_word);
 void	print_invalid_identifier(char *arg, t_shell *shell);
 void	handle_no_equal_sign(char *arg, t_env **env_list, t_shell *shell);
 void	skip_white_space(char **src);
-
-
-
 
 void	update_env_var(t_env **env_list, const char *key, const char *value);
 int		update_pwd(t_env **env_list, char *old_pwd);

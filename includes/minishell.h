@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/24 13:00:47 by adrherna          #+#    #+#             */
+/*   Updated: 2024/07/24 13:00:49 by adrherna         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -82,39 +94,32 @@ typedef struct s_shell
 	bool		child_running;
 }	t_shell;
 
-int		ft_strcmp(const char *s1, const char *s2);
-int	is_builtin(char *command);
+int			ft_strcmp(const char *s1, const char *s2);
+int			is_builtin(char *command);
 
 // extern volatile int child_running;
 
 // helper.c
 
-void	leaks(void);
-void free_env_vars(t_env *env_list);
-const char* get_token_type_string(t_token_type type);
-void print_token_list(t_token *head);
-const char* redir_type_to_string(t_redir_type type);
-void print_redir(t_redir *redir);
-void print_cmd(t_cmd *cmd);
-void add_env_var(t_env **env_list, const char *key, const char *value);
-void copy_env_vars(t_shell *shell, char **env);
-void print_cmd_details(t_cmd *cmds);
-void print_envs(t_env *env_list);
+void		leaks(void);
+void		free_env_vars(t_env *env_list);
+const char	*get_token_type_string(t_token_type type);
+void		print_token_list(t_token *head);
+const char	*redir_type_to_string(t_redir_type type);
+void		print_redir(t_redir *redir);
+void		print_cmd(t_cmd *cmd);
+void		add_env_var(t_env **env_list, const char *key, const char *value);
+void		copy_env_vars(t_shell *shell, char **env);
+void		print_cmd_details(t_cmd *cmds);
+void		print_envs(t_env *env_list);
 
-
-
-void	prnt_err(const char *cmd, const char *msg, int code, t_shell *shell);
-
-
-
+void		prnt_err(const char *cmd, const char *msg,
+				int code, t_shell *shell);
 
 //single_helper.c
-int	is_builtin(char *command);
-int	file_err(const char *file, t_shell *shell);
-
-
-
-void setup_child_signal_handlers(void);
+int			is_builtin(char *command);
+int			file_err(const char *file, t_shell *shell);
+void		setup_child_signal_handlers(void);
 
 
 #endif
