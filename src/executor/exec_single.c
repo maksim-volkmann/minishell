@@ -51,7 +51,6 @@ int	validate_input_file(t_cmd *cmd, t_shell *shell)
 	return (0);
 }
 
-//TODO: APPEND VS TRUNCATE
 int	validate_output_file(t_cmd *cmd, t_shell *shell)
 {
 	int	fd;

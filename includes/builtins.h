@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:53:27 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 12:37:35 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:51:44 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,26 +60,10 @@ void	print_invalid_identifier(char *arg, t_shell *shell);
 void	handle_no_equal_sign(char *arg, t_env **env_list, t_shell *shell);
 void	skip_white_space(char **src);
 
-void	update_env_var(t_env **env_list, const char *key, const char *value);
-int		update_pwd(t_env **env_list, char *old_pwd);
-bool	check_newline_flag(char **argv, int *i);
-void	execute_echo(char **argv);
-int		change_to_home(t_env **env_list);
-void	update_env_var(t_env **env_list, const char *key, const char *value);
-int		change_to_home(t_env **env_list);
-int		execute_cd(char **args, t_env **env_list);
+//pwd.c
 void	execute_pwd(void);
-void	print_envs(t_env *env_list);
-int		execute_env(char **args, t_env *env_list);
-void	print_export_vars(t_env *env_list);
-void	reduce_white_space(char *str);
-int		is_valid_var_name(const char *name);
-char	*find_plus_equal(const char *str);
-void	handle_plus_equal(char *arg, t_env **env_list, t_shell *shell);
-void	handle_equal_sign(char *arg, t_env **env_list, t_shell *shell);
-void	handle_no_equal_sign(char *arg, t_env **env_list, t_shell *shell);
-void	handle_export_arg(char *arg, t_env **env_list, t_shell *shell);
-void	execute_export(char **args, t_env **env_list, t_shell *shell);
+
+//unset.c
 void	remove_env_var(t_env **env_list, const char *key);
 void	execute_unset(char **args, t_env **env_list, t_shell *shell);
 

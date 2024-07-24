@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/24 12:49:28 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 12:49:31 by adrherna         ###   ########.fr       */
+/*   Created: 2024/07/24 12:57:33 by mvolkman          #+#    #+#             */
+/*   Updated: 2024/07/24 13:52:07 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <signal.h>
 # include <termios.h>
 
-struct	termios orig_termios;
+// struct termios orig_termios;
 
 void	ft_configure_terminal(void);
 void	handle_execution_signal(int signal);
