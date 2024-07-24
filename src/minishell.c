@@ -6,14 +6,13 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:01:16 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 13:49:43 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:52:33 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/executor.h"
 #include "../includes/builtins.h"
 #include "../includes/parser.h"
-#include "../includes/lexer.h"
 #include "../includes/minishell.h"
 #include "../includes/redirections.h"
 #include <stdbool.h>
@@ -127,7 +126,6 @@ int	main(int argc, char **argv, char **env)
 			continue ;
 		ft_lexer(shell.input, &shell);
 		ft_parser(&shell, &shell.tokens);
-
 		setup_execution_signals();
 		if (shell.cmds && shell.cmds->next == NULL)
 			exec_single(shell.cmds, &shell);
@@ -142,5 +140,5 @@ int	main(int argc, char **argv, char **env)
 	}
 	free_env_vars(shell.env_list);
 	ft_restore_terminal(1);
-	return shell.exit_code;
+	return (shell.exit_code);
 }

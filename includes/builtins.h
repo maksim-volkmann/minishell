@@ -6,20 +6,20 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:53:27 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 12:39:05 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:51:44 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUILTINS_H
-#define BUILTINS_H
+# define BUILTINS_H
 
-#include "executor.h"
-#include "minishell.h"
-#include <unistd.h>
-#include <limits.h>
-#include <errno.h>
-#include <fcntl.h>
-#include <stdio.h>
+# include "executor.h"
+# include "minishell.h"
+# include <unistd.h>
+# include <limits.h>
+# include <errno.h>
+# include <fcntl.h>
+# include <stdio.h>
 
 //cd.c
 int		change_to_home(t_env **env_list);

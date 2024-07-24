@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:30:28 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/23 12:30:35 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:22:55 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,5 @@ void	ft_parser(t_shell *shell, t_token **tokens)
 		new = ft_new_node();
 		new->argv = ft_get_darray(&current, new->input, new->output);
 		add_or_init_node(&shell->cmds, new);
-		// If no arguments, new->argv is already NULL
-		// print_cmd(new);
 	}
 }

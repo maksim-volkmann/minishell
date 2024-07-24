@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 12:57:33 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 12:58:25 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:51:59 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 
 # include "./parser.h"
 # include "./expander.h"
-# include "./lexer.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>

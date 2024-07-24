@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:30:44 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/23 12:30:47 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:38:54 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	ft_handle_input(t_token *tokens, t_redir *input)
 		input->type = REDIR_HEREDOC;
 		input->file = ft_strdup("./tmp/heredoc.txt");
 	}
-
 }
 
 void	ft_handle_redir(t_token *tokens, t_redir *input,

@@ -6,11 +6,11 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:58:01 by adrherna          #+#    #+#             */
-/*   Updated: 2024/06/27 14:27:54 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:57:41 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/lexer.h"
+#include "../../includes/parser.h"
 #include <stdio.h>
 
 int	ft_strcmp(const char *s1, const char *s2)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dq_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:56:24 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/22 12:58:12 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:27:34 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,30 +103,5 @@ char	*ft_extract_dq_hd(char *input, int *i, t_shell *shell)
 	}
 	if (input[*i] == '\"')
 		(*i)++;
-	// segment = ft_quote_string(segment);
 	return (segment);
 }
-
-// char	*ft_expand_var_dq_hd(t_shell *shell, char *var)
-// {
-// 	t_env	*current;
-// 	char		*exp_var;
-
-// 	if (ft_strcmp(var, "?") == 0)
-// 		return (ft_itoa(shell->exit_code));
-// 	if (ft_strcmp(var, " ") == 0 || ft_strcmp(var, "") == 0)
-// 		return (ft_strdup("$"));
-// 	current = shell->env_list;
-// 	while (current != NULL)
-// 	{
-// 		if (ft_strcmp(current->key, var) == 0)
-// 		{
-// 			exp_var = current->value;
-// 			free(var);
-// 			return (ft_strdup(current->value));
-// 		}
-
-// 		current = current->next;
-// 	}
-// 	return (NULL);
-// }
