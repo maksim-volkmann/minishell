@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:53:27 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 11:57:12 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:20:35 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,3 @@ int	execute_exit(char **argv, t_shell *shell)
 	shell->exit_code = 1;
 	return (1);
 }
-
-

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 13:00:47 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 13:00:49 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:29:03 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,15 @@
 
 # include <stdbool.h>
 
-// #include "executor.h"
-// #include "builtins.h"
-// #include "parser.h"
-// #include "lexer.h"
-// #include "minishell.h"
-// #include "redirections.h"
-// #include <stdbool.h>
-// #include <stdio.h>
-// #include <signal.h>
-// #include <termios.h>
-// #include <readline/readline.h>
-// #include <readline/history.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <signal.h>
+# include <termios.h>
+# include <unistd.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+
+extern int	g_signal_received;
 
 typedef enum e_token_type
 {
@@ -94,32 +91,36 @@ typedef struct s_shell
 	bool		child_running;
 }	t_shell;
 
-int			ft_strcmp(const char *s1, const char *s2);
-int			is_builtin(char *command);
-
-// extern volatile int child_running;
+int		ft_strcmp(const char *s1, const char *s2);
+int		is_builtin(char *command);
 
 // helper.c
+void	leaks(void);
+void	free_env_vars(t_env *env_list);
+char	*get_token_type_string(t_token_type type);
+void	print_token_list(t_token *head);
+char	*redir_type_to_string(t_redir_type type);
+void	print_redir(t_redir *redir);
+void	print_cmd(t_cmd *cmd);
+void	add_env_var(t_env **env_list, const char *key, const char *value);
+void	copy_env_vars(t_shell *shell, char **env);
+void	print_cmd_details(t_cmd *cmds);
+void	print_envs(t_env *env_list);
 
-void		leaks(void);
-void		free_env_vars(t_env *env_list);
-const char	*get_token_type_string(t_token_type type);
-void		print_token_list(t_token *head);
-const char	*redir_type_to_string(t_redir_type type);
-void		print_redir(t_redir *redir);
-void		print_cmd(t_cmd *cmd);
-void		add_env_var(t_env **env_list, const char *key, const char *value);
-void		copy_env_vars(t_shell *shell, char **env);
-void		print_cmd_details(t_cmd *cmds);
-void		print_envs(t_env *env_list);
-
-void		prnt_err(const char *cmd, const char *msg,
-				int code, t_shell *shell);
+void	prnt_err(const char *cmd, const char *msg,
+			int code, t_shell *shell);
 
 //single_helper.c
-int			is_builtin(char *command);
-int			file_err(const char *file, t_shell *shell);
-void		setup_child_signal_handlers(void);
+int		is_builtin(char *command);
+int		file_err(const char *file, t_shell *shell);
+void	setup_child_signal_handlers(void);
 
+//signals.c
+void	ft_configure_terminal(void);
+void	handle_child_signal(int signal);
+void	handle_parent_signal(int signal);
+void	parent_signals(void);
+void	child_signals(void);
+void	ft_restore_terminal(int i);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_execve.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/17 11:21:29 by adrherna           #+#    #+#             */
-/*   Updated: 2024/07/23 12:26:03 by adrherna         ###   ########.fr       */
+/*   Created: 2024/07/24 13:56:45 by mvolkman          #+#    #+#             */
+/*   Updated: 2024/07/24 13:56:47 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

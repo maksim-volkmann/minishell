@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:18:18 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 12:19:58 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:20:20 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,12 @@ void	execute_export(char **args, t_env **env_list, t_shell *shell)
 		print_export_vars(*env_list);
 	else
 	{
-			while (args[i])
-			{
-				handle_export_arg(args[i], env_list, shell);
-				i++;
-			}
+		while (args[i])
+		{
+			handle_export_arg(args[i], env_list, shell);
+			i++;
 		}
-		if (shell->exit_code == 0)
-			shell->exit_code = 0;
+	}
+	if (shell->exit_code == 0)
+		shell->exit_code = 0;
 }

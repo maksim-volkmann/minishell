@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:53:27 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 13:51:44 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:22:42 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 
 //cd.c
 int		change_to_home(t_env **env_list);
+int		change_directory(char *path, char *old_pwd, t_env **env_list);
 int		execute_cd(char **args, t_env **env_list);
 
 //echo.c

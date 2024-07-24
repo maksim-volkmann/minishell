@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:19:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 12:36:59 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:18:10 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,3 @@ void	execute_unset(char **args, t_env **env_list, t_shell *shell)
 	else
 		shell->exit_code = 0;
 }
-

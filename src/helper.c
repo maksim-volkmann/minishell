@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 11:48:49 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 12:58:59 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:27:07 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	leaks(void)
 	system("leaks minishell");
 }
 
-// const char* get_token_type_string(t_token_type type)
+// char* get_token_type_string(t_token_type type)
 // {
 //     switch (type) {
 //         case LESS:    return "LESS";
@@ -51,7 +51,7 @@ void	leaks(void)
 //     }
 // }
 
-// const char* redir_type_to_string(t_redir_type type)
+// char* redir_type_to_string(t_redir_type type)
 // {
 //     switch (type) {
 //         case REDIR_NONE: return "REDIR_NONE";
@@ -151,7 +151,7 @@ void	leaks(void)
 //             printf("  Next Command:\n");
 //             for (int j = 0; current_cmd->next->argv[j]; j++)
 //             {
-//                 printf("    Next Arg[%d]: %s\n", j, current_cmd->next->argv[j]);
+//                 printf("Next Arg[%d]: %s\n", j, current_cmd->next->argv[j]);
 //             }
 //         }
 //         else

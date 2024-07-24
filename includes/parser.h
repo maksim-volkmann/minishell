@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 12:55:59 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 12:56:01 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:25:42 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,18 +67,13 @@ char		*ft_sq_heredoc(char *input, int *i);
 void		ft_heredoc_loop(t_shell *shell);
 char		*ft_append_newline(char *str);
 
-
-
 // -> Syntax
 int			ft_syntax_checker(t_token *tokens);
 int			ft_syntax_checker_2(t_token *tokens);
 
-
-
 // -> Lexer
 
 // lexer.c
-
 void		ft_lexer(const char *line, t_shell *shell);
 void		free_token_list(t_token *head);
 void		print_linked_list(t_token *head);
@@ -86,14 +81,12 @@ int			ft_syntax_checker(t_token *tokens);
 int			ft_syntax_checker_2(t_token *tokens);
 
 // cases.c
-
 t_token		*ft_if_redi_op(const char *line, int *i, t_shell *shell);
 t_token		*ft_if_pipe(const char *line, int *i, t_shell *shell);
 t_token		*ft_if_par(const char *line, int *i);
 t_token		*ft_if_quot(const char *line, int *i);
 
 // cases_2.c
-
 t_token		*ft_if_do_quot(const char *line, int *i);
 t_token		*ft_if_and(const char *line, int *i);
 t_token		*ft_if_word(const char *line, int *i);
@@ -106,7 +99,6 @@ int			ft_isspace(int c);
 void		ft_skip_spaces(const char *line, int *i);
 
 // list_helper.c
-
 t_token		*ft_new_token(char *str, enum e_token_type type);
 void		ft_lst_add_token(t_token **tokens, t_token *new_token);
 void		merge_tokens(t_token **head);

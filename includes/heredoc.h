@@ -3,14 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:53:31 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 12:59:30 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:56:05 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
 
 #ifndef HEREDOC_H
 # define HEREDOC_H

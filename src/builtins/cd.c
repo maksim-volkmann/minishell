@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:15:51 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 11:54:32 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:22:22 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,22 @@ int	change_to_home(t_env **env_list)
 	return (0);
 }
 
+int	change_directory(char *path, char *old_pwd, t_env **env_list)
+{
+	if (chdir(path) != 0)
+	{
+		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
+		ft_putstr_fd(path, STDERR_FILENO);
+		ft_putendl_fd(": No such file or directory", STDERR_FILENO);
+		return (1);
+	}
+	return (update_pwd(env_list, old_pwd));
+}
+
 int	execute_cd(char **args, t_env **env_list)
 {
 	char	buffer[1024];
 	char	*old_pwd;
-	int		status;
 
 	old_pwd = getcwd(buffer, sizeof(buffer));
 	if (!old_pwd)
@@ -48,16 +59,7 @@ int	execute_cd(char **args, t_env **env_list)
 	{
 		if (change_to_home(env_list) != 0)
 			return (1);
-		status = update_pwd(env_list, old_pwd);
-		return (status);
+		return (update_pwd(env_list, old_pwd));
 	}
-	if (chdir(args[1]) != 0)
-	{
-		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
-		ft_putstr_fd(args[1], STDERR_FILENO);
-		ft_putendl_fd(": No such file or directory", STDERR_FILENO);
-		return (1);
-	}
-	status = update_pwd(env_list, old_pwd);
-	return (status);
+	return (change_directory(args[1], old_pwd, env_list));
 }

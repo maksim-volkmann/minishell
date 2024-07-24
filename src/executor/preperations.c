@@ -5,45 +5,24 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/17 00:40:26 by mvolkman           #+#    #+#             */
-/*   Updated: 2024/07/23 17:50:56 by mvolkman         ###   ########.fr       */
+/*   Created: 2024/07/24 13:57:08 by mvolkman          #+#    #+#             */
+/*   Updated: 2024/07/24 16:15:45 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/executor.h"
 #include "../../includes/minishell.h"
 
-// void wait_for_last_process(pid_t last_pid, t_shell *shell)
-// {
-// 	int status;
-// 	pid_t pid;
-
-// 	waitpid(last_pid, &status, 0);
-// 	if (WIFEXITED(status))
-// 		shell->exit_code = WEXITSTATUS(status);
-// 	else if (WIFSIGNALED(status)) {
-// 		shell->exit_code = WTERMSIG(status) + 128;
-// 		if (shell->exit_code == 130)
-// 		{
-// 			write(1, "^C\n", 3);
-// 			rl_redisplay();
-// 		}
-// 	}
-// 	pid = wait(NULL);
-// 	while (pid > 0) {
-// 		pid = wait(NULL);
-// 	}
-// }
-
 void	wait_for_last_process(pid_t last_pid, t_shell *shell)
 {
-	int status;
-	pid_t pid;
+	int		status;
+	pid_t	pid;
 
 	waitpid(last_pid, &status, 0);
 	if (WIFEXITED(status))
 		shell->exit_code = WEXITSTATUS(status);
-	else if (WIFSIGNALED(status)) {
+	else if (WIFSIGNALED(status))
+	{
 		shell->exit_code = WTERMSIG(status) + 128;
 		if (shell->exit_code == 130)
 		{
@@ -52,14 +31,13 @@ void	wait_for_last_process(pid_t last_pid, t_shell *shell)
 		}
 	}
 	pid = wait(NULL);
-	while (pid > 0) {
+	while (pid > 0)
 		pid = wait(NULL);
-	}
 }
 
-pid_t fork_process(t_cmd *cmd, t_shell *shell, int *input_fd, int pipe_fd[2])
+pid_t	fork_process(t_cmd *cmd, t_shell *shell, int *input_fd, int pipe_fd[2])
 {
-	pid_t pid;
+	pid_t	pid;
 
 	pid = fork();
 	if (pid == -1)
@@ -68,7 +46,10 @@ pid_t fork_process(t_cmd *cmd, t_shell *shell, int *input_fd, int pipe_fd[2])
 		exit(EXIT_FAILURE);
 	}
 	if (pid == 0)
+	{
+		child_signals();
 		child_proc(cmd, shell, *input_fd, pipe_fd);
+	}
 	else
 		parent_proc(input_fd, pipe_fd);
 	return (pid);

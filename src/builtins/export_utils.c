@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:18:18 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 12:17:19 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:19:03 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	handle_plus_equal(char *arg, t_env **env_list, t_shell *shell)
 		print_invalid_identifier(arg, shell);
 	}
 }
+
 void	find_and_update_var(t_env **env_list, char *key, char *value)
 {
 	t_env	*current;
@@ -42,7 +43,7 @@ void	find_and_update_var(t_env **env_list, char *key, char *value)
 		if (ft_strcmp(current->key, key) == 0)
 		{
 			update_existing_var(current, value);
-			return;
+			return ;
 		}
 		current = current->next;
 	}

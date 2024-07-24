@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:01:16 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 13:52:33 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:24:41 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,8 @@
 #include "../includes/parser.h"
 #include "../includes/minishell.h"
 #include "../includes/redirections.h"
-#include <stdbool.h>
-#include <stdio.h>
-#include <signal.h>
-#include <termios.h>
-#include "../includes/signals.h"
-#include <unistd.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 
-extern volatile sig_atomic_t g_signal_received;
+//TOOD: NEED TO FIX THIS FILE. NORMMINETTE.
 
 //TODO: Can I re-use this for every error printing?
 void	prnt_err(const char *cmd, const char *msg, int code, t_shell *shell)
@@ -94,51 +86,51 @@ void	ft_end_loop_free(t_shell *shell)
 }
 
 
-int	main(int argc, char **argv, char **env)
+
+void update_exit_code(t_shell *shell)
 {
-	t_shell	shell;
-
-	ft_init_shell(&shell, env);
-
-	setup_parser_signals();
-	ft_configure_terminal();
-	if (argc > 1 || argv[0] == NULL)
-		return (0);
-				if (g_signal_received == SIGINT)
-		{
-			printf("1 exit code : %d\n", shell.exit_code);
-			shell.exit_code = 1;
-			g_signal_received = 0; // Reset the signal
-			printf("2 exit code : %d\n", shell.exit_code);
-		}
-		else if (g_signal_received == SIGQUIT)
-		{
-			// Handle SIGQUIT if needed
-			g_signal_received = 0; // Reset the signal
-		}
-	while (1)
+	if (g_signal_received == SIGINT)
 	{
-		ft_loop_init(&shell);
-		ft_process_input(&shell);
-		if (ft_heredoc_check(&shell) == 1)
-			continue ;
-		if (ft_expander_and_checker(&shell) == 1)
-			continue ;
-		ft_lexer(shell.input, &shell);
-		ft_parser(&shell, &shell.tokens);
-		setup_execution_signals();
-		if (shell.cmds && shell.cmds->next == NULL)
-			exec_single(shell.cmds, &shell);
-		else
-			exec_start(shell.cmds, &shell);
-		// wait_for_last_process(shell.last_pid, &shell);
-		ft_end_loop_free(&shell);
-
-
-
-		setup_parser_signals(); // Re-setup parser signals at the end of each loop
+		shell->exit_code = 1; // 128 + SIGINT
+		g_signal_received = 0;  // Reset the signal
 	}
-	free_env_vars(shell.env_list);
-	ft_restore_terminal(1);
-	return (shell.exit_code);
+}
+
+int main(int argc, char **argv, char **env)
+{
+    t_shell shell;
+
+    ft_init_shell(&shell, env);
+
+    parent_signals();
+    ft_configure_terminal();
+    if (argc > 1 || argv[0] == NULL)
+        return (0);
+
+    while (1)
+    {
+        // Update the exit code based on the signal at the start of the loop
+        update_exit_code(&shell);
+
+        ft_loop_init(&shell);
+        ft_process_input(&shell);
+        if (ft_heredoc_check(&shell) == 1)
+            continue;
+        if (ft_expander_and_checker(&shell) == 1)
+            continue;
+        ft_lexer(shell.input, &shell);
+        ft_parser(&shell, &shell.tokens);
+
+        child_signals();
+        if (shell.cmds && shell.cmds->next == NULL)
+            exec_single(shell.cmds, &shell);
+        else
+            exec_start(shell.cmds, &shell);
+        ft_end_loop_free(&shell);
+        parent_signals();
+    }
+
+    free_env_vars(shell.env_list);
+    ft_restore_terminal(1);
+    return shell.exit_code;
 }

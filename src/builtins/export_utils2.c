@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:18:18 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 12:17:18 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:18:21 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,3 @@ void	skip_white_space(char **src)
 	while (ft_isspace((unsigned char)**src))
 		(*src)++;
 }
-

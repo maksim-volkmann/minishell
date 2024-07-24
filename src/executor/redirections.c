@@ -5,11 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/16 23:46:09 by mvolkman           #+#    #+#             */
-/*   Updated: 2024/07/22 12:58:56 by mvolkman         ###   ########.fr       */
+/*   Created: 2024/07/24 13:56:56 by mvolkman          #+#    #+#             */
+/*   Updated: 2024/07/24 13:56:59 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../../includes/executor.h"
 #include "../../includes/minishell.h"

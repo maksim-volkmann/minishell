@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:16:41 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 11:57:58 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 16:20:44 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,3 @@ int	execute_env(char **args, t_env *env_list)
 	print_envs(env_list);
 	return (0);
 }
-

@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   prepare_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/17 11:38:21 by mvolkman           #+#    #+#             */
-/*   Updated: 2024/07/23 12:24:48 by adrherna         ###   ########.fr       */
+/*   Created: 2024/07/24 16:16:44 by mvolkman          #+#    #+#             */
+/*   Updated: 2024/07/24 16:16:58 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-# include <unistd.h>
-#include <fcntl.h>
 #include "../../includes/executor.h"
 
 void	free_envp(char **envp)
@@ -92,6 +90,3 @@ char	**prepare_envp(t_env *env_list)
 	envp[env_count] = NULL;
 	return (envp);
 }
-
-
-
