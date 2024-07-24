@@ -32,7 +32,6 @@
 
 # include "./parser.h"
 # include "./expander.h"
-# include "./lexer.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
@@ -53,7 +52,8 @@
 // int execute_exit(char **argv, t_shell *shell);
 // int handle_builtin(t_cmd *cmd, t_shell *shell);
 // void execute_command(t_cmd *cmd, t_env *env_list);
-// void fork_and_execute(t_cmd *cmd, t_env *env_list, int input_fd, int output_fd, t_shell *shell);
+// void fork_and_execute(t_cmd *cmd, t_env *env_list,
+// int input_fd, int output_fd, t_shell *shell);
 // void exec_start(t_cmd *commands, t_shell *shell);
 // void free_command2(t_cmd *cmd);
 // char *find_plus_equal(const char *str);
@@ -71,7 +71,6 @@ void	setup_output_redir(t_redir *output, t_shell *shell);
 int		execute_exit(char **argv, t_shell *shell);
 int		handle_builtin(t_cmd *cmd, t_shell *shell);
 void	execute_command(t_cmd *cmd, t_env *env_list);
-void	fork_and_execute(t_cmd *cmd, t_env *env_list, int input_fd, int output_fd, t_shell *shell);
 void	exec_start(t_cmd *commands, t_shell *shell);
 void	free_command2(t_cmd *cmd);
 char	*find_plus_equal(const char *str);
@@ -101,7 +100,7 @@ int		execute_env_builtin(t_cmd *cmd, t_shell *shell);
 void	exec_start(t_cmd *commands, t_shell *shell);
 void	check_input_file(t_cmd *cmd, t_shell *shell);
 int		create_pipe_if_needed(t_cmd *cmd, int pipe_fd[2]);
-pid_t 	fork_process(t_cmd *cmd, t_shell *shell, int *input_fd, int pipe_fd[2]);
+pid_t	fork_process(t_cmd *cmd, t_shell *shell, int *input_fd, int pipe_fd[2]);
 void	wait_for_last_process(pid_t last_pid, t_shell *shell);
 
 
@@ -138,7 +137,7 @@ void	ft_free_split(char **arr);
 
 
 
-void reset_child_signal_handlers(void);
+void	reset_child_signal_handlers(void);
 
 
 #endif

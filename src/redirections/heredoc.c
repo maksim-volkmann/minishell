@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 12:17:44 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/23 18:50:00 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:23:07 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,33 +84,3 @@ void	ft_heredoc_loop(t_shell *shell)
 	ft_open_file("./tmp/heredoc.txt", content, shell);
 	ft_free_heredoc(content, delimiters);
 }
-
-
-// int	ft_heredoc_check(t_shell *shell)
-// {
-// 	pid_t	pid;
-// 	int		status;
-
-// 	ft_lexer(shell->input, shell);
-// 	if (ft_syntax_checker(shell->tokens) == 1
-// 		|| ft_syntax_checker_2(shell->tokens) == 1
-// 		|| shell->syn_err_present == true)
-// 	{
-// 		ft_putstr_fd("syntax error\n", 2);
-// 		free_token_list(shell->tokens);
-// 		shell->exit_code = 2;
-// 		return (1);
-// 	}
-// 	pid = fork();
-// 	if (pid == 0)
-// 	{
-// 		ft_heredoc_loop(shell);
-// 		free_token_list(shell->tokens);
-// 		exit(0);
-// 	}
-// 	else
-// 		waitpid(pid, &status, 0);
-// 	free_token_list(shell->tokens);
-// 	shell->tokens = NULL;
-// 	return (0);
-// }

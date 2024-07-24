@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:53:31 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/21 17:05:51 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:59:30 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 
 # include "./parser.h"
 # include "./expander.h"
-# include "./lexer.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>

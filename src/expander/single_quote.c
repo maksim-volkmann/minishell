@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:55:55 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/21 16:40:51 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:47:20 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,3 @@ char	*ft_extract_sq(char *input, int *i)
 	segment = ft_extract_str(input, start, end);
 	return (segment);
 }
-

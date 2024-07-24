@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:57:08 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/23 13:17:21 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/24 12:27:19 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,9 @@ char	*handle_and_append_variable(char *input, int *i, char *segment,
 		if (exp_var)
 		{
 			expanded_var = ft_expand_var(shell, exp_var);
-			// free(exp_var);  // Free the extracted exp_var
 			if (expanded_var)
 			{
 				new_segment = ft_join_input(segment, expanded_var);
-				// free(expanded_var);  // Free the expanded_var
 				return (new_segment);
 			}
 		}
@@ -102,80 +100,3 @@ char	*ft_extract_segment(char *input, int *i, t_shell *shell)
 	}
 	return (segment);
 }
-
-// char	*ft_expand_var(t_shell *shell, char *var)
-// {
-// 	t_env	*current;
-// 	char		*exp_var;
-
-// 	if (ft_strcmp(var, "?") == 0)
-// 		return (ft_itoa(shell->exit_code));
-// 	if (ft_strcmp(var, " ") == 0)
-// 		return (ft_strdup("$"));
-// 	current = shell->env_list;
-// 	while (current != NULL)
-// 	{
-// 		if (ft_strcmp(current->key, var) == 0)
-// 		{
-// 			exp_var = current->value;
-// 			free(var);
-// 			return (ft_strdup(current->value));
-// 		}
-
-// 		current = current->next;
-// 	}
-// 	return (NULL);
-// }
-
-// char	*ft_extract_var(char *input, int *i)
-// {
-// 	int			j;
-// 	char		*var;
-// 	const int	var_len = ft_var_len(input, (*i));
-
-// 	(*i)++;
-// 	if (input[(*i)] == '?')
-// 		return (ft_strdup("?") + ((*i)++, 0));
-// 	if (input[(*i)] == ' ' || input[(*i)] == '\t' || input[(*i)] == '\0')
-// 		return (ft_strdup(" "));
-// 	var = malloc(var_len + 1);
-// 	if (!var)
-// 		return (NULL);
-// 	j = 0;
-// 	while (input[(*i)] && !ft_is_separator_var(input[(*i)]))
-// 		var[j++] = input[(*i)++];
-// 	var[j] = '\0';
-// 	return (var);
-// }
-
-// char	*ft_extract_var(char *input, int *i)
-// {
-// 	char		*var;
-// 	int			j;
-// 	const int	var_len = ft_var_len(input, (*i));
-
-// 	(*i)++;
-// 	if (input[(*i)] == '?')
-// 	{
-// 		var = ft_strdup("?");
-// 		(*i)++;
-// 		return (var);
-// 	}
-// 	if (input[(*i)] == ' ' || input[(*i)] == '\t' || input[(*i)] == '\0')
-// 		return (ft_strdup(" "));
-// 	var = malloc(var_len + 1);
-// 	j = 0;
-// 	while (input[(*i)] != 0)
-// 	{
-// 		if (ft_is_separator_var(input[(*i)]) != 0)
-// 			break ;
-// 		else
-// 		{
-// 			var[j] = input[(*i)];
-// 			j++;
-// 			(*i)++;
-// 		}
-// 	}
-// 	var[j] = '\0';
-// 	return (var);
-// }
