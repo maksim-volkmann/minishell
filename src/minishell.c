@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:01:16 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/25 12:47:09 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 14:20:00 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,13 +114,11 @@ int main(int argc, char **argv, char **env)
 		ft_parser(&shell, &shell.tokens);
 		child_signals();
 		//TODO: remove this after testing > and < and >>
-		print_cmd_details(shell.cmds);
-		printf("seg1\n");
+		// print_cmd_details(shell.cmds);
 		if (shell.cmds && shell.cmds->next == NULL)
 			exec_single(shell.cmds, &shell);
 		else
 			exec_start(shell.cmds, &shell);
-		printf("seg2\n");
 		ft_end_loop_free(&shell);
 		parent_signals();
 	}

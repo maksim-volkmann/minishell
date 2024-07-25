@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/24 13:26:47 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/03/14 11:58:54 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 14:02:33 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	*ft_strdup(const char *s)
 	char	*str;
 	size_t	i;
 
+	if (!s)
+		s = "";
 	str = (char *)malloc(sizeof(char) * ft_strlen(s) + 1);
 	if (!str)
 		return (NULL);

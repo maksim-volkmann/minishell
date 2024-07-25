@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:18:18 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/25 12:51:03 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 14:18:37 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ void	handle_no_equal_sign(char *arg, t_env **env_list, t_shell *shell)
 		print_invalid_identifier(arg, shell);
 }
 
-void	skip_white_space(char **src)
-{
-	while (ft_isspace((unsigned char)**src))
-		(*src)++;
-}
+// void	skip_white_space(char **src)
+// {
+// 	while (ft_isspace((unsigned char)**src))
+// 		(*src)++;
+// }
