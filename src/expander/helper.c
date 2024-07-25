@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:26:28 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/25 17:38:18 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 18:00:05 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ char	*ft_quote_string(char *input)
 	size_t	length;
 	char	*quoted_string;
 
-	length = strlen(input);
+	length = ft_strlen(input);
 	quoted_string = (char *)malloc(length + 3);
 	if (quoted_string == NULL)
 		return (NULL);

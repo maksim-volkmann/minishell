@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   segment.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:57:08 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 12:27:19 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 18:03:26 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ char	*ft_extract_segment(char *input, int *i, t_shell *shell)
 {
 	char	*segment;
 
-	segment = strdup("");
+	segment = ft_strdup("");
 	if (!segment)
 		return (NULL);
 	while (input[*i] != '\0' && input[*i] != '\"' && input[*i] != '\'')
