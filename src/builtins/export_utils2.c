@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:18:18 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/25 15:22:56 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 18:06:16 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 #include "../../includes/minishell.h"
 #include "../../includes/builtins.h"
 
-void update_env_var(t_env **env_list, const char *key, const char *value)
+void	update_env_var(t_env **env_list, const char *key, const char *value)
 {
-	t_env *current;
+	t_env	*current;
 
 	current = *env_list;
 	while (current)
@@ -28,7 +28,7 @@ void update_env_var(t_env **env_list, const char *key, const char *value)
 				free(current->value);
 				current->value = ft_strdup(value);
 			}
-			return;
+			return ;
 		}
 		current = current->next;
 	}
@@ -43,11 +43,13 @@ void	print_invalid_identifier(char *arg, t_shell *shell)
 	shell->exit_code = 1;
 }
 
-void handle_no_equal_sign(char *arg, t_env **env_list, t_shell *shell)
+void	handle_no_equal_sign(char *arg, t_env **env_list, t_shell *shell)
 {
+	t_env	*current;
+
 	if (is_valid_var_name(arg))
 	{
-		t_env *current = *env_list;
+		current = *env_list;
 		while (current)
 		{
 			if (ft_strcmp(current->key, arg) == 0)

@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:18:18 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/25 15:22:45 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 18:09:07 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 #include "../../includes/minishell.h"
 #include "../../includes/builtins.h"
 
-void handle_equal_sign(char *arg, t_env **env_list, t_shell *shell)
+void	handle_equal_sign(char *arg, t_env **env_list, t_shell *shell)
 {
-	char *equal_sign;
-	char *key;
-	char *value;
+	char	*equal_sign;
+	char	*key;
+	char	*value;
 
 	equal_sign = ft_strchr(arg, '=');
 	*equal_sign = '\0';
@@ -43,7 +43,7 @@ char	*find_plus_equal(const char *str)
 	return (ft_strnstr(str, "+=", ft_strlen(str)));
 }
 
-void handle_export_arg(char *arg, t_env **env_list, t_shell *shell)
+void	handle_export_arg(char *arg, t_env **env_list, t_shell *shell)
 {
 	if (find_plus_equal(arg) != NULL)
 		handle_plus_equal(arg, env_list, shell);
@@ -52,7 +52,6 @@ void handle_export_arg(char *arg, t_env **env_list, t_shell *shell)
 	else
 		handle_no_equal_sign(arg, env_list, shell);
 }
-
 
 void	print_export_vars(t_env *env_list)
 {

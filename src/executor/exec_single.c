@@ -6,27 +6,26 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 16:17:47 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/25 16:52:20 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 18:04:59 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/executor.h"
 
-int validate_input(t_cmd *cmd, t_shell *shell)
+int	validate_input(t_cmd *cmd, t_shell *shell)
 {
 	if (cmd->input && cmd->input->file)
 	{
 		if (access(cmd->input->file, F_OK) != 0)
 			return (file_err(cmd->input->file, shell));
 	}
-
 	return (0);
 }
 
-int validate_output(t_cmd *cmd, t_shell *shell)
+int	validate_output(t_cmd *cmd, t_shell *shell)
 {
-	int fd;
+	int	fd;
 
 	fd = -1;
 	if (cmd->output && cmd->output->file)
@@ -42,17 +41,16 @@ int validate_output(t_cmd *cmd, t_shell *shell)
 	return (0);
 }
 
-void exec_single(t_cmd *cmd, t_shell *shell)
+void	exec_single(t_cmd *cmd, t_shell *shell)
 {
 	if (validate_input(cmd, shell))
-		return;
+		return ;
 	if (validate_output(cmd, shell))
-		return;
+		return ;
 	if (cmd->argv[0] == NULL)
-		return;
+		return ;
 	if (is_builtin(cmd->argv[0]))
 		handle_builtin(cmd, shell);
 	else
 		exec_start(cmd, shell);
 }
-

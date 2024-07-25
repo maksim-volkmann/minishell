@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 12:55:59 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/25 17:51:36 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 18:10:26 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@
 # define NOWORD "<>| \t\n\'\""
 # define NOVAR " \"\'\t\n$/"
 
-// -> Parser
-
+// -> Parse
 void		ft_exit(t_shell *shell);
 // parser.c
 void		ft_parser(t_shell *shell, t_token **tokens);
@@ -67,15 +66,9 @@ char		*ft_sq_heredoc(char *input, int *i);
 void		ft_heredoc_loop(t_shell *shell);
 char		*ft_append_newline(char *str);
 
-
-
-
 // -> Syntax
 int			ft_syntax_checker(t_token *tokens);
 int			ft_syntax_checker_2(t_token *tokens);
-
-
-
 
 // -> Lexer
 

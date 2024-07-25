@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:53:31 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/25 17:51:26 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 18:10:43 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,12 @@ char	*handle_and_append_variable_dq_hd(char *input, int *i, char *segment,
 			t_shell *shell);
 char	*ft_extract_dq_hd(char *input, int *i, t_shell *shell);
 
-
-
 // expander.c
 char	*ft_expander_hd(char *input, t_shell *shell);
-
-
 
 // helper.c
 char	*ft_expand_var_dq_hd(t_shell *shell, char *var);
 char	*ft_expand_var_hd(t_shell *shell, char *var);
-
-
-
 
 // seg_heredoc.c
 char	*ft_handle_segment_hd(char *input, int *index,
