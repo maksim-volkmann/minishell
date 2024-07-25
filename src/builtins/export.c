@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:18:18 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/25 08:49:32 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 12:48:59 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	handle_equal_sign(char *arg, t_env **env_list, t_shell *shell)
 	char	*key;
 	char	*value;
 
+	printf("seg4\n");
 	equal_sign = ft_strchr(arg, '=');
 	*equal_sign = '\0';
 	key = arg;
@@ -40,12 +41,16 @@ char	*find_plus_equal(const char *str)
 
 void	handle_export_arg(char *arg, t_env **env_list, t_shell *shell)
 {
+	reduce_white_space(arg);
+
+	printf("seg3\n");
 	if (find_plus_equal(arg) != NULL)
 		handle_plus_equal(arg, env_list, shell);
 	else if (ft_strchr(arg, '=') != NULL)
 		handle_equal_sign(arg, env_list, shell);
 	else
 		handle_no_equal_sign(arg, env_list, shell);
+	printf("seg5\n");
 }
 
 void	print_export_vars(t_env *env_list)
@@ -63,6 +68,23 @@ void	print_export_vars(t_env *env_list)
 	}
 }
 
+// void	execute_export(char **args, t_env **env_list, t_shell *shell)
+// {
+// 	int	i;
+
+// 	i = 1;
+// 	if (args[1] == NULL)
+// 		print_export_vars(*env_list);
+// 	else
+// 	{
+// 		while (args[i])
+// 		{
+// 			handle_export_arg(args[i], env_list, shell);
+// 			i++;
+// 		}
+// 	}
+// }
+
 void	execute_export(char **args, t_env **env_list, t_shell *shell)
 {
 	int	i;
@@ -72,10 +94,12 @@ void	execute_export(char **args, t_env **env_list, t_shell *shell)
 		print_export_vars(*env_list);
 	else
 	{
-		while (args[i])
-		{
-			handle_export_arg(args[i], env_list, shell);
-			i++;
+			while (args[i])
+			{
+				handle_export_arg(args[i], env_list, shell);
+				i++;
+			}
 		}
-	}
+		if (shell->exit_code == 0)
+			shell->exit_code = 0;
 }
