@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 13:00:47 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 18:28:38 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 08:44:09 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,11 +96,11 @@ int		is_builtin(char *command);
 // helper.c
 void	leaks(void);
 void	free_env_vars(t_env *env_list);
-char	*get_token_type_string(t_token_type type);
-void	print_token_list(t_token *head);
-char	*redir_type_to_string(t_redir_type type);
-void	print_redir(t_redir *redir);
-void	print_cmd(t_cmd *cmd);
+char	*get_token_type_string(t_token_type type); //dead?
+void	print_token_list(t_token *head);//dead?
+char	*redir_type_to_string(t_redir_type type);//dead?
+void	print_redir(t_redir *redir);//dead?
+void	print_cmd(t_cmd *cmd);//dead?
 void	add_env_var(t_env **env_list, const char *key, const char *value);
 void	copy_env_vars(t_shell *shell, char **env);
 void	print_cmd_details(t_cmd *cmds);
@@ -112,7 +112,7 @@ void	prnt_err(const char *cmd, const char *msg,
 //single_helper.c
 int		is_builtin(char *command);
 int		file_err(const char *file, t_shell *shell);
-void	setup_child_signal_handlers(void);
+void	setup_child_signal_handlers(void);//dead?
 
 //signals.c
 void	ft_configure_terminal(void);

@@ -7,6 +7,7 @@ To Do:
 3. < and > and >> prints wrong error.
 4. illegal functions (exit.c fprintf)
 4. in .h files, check all imports, are they used, are they working correctly.
+4. check if all added functions to .h are still used. Delete all dead functions.
 5. Check for leaks with vangrid again.
 5. norminette
 

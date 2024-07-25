@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:53:27 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 16:20:35 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 08:29:22 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,9 @@ int	execute_exit(char **argv, t_shell *shell)
 	if (ft_strcmp(argv[1], "") == 0 || !is_valid_number(argv[1]))
 	{
 		shell->exit_code = 255;
-		fprintf(stderr,
-			"exit\nminishell: exit: %s: numeric argument required\n", argv[1]);
+		ft_putstr_fd("exit\nminishell: exit: ", STDERR_FILENO);
+		ft_putstr_fd(argv[1], STDERR_FILENO);
+		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
 		ft_exit(shell);
 	}
 	if (count == 2)
@@ -62,7 +63,7 @@ int	execute_exit(char **argv, t_shell *shell)
 		shell->exit_code = ft_atoi(argv[1]);
 		ft_exit(shell);
 	}
-	fprintf(stderr, "exit\nminishell: exit: too many arguments\n");
+	ft_putendl_fd("exit\nminishell: exit: too many arguments", STDERR_FILENO);
 	shell->exit_code = 1;
 	return (1);
 }
