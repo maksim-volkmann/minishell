@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 12:17:44 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/25 11:26:17 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:30:25 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 #include "../../includes/expander.h"
 #include "../../includes/heredoc.h"
 #include "../../includes/redirections.h"
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 int	ft_heredoc_check(t_shell *shell)
 {

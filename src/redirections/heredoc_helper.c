@@ -6,16 +6,13 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 12:17:44 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/23 13:12:49 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:30:31 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 #include "../../includes/expander.h"
 #include "../../includes/heredoc.h"
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 char	*ft_append_newline(char *str)
 {

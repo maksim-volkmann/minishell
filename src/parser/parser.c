@@ -6,12 +6,11 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:30:28 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 12:22:55 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:50:49 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
-#include <stdlib.h>
 
 void	assign_to_darray(char **src, char **darray, int *i, int *j)
 {

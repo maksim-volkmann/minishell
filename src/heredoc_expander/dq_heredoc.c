@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:56:24 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 12:27:34 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:32:28 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ char	*ft_extract_dq_hd(char *input, int *i, t_shell *shell)
 {
 	char	*segment;
 
-	segment = strdup("");
+	segment = ft_strdup("");
 	if (!segment)
 		return (NULL);
 	(*i)++;

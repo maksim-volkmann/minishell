@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 11:48:49 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/25 14:10:57 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:50:02 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include "../includes/parser.h"
 
-void	leaks(void)
-{
-	system("leaks minishell");
-}
+// void	leaks(void)
+// {
+// 	system("leaks minishell");
+// }
 
 // char* get_token_type_string(t_token_type type)
 // {

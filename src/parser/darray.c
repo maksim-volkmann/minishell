@@ -6,12 +6,11 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 12:46:42 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 12:47:41 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:30:54 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
-#include <stdio.h>
 
 int	ft_darray_size(t_token	*tokens)
 {

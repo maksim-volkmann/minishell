@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 12:55:59 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/25 11:16:40 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:51:36 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,15 @@ char		*ft_sq_heredoc(char *input, int *i);
 void		ft_heredoc_loop(t_shell *shell);
 char		*ft_append_newline(char *str);
 
+
+
+
 // -> Syntax
 int			ft_syntax_checker(t_token *tokens);
 int			ft_syntax_checker_2(t_token *tokens);
+
+
+
 
 // -> Lexer
 
@@ -105,4 +111,5 @@ void		merge_tokens(t_token **head);
 void		remove_current_token(t_token **head, t_token **current,
 				t_token **previous);
 void		remove_spaces(t_token **head);
+
 #endif

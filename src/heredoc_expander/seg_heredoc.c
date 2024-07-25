@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:57:08 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 12:28:03 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:33:02 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ char	*ft_extract_segment_hd(char *input, int *i, t_shell *shell)
 {
 	char	*segment;
 
-	segment = strdup("");
+	segment = ft_strdup("");
 	if (!segment)
 		return (NULL);
 	while (input[*i] != '\0' && input[*i] != '\"' && input[*i] != '\'')

@@ -6,12 +6,11 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 14:51:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/21 16:38:53 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:40:05 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/expander.h"
-#include <sys/fcntl.h>
 
 char	*ft_expander(char *input, t_shell *shell)
 {

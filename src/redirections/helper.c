@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 15:48:41 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/21 17:23:46 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:30:36 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 #include "../../includes/expander.h"
 #include "../../includes/redirections.h"
 #include "../../includes/heredoc.h"
-#include <stdio.h>
-#include <sys/fcntl.h>
 
 int	ft_open_file(char *filename, char *content, t_shell *shell)
 {

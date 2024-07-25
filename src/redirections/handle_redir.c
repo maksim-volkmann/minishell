@@ -6,15 +6,12 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:30:44 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 12:38:54 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:30:45 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/parser.h"
 #include "../../includes/heredoc.h"
-#include <stdbool.h>
-#include <stdio.h>
-#include <unistd.h>
 
 void	ft_handle_output(t_token *tokens, t_redir *output)
 {

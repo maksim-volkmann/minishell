@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 14:40:22 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/23 14:11:50 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:31:11 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	free_redirection(t_redir *redir)
 }
 
 void	free_command(t_cmd *cmd)
-
 {
 	t_cmd	*current;
 	t_cmd	*next;

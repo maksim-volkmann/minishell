@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:29:48 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/25 11:28:00 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:47:31 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,40 +65,16 @@ t_token	*ft_if_pipe(const char *line, int *i, t_shell *shell)
 	return (new_token);
 }
 
-t_token	*ft_if_par(const char *line, int *i, t_shell *shell)
-{
-	t_token	*new_token = NULL;
-	char	*token;
-	int		start;
-	int		end;
-
-	start = *i;
-	while (line[*i] == '(' || line[*i] == ')')
-		(*i)++;
-	end = *i;
-	token = ft_extract_str((char *)line, start, end);
-	if (ft_strcmp(token, "(") == 0)
-		new_token = ft_new_token(token, LPAR);
-	else if (ft_strcmp(token, ")") == 0)
-		new_token = ft_new_token(token, RPAR);
-	else
-	{
-		shell->syn_err_present = true;
-		return (new_token);
-	}
-	return (new_token);
-}
-
 t_token	*ft_if_quot(const char *line, int *i, t_shell *shell)
 {
-	t_token	*new_token = NULL;
+	t_token	*new_token;
 	char	*temp;
 	char	*token;
 	int		start;
 	int		end;
 
-	start = (*i);
-	(*i)++;
+	new_token = NULL;
+	start = (*i)++;
 	while (line[*i] != '\0' && line[*i] != '\'')
 		(*i)++;
 	end = (*i);
