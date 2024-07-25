@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 09:29:48 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 12:57:37 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 11:28:00 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ t_token	*ft_if_pipe(const char *line, int *i, t_shell *shell)
 	return (new_token);
 }
 
-t_token	*ft_if_par(const char *line, int *i)
+t_token	*ft_if_par(const char *line, int *i, t_shell *shell)
 {
-	t_token	*new_token;
+	t_token	*new_token = NULL;
 	char	*token;
 	int		start;
 	int		end;
@@ -83,15 +83,15 @@ t_token	*ft_if_par(const char *line, int *i)
 		new_token = ft_new_token(token, RPAR);
 	else
 	{
-		printf("Error Parenthesis\n");
-		return (NULL);
+		shell->syn_err_present = true;
+		return (new_token);
 	}
 	return (new_token);
 }
 
-t_token	*ft_if_quot(const char *line, int *i)
+t_token	*ft_if_quot(const char *line, int *i, t_shell *shell)
 {
-	t_token	*new_token;
+	t_token	*new_token = NULL;
 	char	*temp;
 	char	*token;
 	int		start;
@@ -112,8 +112,8 @@ t_token	*ft_if_quot(const char *line, int *i)
 	}
 	else
 	{
-		printf("Error Quote\n");
-		return (NULL);
+		shell->syn_err_present = true;
+		return (new_token);
 	}
 	return (new_token);
 }

@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 10:31:02 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 12:57:45 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 11:18:47 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,10 @@ void	ft_lexer(const char *line, t_shell *shell)
 			ft_lst_add_token(&shell->tokens, ft_if_redi_op(line, &i, shell));
 		else if (line[i] == '|')
 			ft_lst_add_token(&shell->tokens, ft_if_pipe(line, &i, shell));
-		else if (line[i] == '(' || line[i] == ')')
-			ft_lst_add_token(&shell->tokens, ft_if_par(line, &i));
 		else if (line[i] == '\'')
-			ft_lst_add_token(&shell->tokens, ft_if_quot(line, &i));
+			ft_lst_add_token(&shell->tokens, ft_if_quot(line, &i, shell));
 		else if (line[i] == '\"')
-			ft_lst_add_token(&shell->tokens, ft_if_do_quot(line, &i));
+			ft_lst_add_token(&shell->tokens, ft_if_do_quot(line, &i, shell));
 		else
 			ft_lst_add_token(&shell->tokens, ft_if_word(line, &i));
 		if (shell->syn_err_present == true)

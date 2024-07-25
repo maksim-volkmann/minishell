@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/01 12:17:44 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/25 10:25:56 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 11:26:17 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_heredoc_check(t_shell *shell)
 		|| ft_syntax_checker_2(shell->tokens) == 1
 		|| shell->syn_err_present == true)
 	{
-		ft_putstr_fd("syntax error near unexpected token `newline'\n", 2);
+		ft_putstr_fd("syntax error near unexpected token\n", 2);
 		free_token_list(shell->tokens);
 		shell->exit_code = 258;
 		return (1);

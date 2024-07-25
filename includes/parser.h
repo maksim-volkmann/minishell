@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 12:55:59 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 16:25:42 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 11:16:40 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 # include "./minishell.h"
 
 # define NO_DEL ">< \n\t"
-# define NOWORD "<>|() \t\n\'\""
+# define NOWORD "<>| \t\n\'\""
 # define NOVAR " \"\'\t\n$/"
 
 // -> Parser
@@ -83,11 +83,11 @@ int			ft_syntax_checker_2(t_token *tokens);
 // cases.c
 t_token		*ft_if_redi_op(const char *line, int *i, t_shell *shell);
 t_token		*ft_if_pipe(const char *line, int *i, t_shell *shell);
-t_token		*ft_if_par(const char *line, int *i);
-t_token		*ft_if_quot(const char *line, int *i);
+t_token		*ft_if_par(const char *line, int *i, t_shell *shell);
+t_token		*ft_if_quot(const char *line, int *i, t_shell *shell);
 
 // cases_2.c
-t_token		*ft_if_do_quot(const char *line, int *i);
+t_token		*ft_if_do_quot(const char *line, int *i, t_shell *shell);
 t_token		*ft_if_and(const char *line, int *i);
 t_token		*ft_if_word(const char *line, int *i);
 t_token		*ft_if_space(const char *line, int *i);

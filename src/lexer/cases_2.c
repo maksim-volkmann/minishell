@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/28 15:05:33 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 12:57:30 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 11:15:15 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ t_token	*ft_if_space(const char *line, int *i)
 	return (new_token);
 }
 
-t_token	*ft_if_do_quot(const char *line, int *i)
+t_token	*ft_if_do_quot(const char *line, int *i, t_shell *shell)
 {
-	t_token	*new_token;
+	t_token	*new_token = NULL;
 	char	*token;
 	char	*temp;
 	int		start;
@@ -50,35 +50,12 @@ t_token	*ft_if_do_quot(const char *line, int *i)
 	}
 	else
 	{
-		printf("Error Quote\n");
-		return (NULL);
+		shell->syn_err_present = true;
+		return (new_token);
 	}
 	return (new_token);
 }
 
-t_token	*ft_if_and(const char *line, int *i)
-{
-	t_token	*new_token;
-	char	*token;
-	int		start;
-	int		end;
-
-	start = (*i);
-	while (line[*i] == '&')
-		(*i)++;
-	end = (*i);
-	token = ft_extract_str((char *)line, *i, *i + 1);
-	if (ft_strcmp(token, "&") == 0)
-		new_token = ft_new_token(token, AND);
-	else if (ft_strcmp(token, "&&") == 0)
-		new_token = ft_new_token(token, DAND);
-	else
-	{
-		printf("Error And\n");
-		return (NULL);
-	}
-	return (new_token);
-}
 
 t_token	*ft_if_word(const char *line, int *i)
 {
@@ -104,3 +81,27 @@ t_token	*ft_if_word(const char *line, int *i)
 	new_token = ft_new_token(token, WORD);
 	return (new_token);
 }
+
+// t_token	*ft_if_and(const char *line, int *i)
+// {
+// 	t_token	*new_token;
+// 	char	*token;
+// 	int		start;
+// 	int		end;
+
+// 	start = (*i);
+// 	while (line[*i] == '&')
+// 		(*i)++;
+// 	end = (*i);
+// 	token = ft_extract_str((char *)line, *i, *i + 1);
+// 	if (ft_strcmp(token, "&") == 0)
+// 		new_token = ft_new_token(token, AND);
+// 	else if (ft_strcmp(token, "&&") == 0)
+// 		new_token = ft_new_token(token, DAND);
+// 	else
+// 	{
+// 		printf("Error And\n");
+// 		return (NULL);
+// 	}
+// 	return (new_token);
+// }
