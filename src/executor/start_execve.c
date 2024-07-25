@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 13:56:45 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 13:56:47 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:43:54 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ char	*get_executable_path(char *cmd, t_env *env_list)
 		executable_path = find_correct_path(cmd, env_list);
 		if (executable_path == NULL)
 		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
 			ft_putstr_fd(cmd, STDERR_FILENO);
 			ft_putendl_fd(": command not found", STDERR_FILENO);
 			exit(127);

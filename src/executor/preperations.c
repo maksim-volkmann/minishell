@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 13:57:08 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 18:24:49 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:10:26 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,24 +68,6 @@ int	create_pipe_if_needed(t_cmd *cmd, int pipe_fd[2])
 	return (0);
 }
 
-void	check_input_file(t_cmd *cmd, t_shell *shell)
-{
-	int	fd;
-
-	if (cmd->input && cmd->input->file)
-	{
-		fd = open(cmd->input->file, O_RDONLY);
-		if (fd == -1)
-		{
-			perror(cmd->input->file);
-			shell->exit_code = 1;
-			cmd = cmd->next;
-			return ;
-		}
-		close(fd);
-	}
-}
-
 void	exec_start(t_cmd *commands, t_shell *shell)
 {
 	int		pipe_fd[2];
@@ -97,7 +79,6 @@ void	exec_start(t_cmd *commands, t_shell *shell)
 	cmd = commands;
 	while (cmd)
 	{
-		check_input_file(cmd, shell);
 		create_pipe_if_needed(cmd, pipe_fd);
 		last_pid = fork_process(cmd, shell, &input_fd, pipe_fd);
 		cmd = cmd->next;

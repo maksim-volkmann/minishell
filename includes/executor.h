@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 12:57:33 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 13:51:59 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 17:10:17 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ char	**prepare_envp(t_env *env_list);
 void	wait_for_last_process(pid_t last_pid, t_shell *shell);
 pid_t	fork_process(t_cmd *cmd, t_shell *shell, int *input_fd, int pipe_fd[2]);
 int		create_pipe_if_needed(t_cmd *cmd, int pipe_fd[2]);
-void	check_input_file(t_cmd *cmd, t_shell *shell);
 void	exec_start(t_cmd *commands, t_shell *shell);
 
 // redirections.c
@@ -74,11 +73,10 @@ char	*get_executable_path(char *cmd, t_env *env_list);
 void	execute_command(t_cmd *cmd, t_env *env_list);
 
 // exec_single.c
-int		validate_input_no_cmd(t_cmd *cmd, t_shell *shell);
-int		validate_output_no_cmd(t_cmd *cmd, t_shell *shell);
-int		validate_input_file(t_cmd *cmd, t_shell *shell);
-int		validate_output_file(t_cmd *cmd, t_shell *shell);
+int		validate_input(t_cmd *cmd, t_shell *shell);
+int		validate_output(t_cmd *cmd, t_shell *shell);
 void	exec_single(t_cmd *cmd, t_shell *shell);
+
 
 // single_helper.c
 int		file_err(const char *file, t_shell *shell);

@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 13:00:47 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/25 08:44:09 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:28:29 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ void	prnt_err(const char *cmd, const char *msg,
 //single_helper.c
 int		is_builtin(char *command);
 int		file_err(const char *file, t_shell *shell);
-void	setup_child_signal_handlers(void);//dead?
 
 //signals.c
 void	ft_configure_terminal(void);

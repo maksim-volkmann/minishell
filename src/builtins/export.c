@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:18:18 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/25 15:18:59 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:22:45 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,6 @@ void handle_equal_sign(char *arg, t_env **env_list, t_shell *shell)
 	char *value;
 
 	equal_sign = ft_strchr(arg, '=');
-	//TODO: delete or no delete.
-	// if (equal_sign == NULL)
-	// {
-	// 	print_invalid_identifier(arg, shell);
-	// 	return;
-	// }
 	*equal_sign = '\0';
 	key = arg;
 	value = equal_sign + 1;

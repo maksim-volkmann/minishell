@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:18:18 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/25 15:20:23 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:22:56 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,26 +34,6 @@ void update_env_var(t_env **env_list, const char *key, const char *value)
 	}
 	add_env_var(env_list, key, value);
 }
-
-// void	copy_word(char **dst, char **src, int *in_word)
-// {
-// 	if (ft_isspace((unsigned char)**src))
-// 	{
-// 		if (*in_word)
-// 		{
-// 			**dst = ' ';
-// 			(*dst)++;
-// 			*in_word = 0;
-// 		}
-// 	}
-// 	else
-// 	{
-// 		**dst = **src;
-// 		(*dst)++;
-// 		*in_word = 1;
-// 	}
-// 	(*src)++;
-// }
 
 void	print_invalid_identifier(char *arg, t_shell *shell)
 {

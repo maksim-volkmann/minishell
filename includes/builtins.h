@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 11:53:27 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/25 15:20:27 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:31:51 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,8 @@ int		is_valid_var_name(const char *name);
 
 //export_utils2.c
 void	update_env_var(t_env **env_list, const char *key, const char *value);
-// void	copy_word(char **dst, char **src, int *in_word);
 void	print_invalid_identifier(char *arg, t_shell *shell);
 void	handle_no_equal_sign(char *arg, t_env **env_list, t_shell *shell);
-void	skip_white_space(char **src);
 
 //pwd.c
 void	execute_pwd(void);
