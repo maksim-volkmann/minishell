@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/21 16:24:58 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 12:40:42 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/25 19:12:33 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	*ft_expand_var(t_shell *shell, char *var)
 {
 	t_env	*current;
-	char	*exp_var;
+	// char	*exp_var;
 
 	if (ft_strcmp(var, "?") == 0)
 		return (ft_itoa(shell->exit_code));
@@ -26,7 +26,7 @@ char	*ft_expand_var(t_shell *shell, char *var)
 	{
 		if (ft_strcmp(current->key, var) == 0)
 		{
-			exp_var = current->value;
+			// exp_var = current->value;
 			free(var);
 			return (ft_strdup(current->value));
 		}
@@ -59,7 +59,7 @@ char	*ft_extract_var(char *input, int *i)
 char	*ft_expand_var_dq(t_shell *shell, char *var)
 {
 	t_env	*current;
-	char	*exp_var;
+	// char	*exp_var;
 
 	if (ft_strcmp(var, "?") == 0)
 		return (ft_itoa(shell->exit_code));
@@ -70,7 +70,7 @@ char	*ft_expand_var_dq(t_shell *shell, char *var)
 	{
 		if (ft_strcmp(current->key, var) == 0)
 		{
-			exp_var = current->value;
+			// exp_var = current->value;
 			free(var);
 			return (ft_strdup_dq(current->value));
 		}

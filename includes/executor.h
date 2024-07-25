@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 12:57:33 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/25 18:11:40 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 18:26:29 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <readline/history.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <sys/wait.h>
 
 // echo_pwd_cd_env.c
 int		execute_echo_builtin(t_cmd *cmd, t_shell *shell);

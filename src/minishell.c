@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:01:16 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/25 14:20:00 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 19:11:19 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,16 @@ void	ft_loop_init(t_shell *shell)
 	shell->tokens = NULL;
 	shell->syn_err_present = false;
 }
+
+// void ft_cleanup(t_shell *shell) {
+//     // Add code here to free all allocated memory in shell
+//     // For example:
+//     if (shell->input) {
+//         free(shell->input);
+//         shell->input = NULL;
+//     }
+//     // Add other cleanup code as needed
+// }
 
 void	ft_process_input(t_shell *shell)
 {
@@ -107,14 +117,14 @@ int main(int argc, char **argv, char **env)
 		ft_loop_init(&shell);
 		ft_process_input(&shell);
 		if (ft_heredoc_check(&shell) == 1)
-			continue;
+			continue ;
 		if (ft_expander_and_checker(&shell) == 1)
-			continue;
+			continue ;
 		ft_lexer(shell.input, &shell);
 		ft_parser(&shell, &shell.tokens);
 		child_signals();
 		//TODO: remove this after testing > and < and >>
-		// print_cmd_details(shell.cmds);
+		print_cmd_details(shell.cmds);
 		if (shell.cmds && shell.cmds->next == NULL)
 			exec_single(shell.cmds, &shell);
 		else

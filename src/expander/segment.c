@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   segment.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/09 11:57:08 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/25 18:03:26 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 19:24:09 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ char	*handle_and_append_variable(char *input, int *i, char *segment,
 			if (expanded_var)
 			{
 				new_segment = ft_join_input(segment, expanded_var);
+				free(exp_var);
+				free(expanded_var);
 				return (new_segment);
 			}
 		}
