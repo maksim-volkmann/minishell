@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:18:18 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/25 14:17:50 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:03:04 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,20 +74,3 @@ int	is_valid_var_name(const char *name)
 	}
 	return (1);
 }
-
-// void	reduce_white_space(char *str)
-// {
-// 	char	*dst;
-// 	char	*src;
-// 	int		in_word;
-
-// 	dst = str;
-// 	src = str;
-// 	in_word = 0;
-// 	skip_white_space(&src);
-// 	while (*src)
-// 		copy_word(&dst, &src, &in_word);
-// 	if (dst > str && ft_isspace((unsigned char)*(dst - 1)))
-// 		dst--;
-// 	*dst = '\0';
-// }

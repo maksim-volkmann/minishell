@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 12:18:18 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/25 14:18:37 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/25 15:20:23 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,43 +14,46 @@
 #include "../../includes/minishell.h"
 #include "../../includes/builtins.h"
 
-void	update_env_var(t_env **env_list, const char *key, const char *value)
+void update_env_var(t_env **env_list, const char *key, const char *value)
 {
-	t_env	*current;
+	t_env *current;
 
 	current = *env_list;
 	while (current)
 	{
 		if (ft_strcmp(current->key, key) == 0)
 		{
-			free(current->value);
-			current->value = ft_strdup(value);
-			return ;
+			if (value != NULL)
+			{
+				free(current->value);
+				current->value = ft_strdup(value);
+			}
+			return;
 		}
 		current = current->next;
 	}
 	add_env_var(env_list, key, value);
 }
 
-void	copy_word(char **dst, char **src, int *in_word)
-{
-	if (ft_isspace((unsigned char)**src))
-	{
-		if (*in_word)
-		{
-			**dst = ' ';
-			(*dst)++;
-			*in_word = 0;
-		}
-	}
-	else
-	{
-		**dst = **src;
-		(*dst)++;
-		*in_word = 1;
-	}
-	(*src)++;
-}
+// void	copy_word(char **dst, char **src, int *in_word)
+// {
+// 	if (ft_isspace((unsigned char)**src))
+// 	{
+// 		if (*in_word)
+// 		{
+// 			**dst = ' ';
+// 			(*dst)++;
+// 			*in_word = 0;
+// 		}
+// 	}
+// 	else
+// 	{
+// 		**dst = **src;
+// 		(*dst)++;
+// 		*in_word = 1;
+// 	}
+// 	(*src)++;
+// }
 
 void	print_invalid_identifier(char *arg, t_shell *shell)
 {
@@ -60,16 +63,19 @@ void	print_invalid_identifier(char *arg, t_shell *shell)
 	shell->exit_code = 1;
 }
 
-void	handle_no_equal_sign(char *arg, t_env **env_list, t_shell *shell)
+void handle_no_equal_sign(char *arg, t_env **env_list, t_shell *shell)
 {
 	if (is_valid_var_name(arg))
-		update_env_var(env_list, arg, NULL);
+	{
+		t_env *current = *env_list;
+		while (current)
+		{
+			if (ft_strcmp(current->key, arg) == 0)
+				return ;
+			current = current->next;
+		}
+		add_env_var(env_list, arg, NULL);
+	}
 	else
 		print_invalid_identifier(arg, shell);
 }
-
-// void	skip_white_space(char **src)
-// {
-// 	while (ft_isspace((unsigned char)**src))
-// 		(*src)++;
-// }
