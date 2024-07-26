@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 13:00:47 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/25 16:28:29 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/26 10:20:31 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,22 +90,46 @@ typedef struct s_shell
 	char		*input;
 }	t_shell;
 
-int		ft_strcmp(const char *s1, const char *s2);
-int		is_builtin(char *command);
+// env.c
+void	free_env_vars(t_env *env_list);
+t_env	*create_env_var(const char *key, const char *value);
+void	add_env_var(t_env **env_list, const char *key, const char *value);
+void	copy_env_vars(t_shell *shell, char **env);
 
 // helper.c
-void	leaks(void);
-void	free_env_vars(t_env *env_list);
+void	ft_process_input(t_shell *shell);
+int		ft_expander_and_checker(t_shell *shell);
+void	ft_exit(t_shell *shell);
+void	update_exit_code(t_shell *shell);
+int		ft_strcmp(const char *s1, const char *s2);
+
+// minishell.c
+void	ft_init_shell(t_shell *shell, char *env[]);
+void	ft_loop_init(t_shell *shell);
+void	ft_execution(t_shell *shell);
+void	ft_end_loop(t_shell *shell);
+int		main(int argc, char **argv, char **env);
+
+// signals/signals.c
+void	ft_configure_terminal(void);
+void	handle_child_signal(int signal);
+void	handle_parent_signal(int signal);
+void	parent_signals(void);
+void	child_signals(void);
+
+// signals/signals_utils.c
+void	ft_restore_terminal(int i);
+
+
+
+
+
+
+
+// helper.c
 char	*get_token_type_string(t_token_type type); //dead?
 void	print_token_list(t_token *head);//dead?
 char	*redir_type_to_string(t_redir_type type);//dead?
-void	print_redir(t_redir *redir);//dead?
-void	print_cmd(t_cmd *cmd);//dead?
-void	add_env_var(t_env **env_list, const char *key, const char *value);
-void	copy_env_vars(t_shell *shell, char **env);
-void	print_cmd_details(t_cmd *cmds);
-void	print_envs(t_env *env_list);
-
 void	prnt_err(const char *cmd, const char *msg,
 			int code, t_shell *shell);
 
@@ -113,12 +137,14 @@ void	prnt_err(const char *cmd, const char *msg,
 int		is_builtin(char *command);
 int		file_err(const char *file, t_shell *shell);
 
-//signals.c
-void	ft_configure_terminal(void);
-void	handle_child_signal(int signal);
-void	handle_parent_signal(int signal);
-void	parent_signals(void);
-void	child_signals(void);
-void	ft_restore_terminal(int i);
+
+// int		is_builtin(char *command);
+// void	print_envs(t_env *env_list);
+// void	print_cmd_details(t_cmd *cmds);
+// void	copy_env_vars(t_shell *shell, char **env);
+// void	add_env_var(t_env **env_list, const char *key, const char *value);
+// void	print_redir(t_redir *redir);//dead?
+// void	print_cmd(t_cmd *cmd);//dead?
+// void	leaks(void);
 
 #endif
