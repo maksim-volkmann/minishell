@@ -6,13 +6,14 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/04 10:24:05 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/24 12:53:39 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/26 09:50:18 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include "../../includes/parser.h"
 #include <stdio.h>
+#include <sys/_types/_null.h>
 
 int	ft_tokens_size(t_token *tokens)
 {
@@ -68,6 +69,8 @@ int	ft_syntax_checker_2(t_token *tokens)
 		if (current->type == PIPE && num_ite == 0)
 			return (1);
 		if (current->type == PIPE && lst_size == 1)
+			return (1);
+		if (current->type == PIPE && current->next == NULL)
 			return (1);
 		current = current->next;
 		num_ite++;

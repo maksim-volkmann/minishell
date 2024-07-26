@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:01:16 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/25 19:11:19 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/26 09:45:56 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void update_exit_code(t_shell *shell)
 
 int main(int argc, char **argv, char **env)
 {
-	t_shell shell;
+	t_shell	shell;
 
 	ft_init_shell(&shell, env);
 
@@ -113,7 +113,6 @@ int main(int argc, char **argv, char **env)
 	while (1)
 	{
 		update_exit_code(&shell);
-
 		ft_loop_init(&shell);
 		ft_process_input(&shell);
 		if (ft_heredoc_check(&shell) == 1)
