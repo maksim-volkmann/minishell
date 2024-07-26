@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:01:16 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/26 10:46:12 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:02:24 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,6 @@
 #include "../includes/parser.h"
 #include "../includes/minishell.h"
 #include "../includes/redirections.h"
-
-//TOOD: NEED TO FIX THIS FILE. NORMMINETTE.
-
-//TODO: Can I re-use this for every error printing?
 
 void	ft_init_shell(t_shell *shell, char *env[])
 {
@@ -50,16 +46,13 @@ void	ft_end_loop(t_shell *shell)
 	shell->input = NULL;
 }
 
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
 	t_shell	shell;
 
 	ft_init_shell(&shell, env);
-
-	parent_signals();
-	ft_configure_terminal();
-	ft_restore_terminal(0);
-	if (argc > 1 || argv[0] == NULL)
+	ft_init_signals();
+	if (argc != 1 && argv[0] != NULL)
 		return (0);
 	while (1)
 	{
@@ -72,7 +65,6 @@ int main(int argc, char **argv, char **env)
 			continue ;
 		ft_lexer(shell.input, &shell);
 		ft_parser(&shell, &shell.tokens);
-		// print_cmd_details(shell.cmds);
 		ft_execution(&shell);
 		ft_end_loop(&shell);
 		parent_signals();
@@ -81,8 +73,3 @@ int main(int argc, char **argv, char **env)
 	ft_restore_terminal(1);
 	return (shell.exit_code);
 }
-
-	// if (shell.cmds && shell.cmds->next == NULL)
-	// 	exec_single(shell.cmds, &shell);
-	// else
-	// 	exec_start(shell.cmds, &shell);

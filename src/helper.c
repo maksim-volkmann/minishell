@@ -6,7 +6,7 @@
 /*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 11:48:49 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/26 10:20:09 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:03:22 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	ft_process_input(t_shell *shell)
 		shell->input = ft_strtrim(line, "\n");
 		free(line);
 	}
-
 	if (!shell->input)
 		ft_exit(shell);
 	add_history(shell->input);

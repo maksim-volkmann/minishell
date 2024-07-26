@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
+/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 13:00:47 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/26 10:53:37 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/26 11:01:14 by adrherna         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ int		main(int argc, char **argv, char **env);
 void	ft_configure_terminal(void);
 void	handle_parent_signal(int signal);
 void	parent_signals(void);
+void	ft_init_signals(void);
 
 // signals/signals_utils.c
 void	ignore_sigint(struct sigaction *old_action);
