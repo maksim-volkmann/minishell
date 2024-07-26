@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 13:57:08 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/25 17:10:26 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/26 10:52:07 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 
 void	wait_for_last_process(pid_t last_pid, t_shell *shell)
 {
-	int		status;
-	pid_t	pid;
+	int					status;
+	pid_t				pid;
+	struct sigaction	sa_old;
 
+	ignore_sigint(&sa_old);
 	waitpid(last_pid, &status, 0);
 	if (WIFEXITED(status))
 		shell->exit_code = WEXITSTATUS(status);
@@ -33,6 +35,7 @@ void	wait_for_last_process(pid_t last_pid, t_shell *shell)
 	pid = wait(NULL);
 	while (pid > 0)
 		pid = wait(NULL);
+	restore_sigint(&sa_old);
 }
 
 pid_t	fork_process(t_cmd *cmd, t_shell *shell, int *input_fd, int pipe_fd[2])

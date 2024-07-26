@@ -6,7 +6,7 @@
 /*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 16:09:35 by mvolkman          #+#    #+#             */
-/*   Updated: 2024/07/24 16:15:15 by mvolkman         ###   ########.fr       */
+/*   Updated: 2024/07/26 10:47:38 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ void	ft_configure_terminal(void)
 	tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
 }
 
-void	handle_child_signal(int signal)
-{
-	if (signal == SIGINT || signal == SIGQUIT)
-		g_signal_received = signal;
-}
+// void	handle_child_signal(int signal)
+// {
+// 	if (signal == SIGINT || signal == SIGQUIT)
+// 		g_signal_received = signal;
+// }
 
 void	handle_parent_signal(int signal)
 {
@@ -54,14 +54,14 @@ void	parent_signals(void)
 	sigaction(SIGQUIT, &sa, NULL);
 }
 
-void	child_signals(void)
-{
-	struct sigaction	sa;
+// void	child_signals(void)
+// {
+// 	struct sigaction	sa;
 
-	sa.sa_handler = handle_child_signal;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
-	sa.sa_handler = SIG_IGN;
-	sigaction(SIGQUIT, &sa, NULL);
-}
+// 	sa.sa_handler = handle_child_signal;
+// 	sigemptyset(&sa.sa_mask);
+// 	sa.sa_flags = SA_RESTART;
+// 	sigaction(SIGINT, &sa, NULL);
+// 	sa.sa_handler = SIG_IGN;
+// 	sigaction(SIGQUIT, &sa, NULL);
+// }

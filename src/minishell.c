@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adrherna <adrianhdt.2001@gmail.com>        +#+  +:+       +#+        */
+/*   By: mvolkman <mvolkman@student.42heilbronn.    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:01:16 by adrherna          #+#    #+#             */
-/*   Updated: 2024/07/26 10:43:47 by adrherna         ###   ########.fr       */
+/*   Updated: 2024/07/26 10:46:12 by mvolkman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ int main(int argc, char **argv, char **env)
 
 	parent_signals();
 	ft_configure_terminal();
+	ft_restore_terminal(0);
 	if (argc > 1 || argv[0] == NULL)
 		return (0);
 	while (1)
@@ -71,7 +72,6 @@ int main(int argc, char **argv, char **env)
 			continue ;
 		ft_lexer(shell.input, &shell);
 		ft_parser(&shell, &shell.tokens);
-		child_signals();
 		// print_cmd_details(shell.cmds);
 		ft_execution(&shell);
 		ft_end_loop(&shell);
